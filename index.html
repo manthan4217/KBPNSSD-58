@@ -41,8 +41,7 @@
   </div>
 
 </header>
-<section id="home"></section>
-</section>
+<div id="home"></div>
 
 <!-- ================= NAVBAR ================= -->
 <nav class="navbar" id="navbar">
@@ -61,15 +60,18 @@
     <li><a href="#camps">Camps</a></li>
     <li><a href="#special-programs">Special Programs</a></li>
     <li><a href="#gallery">Gallery</a></li>
-    <li><a href="#report">Report</a></li>
     <li><a href="#contact">Contact</a></li>
   </ul>
+
+  <div class="menu-toggle" id="menuToggle">
+    ☰
+  </div>
 
 </nav>
 
 <!-- ================= HERO SECTION ================= -->
 <section class="hero">
-
+  <img src="15aug.jpeg">
   <div class="hero-overlay">
 
     <div class="hero-content">
@@ -155,6 +157,7 @@
 
 <!-- ================= PROJECTS SECTION ================= -->
 <section class="projects" id="projects">
+
 
   <h2>Our Activities</h2>
 
@@ -448,6 +451,35 @@
 
 </section>
 
+<!-- ================= STUDENT LEADERS ================= -->
+<section class="leaders-section">
+
+  <h2>Student Leadership Team</h2>
+
+  <div class="leaders-container">
+
+    <div class="leader-card">
+      <img src="manthan.jpeg">
+      <p class="name">Manthan Vitthal Rajdev</p>
+      <span class="role highlight">NSS Leader</span>
+    </div>
+
+    <div class="leader-card">
+      <img src="images/leader2.jpg">
+      <p class="name">Student Name</p>
+      <span class="role">Assistant Leader</span>
+    </div>
+
+    <div class="leader-card">
+      <img src="images/leader3.jpg">
+      <p class="name">Student Name</p>
+      <span class="role">Coordinator</span>
+    </div>
+
+  </div>
+
+</section>
+
 <!-- ================= GUIDANCE ================= -->
 <section class="guidance">
 
@@ -511,29 +543,30 @@
     </div>
 
     <!-- RIGHT: FORM -->
-    <div class="contact-form-card">
-      <form>
+    <form action="https://formspree.io/f/mvzlzegn" method="POST">
 
-        <div class="input-group">
-          <input type="text" required>
-          <label>Your Name</label>
-        </div>
+      <div class="input-group">
+        <input type="text" name="name" required>
+        <label>Your Name</label>
+      </div>
 
-        <div class="input-group">
-          <input type="email" required>
-          <label>Your Email</label>
-        </div>
+      <div class="input-group">
+        <input type="email" name="email" required>
+        <label>Your Email</label>
+      </div>
 
-        <div class="input-group">
-          <textarea rows="4" required></textarea>
-          <label>Your Message</label>
-        </div>
+      <div class="input-group">
+        <textarea name="message" rows="4" required></textarea>
+        <label>Your Message</label>
+      </div>
 
-        <button type="submit">Send Message</button>
+      <button type="submit">Send Message</button>
 
-      </form>
-    </div>
-
+    </form>
+    <p id="form-status"></p>
+    <p style="margin-top:10px;">
+      Or contact us directly at: nss@kbpcollege.edu
+    </p>
   </div>
 
 </section>
