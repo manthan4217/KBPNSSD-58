@@ -9,6 +9,20 @@ window.addEventListener("scroll", function () {
   }
 });
 
+// NAVBAR MENU BUTTON
+const toggle = document.getElementById("menuToggle");
+const nav = document.getElementById("navLinks");
+
+toggle.addEventListener("click", () => {
+  nav.classList.toggle("active");
+});
+
+document.querySelectorAll(".nav-links a").forEach(link => {
+  link.addEventListener("click", () => {
+    nav.classList.remove("active");
+  });
+});
+
 // gallery 
 // WAIT FOR PAGE LOAD
 window.onload = function(){
@@ -46,3 +60,32 @@ function openImage(src){
 function closeImage(){
   document.getElementById("lightbox").style.display = "none";
 }
+
+// form
+const form = document.querySelector("form");
+const status = document.getElementById("form-status");
+
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const data = new FormData(form);
+
+  status.innerHTML = "⏳ Sending...";
+  
+  fetch(form.action, {
+    method: form.method,
+    body: data,
+    headers: {
+      'Accept': 'application/json'
+    }
+  }).then(response => {
+    if (response.ok) {
+      status.innerHTML = "✅ Message sent successfully!";
+      form.reset();
+    } else {
+      status.innerHTML = "❌ Oops! Something went wrong.";
+    }
+  }).catch(() => {
+    status.innerHTML = "❌ Network error!";
+  });
+});
