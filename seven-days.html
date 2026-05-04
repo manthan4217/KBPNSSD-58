@@ -2,22 +2,26 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>NSS Unit D-58</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>7 Days Residential Camp | NSS Unit D-58</title>
 
 <link rel="stylesheet" href="style.css">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script defer src="script.js"></script>
 
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
 </head>
 
 <body>
 
+<!-- 🔰 HEADER (SAME AS MAIN SITE) -->
 <!-- ================= TOP HEADER ================= -->
 <header class="top-header">
 
   <!-- LEFT LOGOS -->
   <div class="logo-group left">
-    <img src="clglogo.png" alt="College Logo">
-    <img src="univesity11-removebg-preview.png" alt="University Logo">
+    <img src="images/clglogo.png" alt="College Logo">
+    <img src="images/univesity11-removebg-preview.png" alt="University Logo">
   </div>
 
   <!-- CENTER TEXT -->
@@ -35,21 +39,24 @@
 
   <!-- RIGHT LOGOS -->
   <div class="logo-group right">
-    <img src="mybharatlogo_opt_2x.png" alt="My Bharat Logo">
-    <img src="founder.png" alt="Founder Logo">
+    <img src="images/mybharatlogo_opt_2x.png" alt="My Bharat Logo">
+    <img src="images/founder.png" alt="Founder Logo">
   </div>
 
 </header>
-<section id="home"></section>
-</section>
 
-<!-- ================= NAVBAR ================= -->
+<!-- 🔗 NAVBAR (SAME STYLE) -->
 <nav class="navbar" id="navbar">
 
   <!-- LEFT NSS -->
   <div class="nav-left" id="navLeft">
-    <img src="nsslogo.png">
+    <img src="images/nsslogo.png">
     <span>NSS D-58</span>
+  </div>
+
+  <!-- 🍔 Hamburger Button -->
+  <div class="hamburger" onclick="toggleMenu()">
+    ☰
   </div>
 
   <!-- CENTER MENU -->
@@ -57,33 +64,116 @@
     <li><a href="#home">Home</a></li>
     <li><a href="#projects">Projects</a></li>
     <li><a href="#achievements">Achievements</a></li>
-    <li><a href="#camps">Camps</a></li>
+    <li><a class="active" href="sevendays.html">Camp</a></li>
     <li><a href="#special-programs">Special Programs</a></li>
     <li><a href="#gallery">Gallery</a></li>
-    <li><a href="#report">Report</a></li>
     <li><a href="#contact">Contact</a></li>
   </ul>
 
 </nav>
 
-<section class="hero">
-<img src="camp.jpeg">
-<div class="hero-overlay">
-<h1>Seven Days Reside Camp 2025</h1>
-</div>
-</section>
 
-<section class="section">
+<!-- 🌟 HERO SECTION (ONLY CHANGE) -->
+<section class="camp-banner">
 
-<div class="card">Day 1 - Arrival & Setup</div>
-<div class="card">Day 2 - Cleanliness Drive</div>
-<div class="card">Day 3 - Awareness Programs</div>
-<div class="card">Day 4 - RTI Lecture</div>
-<div class="card">Day 5 - Career Guidance</div>
-<div class="card">Day 6 - Field Visit</div>
-<div class="card">Day 7 - Valedictory Ceremony</div>
+  <img src="images/camp.jpeg" alt="NSS Camp Group Photo">
+
+  <div class="camp-banner-overlay">
+    <h1>7 Days Residential Camp 2026</h1>
+    <p>NSS Unit D-58 | KBP College, Vashi</p>
+  </div>
 
 </section>
 
+<!-- 📅 CAMP TIMELINE -->
+<section class="camp-timeline">
+
+  <h2>Camp Schedule Overview</h2>
+
+  <div class="day-card">
+    <h3>Day 1 – Orientation & Inauguration</h3>
+    <p>Inauguration ceremony, NSS briefing, group formation, campus introduction and cleanliness drive.</p>
+  </div>
+
+  <div class="day-card">
+    <h3>Day 2 – Awareness Activities</h3>
+    <p>Yoga session, cleanliness drive, cyber security lecture, and cultural program activities.</p>
+  </div>
+
+  <div class="day-card">
+    <h3>Day 3 – Community Service</h3>
+    <p>Area cleaning, door-to-door awareness, health survey, and guest lectures.</p>
+  </div>
+
+  <div class="day-card">
+    <h3>Day 4 – Health & Environment</h3>
+    <p>Eye checkup camp, soil testing awareness, debates and cleaning activities.</p>
+  </div>
+
+  <div class="day-card">
+    <h3>Day 5 – Social Development Work</h3>
+    <p>Water conservation work, plantation drive, and awareness lectures.</p>
+  </div>
+
+  <div class="day-card">
+    <h3>Day 6 – Cultural & Leadership</h3>
+    <p>Cultural events, leadership training, group activities and reflection sessions.</p>
+  </div>
+
+  <div class="day-card">
+    <h3>Day 7 – Closing Ceremony</h3>
+    <p>Final cleaning drive, certificate distribution, feedback and closing ceremony.</p>
+  </div>
+
+</section>
+
+<!-- ================= FOOTER ================= -->
+<footer class="footer">
+
+  <div class="footer-container">
+
+    <!-- LEFT -->
+    <div class="footer-section">
+      <h3>NSS Unit D-58</h3>
+      <p>Karmaveer Bhaurao Patil College, Vashi</p>
+      <p>"Not Me But You"</p>
+    </div>
+
+    <!-- MIDDLE -->
+    <div class="footer-section">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="#">Home</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#achievements">Achievements</a></li>
+        <li><a href="#camps">Camps</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+
+    <!-- RIGHT -->
+    <div class="footer-section">
+      <h4>Contact</h4>
+      <p>Email: nss@kbpcollege.edu</p>
+      <p>Phone: +91 XXXXX XXXXX</p>
+
+      <div class="social-icons">
+        <a href="#"><i class="fab fa-instagram"></i></a>
+        <a href="#"><i class="fab fa-youtube"></i></a>
+        <a href="#"><i class="fab fa-facebook"></i></a>
+        <a href="#"><i class="fab fa-whatsapp"></i></a>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="footer-bottom">
+    <p>© 2026 NSS Unit D-58 | All Rights Reserved</p>
+  </div>
+
+</footer>
+
+<script src="script.js"></script>
 </body>
+
 </html>
