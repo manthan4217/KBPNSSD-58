@@ -16,19 +16,36 @@ html, body{
   scroll-padding-top:80px;
 }
 
+/* FIX "desktop zoomed-out feel" */
+body {
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* Prevent any element forcing desktop width */
+
+
 /* ================= HEADER ================= */
 .top-header{
-display:grid;
-grid-template-columns: 1fr 2fr 1fr;
-align-items:center;
-padding:8px 20px;  /* controlled spacing */
-background: linear-gradient(90deg, #FF9933,#ffffff, #138808);
+  display: grid;
+  grid-template-columns: 120px 1fr 120px;
+  align-items: center;
 
-color:#000;
+  padding: 6px 15px;
+  margin: 0;
+  margin-bottom: 0;
 
-/* 🔥 FIX */
-margin:0;
-line-height:1;
+  background: linear-gradient(90deg, #FF9933, #ffffff, #138808);
+  color: #000;
+
+  line-height: 1.2;
+}
+
+@media(max-width:768px){
+  .top-header{
+    grid-template-columns:1fr;
+    text-align:center;
+  }
 }
 
 .top-header > *{
@@ -53,8 +70,9 @@ justify-content:flex-end;
 
 /* LOGOS */
 .logo-group img{
-height:120px;
-object-fit:contain;
+  height: 70px;
+  width: auto;
+  object-fit: contain;
 }
 
 /* CENTER TEXT */
@@ -86,6 +104,20 @@ margin:2px 0;
 margin:2px 0;
 }
 
+.center-text h1{
+  font-size: 20px;
+  margin: 2px 0;
+}
+
+.center-text h3{
+  font-size: 15px;
+  margin: 2px 0;
+}
+
+.center-text p{
+  margin: 1px 0;
+}
+
 /* NSS BLOCK */
 .nss-logo{
 height: 55px;
@@ -114,145 +146,215 @@ opacity:0.9;
 /* RESPONSIVE */
 @media(max-width:768px){
 
-.top-header{
-grid-template-columns:1fr;
-gap:10px;
-text-align:center;
-}
+  .top-header{
+    display:flex;
+    flex-direction:row;
+    align-items:center;
+    justify-content:space-between;
+    padding:6px 8px;
+    gap:6px;
+    height:auto;
+  }
 
-.logo-group{
-justify-content:center;
-}
+  .logo-group{
+    flex:0 0 55px;
+    display:flex;
+    justify-content:center;
+  }
 
-}
+  .logo-group img{
+    height:45px;
+    width:auto;
+  }
 
-/* 🔥 GAP FIX */
-.top-header + .navbar{
-margin-top:0;
+  .center-text{
+    flex:1;
+    text-align:center;
+    min-width:0;
+  }
+
+  .center-text h1{
+    font-size:12px;
+    line-height:1.1;
+    margin:2px 0;
+  }
+
+  .center-text p,
+  .center-text .org,
+  .center-text .sub,
+  .center-text .unit,
+  .center-text .slogan{
+    font-size:10px;
+    line-height:1.1;
+    margin:1px 0;
+  }
+
+  .nss-logo{
+    height:22px;
+  }
 }
 
 /* ================= NAVBAR ================= */
+/* ================= NAVBAR FIXED ================= */
 
 .navbar{
   position: sticky;
-  top: 125px;
-  left: 0;
-  width: 100%;
+  top: 0;
   z-index: 9999;
-  transition: all 0.3s ease;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:10px 25px;
 
-  background: linear-gradient(90deg, #0f3d2e, #145c3a);
-  color:white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 8px 20px;
+  height: 55px;
+
+  background: #0f3d2e;
+  color: white;
 }
 
-/* LEFT NSS BRAND */
+/* LEFT LOGO */
 .nav-left{
-display:flex;
-align-items:center;
-gap:10px;
-font-weight:600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .nav-left img{
-height:38px;
+  height: 32px;
 }
 
-/* NAV LINKS */
+/* CENTER MENU (DESKTOP) */
 .nav-links{
-display:flex;
-list-style:none;
-gap:25px;
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  gap: 22px;
+
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
 
 .nav-links a{
-text-decoration:none;
-color:white;
-font-size:15px;
-transition:0.3s;
+  color: white;
+  text-decoration: none;
+  font-size: 14px;
 }
 
-.nav-links a:hover{
-color:#ffd166;
+/* HAMBURGER (hidden on desktop) */
+/* HAMBURGER */
+.hamburger {
+  display: none;
+  font-size: 26px;
+  cursor: pointer;
+  color: white;
 }
 
-.nav-left img:hover{
-transform:scale(1.1);
-transition:0.3s;
-}
-
-/* NAVBAR BASE */
-
-
-/* LEFT NSS */
-.nav-left{
-display:flex;
-align-items:center;
-gap:10px;
-font-weight:600;
-transition:0.3s;
-}
-
-.nav-left img{
-height:35px;
-}
-
-/* MENU */
-.nav-links{
-display:flex;
-gap:25px;
-list-style:none;
-transition:0.3s;
-}
-
-.nav-links a{
-color:white;
-text-decoration:none;
-}
-
-/* 🔥 SCROLL STATE */
-.navbar.scrolled{
-padding: 5px 25px;
-  background: rgba(15,61,46,0.95);
-  backdrop-filter: blur(8px);
-justify-content:center;
-}
-
-/* HIDE LEFT */
-.navbar.scrolled .nav-left{
-opacity:0;
-width:0;
-overflow:hidden;
-}
-
-/* CENTER MENU */
-.navbar.scrolled .nav-links{
-justify-content:center;
+/* NAVBAR ALIGNMENT FIX */
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 @media(max-width:768px){
 
-  .navbar{
-    flex-direction:column;
-    gap:10px;
+  .hamburger{
+    display: block;
+    margin-left: auto;
   }
 
   .nav-links{
-    flex-wrap:wrap;
-    justify-content:center;
-    gap:12px;
+    position: absolute;
+    top: 55px;
+    left: 0;
+    width: 100%;
+
+    background: #0f3d2e;
+    flex-direction: column;
+    display: none;
+
+    padding: 10px 0;
+    text-align: center;
   }
 
+  .nav-links.active{
+    display: flex;
+  }
+}
+
+/* DESKTOP NAV ALWAYS VISIBLE */
+.nav-links {
+  display: flex;
+  gap: 25px;
+  list-style: none;
+  justify-content: center;
+  flex: 1;
+}
+
+.nav-links li a {
+  color: white;
+  text-decoration: none;
+}
+
+/* ===== NAVBAR FINAL OVERRIDE FIX ===== */
+
+.navbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:10px 20px;
+}
+
+/* LEFT SIDE */
+.nav-left{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.nav-left span{
+  font-weight:600;
+  font-size:16px;
+  color:white;
+}
+
+/* LOGO */
+.nav-left img{
+  height:35px;
+}
+
+/* HAMBURGER */
+.menu-toggle{
+  font-size:26px;
+  cursor:pointer;
+  color:white;
+}
+
+/* MENU */
+.nav-links{
+  position:absolute;
+  top:60px;
+  left:0;
+  width:100%;
+  background:#145c3a;
+  flex-direction:column;
+  display:none;
+  padding:10px 0;
+}
+
+.nav-links.active{
+  display:flex;
 }
 
 /* ================= MENU BUTTON ================= */
 .menu-toggle{
   display:none;
   font-size:24px;
+  flex:0 0 auto;
   cursor:pointer;
+  margin-left:auto;
 }
 
 /* Mobile */
@@ -367,6 +469,10 @@ animation: bounce 1.5s infinite;
     font-size:24px;
   }
 
+  .hero-content{
+    padding:0 15px;
+  }
+
 }
 
 /* ================= ABOUT SECTION ================= */
@@ -416,8 +522,8 @@ text-align:center;
 
 .about-image img{
 width:100%;
-max-width:450px;
-border-radius:12px;
+max-width:700px;
+border-radius:20px;
 box-shadow:0 6px 20px rgba(0,0,0,0.15);
 }
 
@@ -786,9 +892,9 @@ color:#1b4332;
 
 /* GRID */
 .gallery-container{
-display:grid;
-grid-template-columns:repeat(auto-fit, minmax(200px,1fr));
-gap:15px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(140px,1fr));
+  gap:15px;
 }
 
 /* IMAGE */
@@ -946,7 +1052,7 @@ background:#ff9933;
   border-radius:14px;
   text-align:center;
   box-shadow:0 5px 15px rgba(0,0,0,0.08);
-  width:220px;
+  width:250px;
   transition:0.3s ease;
   overflow:hidden;
 }
@@ -1129,6 +1235,101 @@ background:#ff9933;
   color:#145c3a;
 }
 
+
+/* ================= CONTACT WRAPPER ================= */
+
+/* INPUT GROUP */
+.input-group{
+  position:relative;
+  margin-bottom:18px;
+}
+
+.input-group input,
+.input-group textarea{
+  width:100%;
+  padding:14px;
+  border:1px solid #ccc;
+  border-radius:8px;
+  outline:none;
+  font-size:14px;
+}
+
+/* LABEL */
+.input-group label{
+  position:absolute;
+  left:12px;
+  top:50%;
+  transform:translateY(-50%);
+  font-size:13px;
+  color:#777;
+  background:white;
+  padding:0 5px;
+  pointer-events:none;
+  transition:0.3s;
+}
+
+/* FLOAT EFFECT */
+.input-group input:focus + label,
+.input-group textarea:focus + label,
+.input-group input:valid + label,
+.input-group textarea:valid + label{
+  top:-8px;
+  font-size:11px;
+  color:#145c3a;
+}
+
+/* BUTTON */
+.contact-form-card button{
+  width:100%;
+  padding:14px;
+  border:none;
+  background:#145c3a;
+  color:white;
+  border-radius:30px;
+  font-size:15px;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+.contact-form-card button:hover{
+  background:#ff9933;
+  transform:scale(1.02);
+}
+
+/* ================= MOBILE FIX ================= */
+@media(max-width:768px){
+
+  .contact{
+    padding:50px 5%;
+  }
+
+  .contact-wrapper{
+    flex-direction:column;
+    gap:20px;
+  }
+
+  .contact-info-card,
+  .contact-form-card{
+    width:100%;
+    padding:20px;
+    text-align:center;
+  }
+
+  .contact-info-card p{
+    font-size:14px;
+  }
+
+  .input-group input,
+  .input-group textarea{
+    font-size:14px;
+    padding:12px;
+  }
+
+  .contact-form-card button{
+    font-size:14px;
+    padding:12px;
+  }
+}
 /* FOOTER */
 .footer{
   background:#145c3a;
@@ -1207,10 +1408,7 @@ background:#ff9933;
 }
 
 /* ================= RESPONSIVE ================= */
-/* ================= GLOBAL FIX ================= */
-*{
-  box-sizing:border-box;
-}
+
 
 img{
   max-width:100%;
@@ -1366,6 +1564,265 @@ section{
   /* NAVBAR TEXT SMALL */
   .nav-links{
     font-size:13px;
+  }
+}
+
+/* =================  MOBILE ================= */
+@media (max-width: 768px) {
+
+  .header-container {
+    flex-direction: column;
+    text-align: center;
+    gap: 10px;
+  }
+
+  .logo-left img,
+  .logo-right img {
+    width: 60px;
+  }
+
+  .college-text h1 {
+    font-size: 16px;
+  }
+
+  .college-text h2 {
+    font-size: 14px;
+  }
+
+  .college-text h3 {
+    font-size: 13px;
+  }
+
+  .nss-unit {
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .nss-unit img {
+    width: 35px;
+  }
+}
+
+@media (max-width: 768px) {
+
+  nav ul {
+    flex-direction: column;
+    gap: 10px;
+    padding: 15px;
+  }
+
+  nav ul li a {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 768px) {
+
+  section {
+    padding: 20px 15px;
+  }
+
+  h1, h2, h3 {
+    text-align: center;
+  }
+}
+
+@media (max-width: 768px) {
+
+  .project-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .project-card {
+    width: 90%;
+    margin-bottom: 15px;
+  }
+}
+
+
+
+/* 🍔 HAMBURGER BUTTON */
+.hamburger {
+  display: none;
+  font-size: 28px;
+  cursor: pointer;
+  padding: 10px 15px;
+  color: #0b3d2e;
+}
+
+/* NAV LINKS (desktop default) */
+#nav-links {
+  display: flex;
+  justify-content: center;
+  gap: 25px;
+  list-style: none;
+}
+
+/* MOBILE VIEW */
+@media (max-width: 768px) {
+
+  .hamburger {
+    display: block;
+    text-align: right;
+  }
+
+  #nav-links {
+    display: none;
+    flex-direction: column;
+    background: white;
+    position: absolute;
+    top: 60px;
+    left: 0;
+    width: 100%;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    padding: 10px 0;
+  }
+
+  #nav-links.show {
+    display: flex;
+  }
+
+  #nav-links li {
+    text-align: center;
+    padding: 10px 0;
+  }
+}
+
+
+/* 🌟 CAMP HERO SECTION */
+.camp-hero {
+  text-align: center;
+  padding: 50px 20px;
+  background: linear-gradient(90deg, #0b3d2e, #146c43);
+  color: white;
+}
+
+.camp-hero h1 {
+  font-size: 32px;
+  margin-bottom: 10px;
+}
+
+.camp-hero p {
+  font-size: 18px;
+  opacity: 0.9;
+}
+
+/* highlight tags */
+.camp-highlight {
+  margin-top: 15px;
+}
+
+.camp-highlight span {
+  display: inline-block;
+  background: rgba(255,255,255,0.15);
+  padding: 8px 12px;
+  margin: 5px;
+  border-radius: 20px;
+  font-size: 14px;
+}
+
+/* 📅 TIMELINE SECTION */
+.camp-timeline {
+  padding: 30px 20px;
+  text-align: center;
+}
+
+.camp-timeline h2 {
+  margin-bottom: 20px;
+  color: #0b3d2e;
+}
+
+/* 📦 DAY CARDS */
+.day-card {
+  background: white;
+  margin: 15px auto;
+  padding: 15px;
+  max-width: 800px;
+  border-left: 5px solid #0b3d2e;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  transition: 0.3s;
+  text-align: left;
+}
+
+.day-card:hover {
+  transform: scale(1.02);
+}
+
+/* 📱 MOBILE RESPONSIVE */
+@media (max-width: 768px) {
+
+  .camp-hero h1 {
+    font-size: 24px;
+  }
+
+  .camp-hero p {
+    font-size: 14px;
+  }
+
+  .day-card {
+    width: 90%;
+  }
+}
+
+/* CAMP BANNER (LIKE HERO IMAGE STYLE) */
+.camp-banner{
+  position:relative;
+  width:100%;
+  height:70vh;
+  overflow:hidden;
+}
+
+/* IMAGE */
+.camp-banner img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+/* DARK OVERLAY */
+.camp-banner-overlay{
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.5);
+
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  color:white;
+  padding:20px;
+}
+
+/* TEXT */
+.camp-banner-overlay h1{
+  font-size:36px;
+  margin-bottom:10px;
+}
+
+.camp-banner-overlay p{
+  font-size:18px;
+  opacity:0.9;
+}
+
+/* MOBILE */
+@media(max-width:768px){
+
+  .camp-banner{
+    height:50vh;
+  }
+
+  .camp-banner-overlay h1{
+    font-size:22px;
+  }
+
+  .camp-banner-overlay p{
+    font-size:14px;
   }
 }
 
