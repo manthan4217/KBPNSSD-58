@@ -195,116 +195,14 @@ opacity:0.9;
 }
 
 /* ================= NAVBAR ================= */
-/* ================= NAVBAR FIXED ================= */
-
-.navbar{
-  position: sticky;
-  top: 0;
-  z-index: 9999;
-
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  padding: 8px 20px;
-  height: 55px;
-
-  background: #0f3d2e;
-  color: white;
-}
-
-/* LEFT LOGO */
-.nav-left{
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.nav-left img{
-  height: 32px;
-}
-
-/* CENTER MENU (DESKTOP) */
-.nav-links{
-  display: flex;
-  flex: 1;
-  justify-content: center;
-  gap: 22px;
-
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.nav-links a{
-  color: white;
-  text-decoration: none;
-  font-size: 14px;
-}
-
-/* HAMBURGER (hidden on desktop) */
-/* HAMBURGER */
-.hamburger {
-  display: none;
-  font-size: 26px;
-  cursor: pointer;
-  color: white;
-}
-
-/* NAVBAR ALIGNMENT FIX */
-.navbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-@media(max-width:768px){
-
-  .hamburger{
-    display: block;
-    margin-left: auto;
-  }
-
-  .nav-links{
-    position: absolute;
-    top: 55px;
-    left: 0;
-    width: 100%;
-
-    background: #0f3d2e;
-    flex-direction: column;
-    display: none;
-
-    padding: 10px 0;
-    text-align: center;
-  }
-
-  .nav-links.active{
-    display: flex;
-  }
-}
-
-/* DESKTOP NAV ALWAYS VISIBLE */
-.nav-links {
-  display: flex;
-  gap: 25px;
-  list-style: none;
-  justify-content: center;
-  flex: 1;
-}
-
-.nav-links li a {
-  color: white;
-  text-decoration: none;
-}
-
-/* ===== NAVBAR FINAL OVERRIDE FIX ===== */
-
+/* NAVBAR */
 .navbar{
   display:flex;
-  justify-content:space-between;
   align-items:center;
+  justify-content:space-between;
   padding:10px 20px;
+  background:#0f3d2e;
+  position:relative;
 }
 
 /* LEFT SIDE */
@@ -312,65 +210,58 @@ opacity:0.9;
   display:flex;
   align-items:center;
   gap:10px;
-}
-
-.nav-left span{
-  font-weight:600;
-  font-size:16px;
   color:white;
 }
 
-/* LOGO */
 .nav-left img{
   height:35px;
 }
 
-/* HAMBURGER */
-.menu-toggle{
-  font-size:26px;
-  cursor:pointer;
-  color:white;
-}
-
-/* MENU */
+/* MENU (DESKTOP) */
 .nav-links{
-  position:absolute;
-  top:60px;
-  left:0;
-  width:100%;
-  background:#145c3a;
-  flex-direction:column;
-  display:none;
-  padding:10px 0;
-}
-
-.nav-links.active{
   display:flex;
+  gap:25px;
+  list-style:none;
 }
 
-/* ================= MENU BUTTON ================= */
-.menu-toggle{
+.nav-links li a{
+  color:white;
+  text-decoration:none;
+}
+
+/* HAMBURGER */
+.hamburger{
   display:none;
-  font-size:24px;
-  flex:0 0 auto;
+  font-size:28px;
+  color:white;
   cursor:pointer;
-  margin-left:auto;
 }
 
-/* Mobile */
+/* MOBILE */
 @media(max-width:768px){
-  .menu-toggle{
+
+  .hamburger{
     display:block;
   }
 
   .nav-links{
     display:none;
     flex-direction:column;
+    position:absolute;
+    top:60px;
+    left:0;
     width:100%;
+    background:#145c3a; /* DARK GREEN */
+    padding:10px 0;
   }
 
-  .nav-links.active{
+  .nav-links.show{
     display:flex;
+  }
+
+  .nav-links li{
+    text-align:center;
+    padding:12px 0;
   }
 }
 /* ================= HERO ================= */
@@ -1473,7 +1364,9 @@ section{
 
   /* NAVBAR */
   .navbar{
-    flex-direction:column;
+    flex-direction:row;   /* ✅ FIX */
+    justify-content:space-between;
+    align-items:center;
     align-items:center;
     gap:10px;
   }
@@ -1643,22 +1536,7 @@ section{
 
 
 
-/* 🍔 HAMBURGER BUTTON */
-.hamburger {
-  display: none;
-  font-size: 28px;
-  cursor: pointer;
-  padding: 10px 15px;
-  color: #0b3d2e;
-}
 
-/* NAV LINKS (desktop default) */
-#nav-links {
-  display: flex;
-  justify-content: center;
-  gap: 25px;
-  list-style: none;
-}
 
 /* MOBILE VIEW */
 @media (max-width: 768px) {
@@ -1668,23 +1546,24 @@ section{
     text-align: right;
   }
 
-  #nav-links {
-    display: none;
+  .nav-links {
+    display: none;   /* ✅ FIXED */
     flex-direction: column;
-    background: white;
+    background: #145c3a;
     position: absolute;
-    top: 60px;
+    top: 50px;
     left: 0;
     width: 100%;
     box-shadow: 0 4px 10px rgba(0,0,0,0.2);
     padding: 10px 0;
+    z-index: 999; /* ✅ important */
   }
 
-  #nav-links.show {
+  .nav-links.show {
     display: flex;
   }
 
-  #nav-links li {
+  .nav-links li {
     text-align: center;
     padding: 10px 0;
   }
