@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>NSS Unit D-58</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="style.css">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -17,8 +17,8 @@
 
   <!-- LEFT LOGOS -->
   <div class="logo-group left">
-    <img src="clglogo.png" alt="College Logo">
-    <img src="univesity11-removebg-preview.png" alt="University Logo">
+    <img src="images/clglogo.png" alt="College Logo">
+    <img src="images/univesity11-removebg-preview.png" alt="University Logo">
   </div>
 
   <!-- CENTER TEXT -->
@@ -36,8 +36,8 @@
 
   <!-- RIGHT LOGOS -->
   <div class="logo-group right">
-    <img src="mybharatlogo_opt_2x.png" alt="My Bharat Logo">
-    <img src="founder.png" alt="Founder Logo">
+    <img src="images/mybharatlogo_opt_2x.png" alt="My Bharat Logo">
+    <img src="images/founder.png" alt="Founder Logo">
   </div>
 
 </header>
@@ -46,13 +46,16 @@
 <!-- ================= NAVBAR ================= -->
 <nav class="navbar" id="navbar">
 
-  <!-- LEFT NSS -->
-  <div class="nav-left" id="navLeft">
-    <img src="nsslogo.png">
+  <!-- LEFT -->
+  <div class="nav-left">
+    <img src="images/nsslogo.png" alt="logo">
     <span>NSS D-58</span>
   </div>
 
-  <!-- CENTER MENU -->
+  <!-- RIGHT HAMBURGER -->
+  <div class="hamburger" onclick="toggleMenu()">☰</div>
+
+  <!-- MENU -->
   <ul class="nav-links" id="navLinks">
     <li><a href="#home">Home</a></li>
     <li><a href="#projects">Projects</a></li>
@@ -63,15 +66,11 @@
     <li><a href="#contact">Contact</a></li>
   </ul>
 
-  <div class="menu-toggle" id="menuToggle">
-    ☰
-  </div>
-
 </nav>
 
 <!-- ================= HERO SECTION ================= -->
 <section class="hero">
-  <img src="15aug.jpeg">
+  <img src="images/15aug.jpeg">
   <div class="hero-overlay">
 
     <div class="hero-content">
@@ -125,7 +124,7 @@
 
     <!-- RIGHT IMAGE -->
     <div class="about-image">
-      <img src="shivjaynati.jpeg" alt="NSS Group Photo">
+      <img src="images/shivjaynati.jpeg" alt="NSS Group Photo">
     </div>
 
   </div>
@@ -133,7 +132,7 @@
   <!-- 🔥 STATS BELOW -->
   <div class="about-stats">
     <div class="stat">
-      <h3>300+</h3>
+      <h3>300</h3>
       <p>Volunteers / Year</p>
     </div>
 
@@ -263,7 +262,7 @@
 
     <!-- 7 DAYS -->
     <div class="camp-card">
-      <img src="camp.jpeg" alt="">
+      <img src="images/camp.jpeg" alt="">
       <div class="camp-content">
         <h3>7 Days Residential Camp</h3>
         <p>Village-based social service and community development camp.</p>
@@ -297,7 +296,7 @@
 
     <!-- STATE -->
     <div class="camp-card">
-      <img src="avhan.jpeg" alt="">
+      <img src="images/avhan.jpeg" alt="">
       <div class="camp-content">
         <h3>State Aavhan Camp</h3>
         <p>State-level NSS participation and competitions.</p>
@@ -314,7 +313,7 @@
 
     <!-- UTKARSHA -->
     <div class="camp-card">
-      <img src="utkarsha.jpeg" alt="">
+      <img src="images/utkarsha.jpeg" alt="">
       <div class="camp-content">
         <h3>Utkarsha Camp</h3>
         <p>Leadership-focused camp for selected volunteers.</p>
@@ -331,7 +330,7 @@
 
     <!-- OTHER CAMPS -->
     <div class="camp-card">
-      <img src="jalgaon.jpeg" alt="">
+      <img src="images/jalgaon.jpeg" alt="">
       <div class="camp-content">
         <h3>Other Camps</h3>
         <p>Participation in national-level youth development and NSS programs.</p>
@@ -409,16 +408,16 @@
 
   <div class="gallery-container">
 
-    <img src="mycamp.jpeg" class="gallery-img" onclick="openImage(this.src)">
-    <img src="camp.jpeg" class="gallery-img" onclick="openImage(this.src)">
-    <img src="shivjayanti24.jpeg" class="gallery-img" onclick="openImage(this.src)">
-    <img src="campsupport.jpeg" class="gallery-img" onclick="openImage(this.src)">
-    <img src="independenceday.jpeg" class="gallery-img" onclick="openImage(this.src)">
+    <img src="images/mycamp.jpeg" class="gallery-img" onclick="openImage(this.src)">
+    <img src="images/camp.jpeg" class="gallery-img" onclick="openImage(this.src)">
+    <img src="images/shivjayanti24.jpeg" class="gallery-img" onclick="openImage(this.src)">
+    <img src="images/campsupport.jpeg" class="gallery-img" onclick="openImage(this.src)">
+    <img src="images/independenceday.jpeg" class="gallery-img" onclick="openImage(this.src)">
     
     <!-- EXTRA -->
-    <img src="WhatsApp Image 2026-05-02 at 11.44.35 AM.jpeg" class="gallery-img extra hidden" onclick="openImage(this.src)">
-    <img src="maayechiubb.jpeg" class="gallery-img extra hidden" onclick="openImage(this.src)">
-    <img src="camp24.jpeg" class="gallery-img extra hidden" onclick="openImage(this.src)">
+    <img src="images/WhatsApp Image 2026-05-02 at 11.44.35 AM.jpeg" class="gallery-img extra hidden" onclick="openImage(this.src)">
+    <img src="images/maayechiubb.jpeg" class="gallery-img extra hidden" onclick="openImage(this.src)">
+    <img src="images/camp24.jpeg" class="gallery-img extra hidden" onclick="openImage(this.src)">
     <img src="images/g9.jpg" class="gallery-img extra hidden" onclick="openImage(this.src)">
     <img src="images/g10.jpg" class="gallery-img extra hidden" onclick="openImage(this.src)">
 
@@ -459,7 +458,7 @@
   <div class="leaders-container">
 
     <div class="leader-card">
-      <img src="manthan.jpeg">
+      <img src="images/manthan.jpeg">
       <p class="name">Manthan Vitthal Rajdev</p>
       <span class="role highlight">NSS Leader</span>
     </div>
@@ -503,13 +502,13 @@
 
     <!-- PROGRAMME OFFICER -->
     <div class="guidance-card">
-      <img src="AMITSIRPO.jpeg" alt="">
+      <img src="images/AMITSIRPO.jpeg" alt="">
       <p class="name">Mr. Amit Surve</p>
       <span class="role">Programme Officer</span>
     </div>
 
     <div class="guidance-card">
-      <img src="NITINSIRPO.jpeg" alt="">
+      <img src="images/NITINSIRPO.jpeg" alt="">
       <p class="name">Mr. Nitin Gamare</p>
       <span class="role">Programme Officer</span>
     </div>
@@ -543,7 +542,7 @@
     </div>
 
     <!-- RIGHT: FORM -->
-    <form action="https://formspree.io/f/mvzlzegn" method="POST">
+    <form class="contact-form-card" action="https://formspree.io/f/mvzlzegn" method="POST">
 
       <div class="input-group">
         <input type="text" name="name" required>
@@ -564,9 +563,7 @@
 
     </form>
     <p id="form-status"></p>
-    <p style="margin-top:10px;">
-      Or contact us directly at: nss@kbpcollege.edu
-    </p>
+    
   </div>
 
 </section>
@@ -602,8 +599,8 @@
       <p>Phone: +91 XXXXX XXXXX</p>
 
       <div class="social-icons">
-        <a href="#"><i class="fab fa-instagram"></i></a>
-        <a href="#"><i class="fab fa-youtube"></i></a>
+        <a href="https://www.instagram.com/kbp_nss?igsh=c2JscjFqeTBmbXYx"><i class="fab fa-instagram"></i></a>
+        <a href="https://www.youtube.com/@kbpnss8858"><i class="fab fa-youtube"></i></a>
         <a href="#"><i class="fab fa-facebook"></i></a>
         <a href="#"><i class="fab fa-whatsapp"></i></a>
       </div>
