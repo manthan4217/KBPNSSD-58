@@ -10,18 +10,10 @@ window.addEventListener("scroll", function () {
 });
 
 // NAVBAR MENU BUTTON
-const toggle = document.getElementById("menuToggle");
-const nav = document.getElementById("navLinks");
-
-toggle.addEventListener("click", () => {
+function toggleMenu() {
+  const nav = document.getElementById("navLinks");
   nav.classList.toggle("active");
-});
-
-document.querySelectorAll(".nav-links a").forEach(link => {
-  link.addEventListener("click", () => {
-    nav.classList.remove("active");
-  });
-});
+}
 
 // gallery 
 // WAIT FOR PAGE LOAD
@@ -71,7 +63,7 @@ form.addEventListener("submit", async (e) => {
   const data = new FormData(form);
 
   status.innerHTML = "⏳ Sending...";
-  
+
   fetch(form.action, {
     method: form.method,
     body: data,
