@@ -917,7 +917,7 @@ background:#ff9933;
 /* IMAGE */
 .leader-card img{
   width:100%;
-  height:200px;
+  height:280px;
   object-fit:cover;
   border-radius:10px;
   margin-bottom:10px;
@@ -1316,7 +1316,7 @@ section{
 @media(max-width:992px){
 
   section{
-    padding:60px 6%;
+    padding:0px 0%;
   }
 
   /* NAVBAR */
@@ -1512,7 +1512,7 @@ section{
 @media (max-width: 768px) {
 
   section {
-    padding: 20px 15px;
+    padding: 0px 0px;
   }
 
   h1, h2, h3 {
@@ -1623,6 +1623,7 @@ section{
   box-shadow: 0 2px 10px rgba(0,0,0,0.1);
   transition: 0.3s;
   text-align: left;
+  line-height: 1.7;
 }
 
 .day-card:hover {
