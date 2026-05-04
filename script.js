@@ -10,10 +10,17 @@ window.addEventListener("scroll", function () {
 });
 
 // NAVBAR MENU BUTTON
-function toggleMenu() {
-  const nav = document.getElementById("navLinks");
-  nav.classList.toggle("active");
+function toggleMenu(){
+  document.getElementById("navLinks").classList.toggle("active");
+  navLinks.classList.toggle("show");
 }
+
+// auto close on link click
+document.querySelectorAll(".nav-links a").forEach(link=>{
+  link.addEventListener("click",()=>{
+    document.getElementById("nav-links").classList.remove("show");
+  });
+});
 
 // gallery 
 // WAIT FOR PAGE LOAD
