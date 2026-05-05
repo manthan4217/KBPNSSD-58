@@ -11,14 +11,14 @@ window.addEventListener("scroll", function () {
 
 // NAVBAR MENU BUTTON
 function toggleMenu(){
-  document.getElementById("navLinks").classList.toggle("active");
+  const navLinks = document.getElementById("navLinks");
   navLinks.classList.toggle("show");
 }
 
 // auto close on link click
-document.querySelectorAll(".nav-links a").forEach(link=>{
-  link.addEventListener("click",()=>{
-    document.getElementById("nav-links").classList.remove("show");
+document.querySelectorAll(".nav-links a").forEach(link => {
+  link.addEventListener("click", () => {
+    document.getElementById("navLinks").classList.remove("show");
   });
 });
 
@@ -64,27 +64,50 @@ function closeImage(){
 const form = document.querySelector("form");
 const status = document.getElementById("form-status");
 
-form.addEventListener("submit", async (e) => {
-  e.preventDefault();
+if (form) {
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-  const data = new FormData(form);
+    const data = new FormData(form);
 
-  status.innerHTML = "⏳ Sending...";
+    status.innerHTML = "⏳ Sending...";
 
-  fetch(form.action, {
-    method: form.method,
-    body: data,
-    headers: {
-      'Accept': 'application/json'
-    }
-  }).then(response => {
-    if (response.ok) {
-      status.innerHTML = "✅ Message sent successfully!";
-      form.reset();
-    } else {
-      status.innerHTML = "❌ Oops! Something went wrong.";
-    }
-  }).catch(() => {
-    status.innerHTML = "❌ Network error!";
+    fetch(form.action, {
+      method: form.method,
+      body: data,
+      headers: {
+        'Accept': 'application/json'
+      }
+    }).then(response => {
+      if (response.ok) {
+        status.innerHTML = "✅ Message sent successfully!";
+        form.reset();
+      } else {
+        status.innerHTML = "❌ Oops! Something went wrong.";
+      }
+    }).catch(() => {
+      status.innerHTML = "❌ Network error!";
+    });
   });
+}
+
+// back to home button
+document.addEventListener("DOMContentLoaded", function () {
+
+  const hero = document.querySelector(".camp-banner");
+  const backBtn = document.getElementById("backHomeBtn");
+
+  if (!hero || !backBtn) return;
+
+  function handleScroll() {
+    const trigger = hero.offsetHeight * 0.5;
+
+    if (window.scrollY > trigger) {
+      backBtn.classList.add("show");
+    } else {
+      backBtn.classList.remove("show");
+    }
+  }
+
+  window.addEventListener("scroll", handleScroll);
 });
