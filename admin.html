@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NSS Admin Dashboard</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <h2>⚡ NSS ADMIN</h2>
+
+    <button onclick="showTab('dashboard')">📊 Dashboard</button>
+    <button onclick="showTab('activities')">📅 Activities</button>
+    <button onclick="showTab('attendance')">🧑‍🎓 Attendance</button>
+    <button onclick="showTab('volunteers')">👥 Volunteers</button>
+    <button onclick="showTab('marks')">📝 Marks</button>
+
+    <button id="logoutBtn" class="logout">🚪 Logout</button>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+
+    <!-- DASHBOARD -->
+    <div id="dashboard" class="tab active">
+      <h1>Welcome Admin 👋</h1>
+
+      <div class="card-grid">
+
+        <div class="card">
+          <h3>Total Volunteers</h3>
+          <p id="totalVolunteers">0</p>
+        </div>
+
+        <div class="card">
+          <h3>Total Activities</h3>
+          <p id="totalActivities">0</p>
+        </div>
+
+        <div class="card">
+          <h3>Total Marks</h3>
+          <p id="totalMarks">0</p>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ACTIVITIES -->
+    <div id="activities" class="tab">
+      <h2>Create Activity</h2>
+
+      <div class="form-box">
+        <input id="actName" placeholder="Activity Name">
+        <input id="actDate" type="date">
+        <textarea id="actDesc" placeholder="Description"></textarea>
+
+        <button id="createActivityBtn">Create Activity</button>
+      </div>
+
+      <div id="activityList" class="list"></div>
+    </div>
+
+    <!-- ATTENDANCE -->
+    <div id="attendance" class="tab">
+
+      <h2>Attendance System</h2>
+
+      <select id="activitySelect"></select>
+
+      <div class="btn-row">
+        <button onclick="startSession()">Start Session</button>
+        <button onclick="endSession()">End Session</button>
+      </div>
+
+      <h3>Volunteers</h3>
+      <div id="attendanceList"></div>
+
+      <button onclick="loadAttendanceList()">📋 View Present Students</button>
+
+      <div id="attendanceResult"></div>
+
+    </div>
+
+    <!-- VOLUNTEERS -->
+    <div id="volunteers" class="tab">
+      <h2>Registered Volunteers</h2>
+      <div id="volunteerList"></div>
+    </div>
+
+    <!-- MARKS -->
+    <div id="marks" class="tab">
+
+      <h2>Marks System</h2>
+
+      <div class="form-box">
+
+        <input id="markStudentId" placeholder="Student ID">
+        <input id="attendanceMarks" placeholder="Attendance Marks">
+        <input id="activityMarks" placeholder="Activity Marks">
+
+        <button id="saveMarks">Save Marks</button>
+
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<script type="module" src="admin.js"></script>
+
+<script>
+function showTab(tabId){
+  document.querySelectorAll(".tab").forEach(t=>{
+    t.classList.remove("active");
+  });
+
+  document.getElementById(tabId).classList.add("active");
+}
+</script>
+
+</body>
+</html>

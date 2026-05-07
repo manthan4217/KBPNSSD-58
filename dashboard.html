@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NSS Dashboard</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<!-- HEADER -->
+<header class="topbar">
+  <div class="brand">
+    <h2>NSS Portal</h2>
+    <span>Student Dashboard</span>
+  </div>
+
+  <button id="logoutBtn" class="btn-logout">Logout</button>
+</header>
+
+<!-- MAIN -->
+<div class="dashboard">
+
+  <!-- PROFILE CARD -->
+  <div class="card profile">
+    <h3>👤 My Profile</h3>
+
+    <div class="profile-grid">
+      <div>
+        <label>Name</label>
+        <p id="d-name">Loading...</p>
+      </div>
+
+      <div>
+        <label>Student ID</label>
+        <p id="d-id">Loading...</p>
+      </div>
+
+      <div>
+        <label>Class</label>
+        <p id="d-class">Loading...</p>
+      </div>
+
+      <div>
+        <label>Contact</label>
+        <p id="d-contact">Loading...</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ATTENDANCE CARD -->
+  <div class="card attendance">
+
+    <h3>📅 Live Attendance</h3>
+
+    <div id="activeActivityBox">
+      <p>Loading active activity...</p>
+    </div>
+
+    <select id="activitySelect"></select>
+
+    <button onclick="markAttendance()" class="btn-primary">
+      Mark Attendance
+    </button>
+
+    <p id="attendanceStatus"></p>
+
+  </div>
+
+  <!-- ACTIVITIES -->
+  <div class="card">
+    <h3>🎯 NSS Activities</h3>
+
+    <div class="activity-list">
+      <div class="activity">Cleanliness Drive</div>
+      <div class="activity">Blood Donation Camp</div>
+      <div class="activity">Village Survey</div>
+    </div>
+
+  </div>
+
+</div>
+
+<script type="module" src="dashboard.js"></script>
+
+</body>
+</html>

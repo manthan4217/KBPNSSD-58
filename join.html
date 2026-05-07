@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Join NSS | KBP College</title>
+
+<link rel="stylesheet" href="style.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+<!-- ================= TOP HEADER ================= -->
+<header class="top-header">
+
+  <!-- LEFT LOGOS -->
+  <div class="logo-group left">
+    <img src="images/clglogo.png" alt="College Logo">
+    <img src="images/univesity11-removebg-preview.png" class="hide-mobile" alt="University Logo">
+  </div>
+
+  <!-- CENTER TEXT -->
+  <div class="center-text">
+    <p class="org">Rayat Shikshan Sanstha's</p>
+
+    <h1>Karmaveer Bhaurao Patil College, Vashi</h1>
+
+    <p class="sub">[ Empowered Autonomous ]</p>
+
+    <h3>National Service Scheme</h3>
+    <p class="unit">D-58</p>
+    <p class="slogan">"Not Me But You"</p>
+  </div>
+
+  <!-- RIGHT LOGOS -->
+  <div class="logo-group right">
+    <img src="images/mybharatlogo_opt_2x.png" class="hide-mobile" alt="My Bharat Logo">
+    <img src="images/founder.png" alt="Founder Logo">
+  </div>
+
+</header>
+
+<!-- HERO -->
+<section class="join-hero">
+  <h1>Join NSS Unit D-58</h1>
+  <p>Start your journey of social service</p>
+</section>
+
+<!-- STEP INDICATOR -->
+<div class="steps-indicator">
+  <div class="step-box active" id="step1-ind">Step 1</div>
+  <div class="step-box" id="step2-ind">Step 2</div>
+  <div class="step-box" id="step3-ind">Step 3</div>
+</div>
+
+<!-- STEP 1 -->
+<div class="step-content active" id="step1">
+
+  <h2>Instructions Before Enrollment</h2>
+
+  <ol class="rules">
+    <li>All volunteers must complete 120 hours of NSS work in the first year.</li>
+    <li>In the second year, NSS work continues under Field Project.</li>
+    <li>NSS certificate is given after 2 years + 1 Special Camp.</li>
+    <li>Participation in one Special Camp is compulsory.</li>
+    <li>Marks are given based on performance and participation.</li>
+    <li>Regular attendance is mandatory.</li>
+    <li>Discipline and teamwork must be maintained.</li>
+    <li>Participation in social awareness and community service is required.</li>
+    <li>Balance academics with NSS activities.</li>
+  </ol>
+
+  <button type="button" class="btn" id="agreeBtn">I Agree & Continue</button>
+
+</div>
+
+<!-- STEP 2 -->
+<div class="step-content" id="step2">
+
+  <form id="nssForm">
+
+    <h2>Volunteer Registration</h2>
+
+    <!-- BASIC -->
+    <h3>Basic Information</h3>
+
+      <input type="text" id="fullName" placeholder="Full Name (SURNAME NAME FATHER MOTHER)" required>
+
+      <input type="text" id="class" placeholder="Class" required>
+
+      <input type="text" id="rollNo" placeholder="Roll Number" required>
+
+      <input type="text" id="studentId" placeholder="Student ID" required>
+
+    <!-- LOGIN -->
+    <h3>Login Details</h3>
+
+      <input type="text" id="loginId" placeholder="Login ID (Auto Generated)" readonly>
+
+      <input type="password" id="password" placeholder="Create Password" required>
+
+      <input type="password" id="confirmPassword" placeholder="Confirm Password" required>
+
+    <!-- PERSONAL -->
+    <h3>Personal Details</h3>
+
+      <input type="text" id="address" placeholder="Address" required>
+
+      <input type="tel" id="contact" placeholder="Contact Number" required>
+
+      <input type="email" id="email" placeholder="Email ID" required>
+
+      <input type="text" id="bloodGroup" placeholder="Blood Group" required>
+
+      <input type="date" id="dob" required>
+
+      <input type="number" id="age" placeholder="Age" required>
+
+      <input type="text" id="caste" placeholder="Caste" required>
+
+    <!-- PHOTO -->
+    <h3>Upload Photo</h3>
+
+    <input type="file" accept="image/*" required>
+
+    <br><br>
+
+    <button type="submit" class="btn">Continue</button>
+
+  </form>
+
+</div>
+
+<!-- STEP 3 -->
+<div class="step-content" id="step3">
+
+<h2>Final Step</h2>
+
+<p>Download the NSS Enrollment Form and submit it in NSS office.</p>
+
+<a href="2. Performa II Enrollment Form.pdf" class="btn" download>
+Download Form
+</a>
+
+</div>
+<script type="module" src="script.js"></script>
+
+</body>
+</html>
