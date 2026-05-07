@@ -1550,7 +1550,7 @@ section{
 
   /* CARD SIZE BALANCE */
   .project-card,
-  .guidance-card,{
+  .guidance-card{
     width:45%;
   }
 
@@ -1615,7 +1615,7 @@ section{
 
   /* CARD WIDTH FULL */
   .project-card,
-  .guidance-card,{
+  .guidance-card{
     width:100%;
     max-width:350px;
   }
