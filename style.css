@@ -304,7 +304,7 @@ opacity:0.9;
 
 .hero{
   position: relative;
-  height: 100vh;
+  min-height:100vh;
   overflow: hidden;
   color: white;
   font-family: 'Poppins', sans-serif;
@@ -753,8 +753,19 @@ background:white;
 padding:25px;
 border-radius:var(--radius);
 text-align:left;
-border-left:5px solid #145c3a;
+border:none;
+position:relative;
 transition:var(--transition);
+}
+
+.achievement-card::before{
+  content:"";
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:4px;
+  background:linear-gradient(90deg,#145c3a,#ff9933);
 }
 
 .achievement-card:hover{
@@ -784,7 +795,8 @@ margin-top:15px;
 .volunteer-card{
 background: linear-gradient(135deg, #ffffff, #f1fdf6);
 padding:18px;
-border-radius:10px;
+border-radius:18px;
+  box-shadow:0 8px 24px rgba(0,0,0,0.06);
 text-align:center;
 position:relative;
 transition:var(--transition);
@@ -992,7 +1004,7 @@ color:#1b4332;
 width:100%;
 height:180px;
 object-fit:cover;
-border-radius:10px;
+border-radius:18px;
 cursor:pointer;
 transition:var(--transition);
 position:relative;
@@ -1086,47 +1098,7 @@ transition:var(--transition);
 background:#ff9933;
 }
 
-/* ================= STUDENT ================= */
-.leaders-section{
-  padding:90px 10%;
-  text-align:center;
-  background:#ffffff;
-}
 
-.leaders-container{
-  display:flex;
-  flex-wrap:wrap;
-  gap:25px;
-  justify-content:center;
-}
-
-.leader-card{
-  width:250px;
-  background:white;
-  padding:15px;
-  border-radius:var(--radius);
-  box-shadow:var(--shadow);
-  transition:var(--transition);
-}
-
-.leader-card:hover{
-  transform:translateY(-6px);
-}
-
-/* IMAGE */
-.leader-card img{
-  width:100%;
-  height:250px;
-  object-fit:cover;
-  border-radius:10px;
-  margin-bottom:10px;
-}
-
-.leader-card .name{
-  font-weight:600;
-  margin-bottom:5px;
-  color:#145c3a;
-}
 
 /* ================= GUIDANCE ================= */
 /* CARD */
@@ -1548,14 +1520,14 @@ img{
 
 /* ================= CONTAINER SPACING ================= */
 section{
-  padding:90px 10%;
+  padding:110px 8%;
 }
 
 /* ================= TABLET ================= */
 @media(max-width:992px){
 
   section{
-    padding:70px 5%;
+    padding:70px 6%;
   }
 
   /* NAVBAR */
@@ -1571,7 +1543,6 @@ section{
   .projects-container,
   .featured-programs,
   .guidance-container,
-  .leaders-container,
   .contact-wrapper{
     flex-wrap:wrap;
     justify-content:center;
@@ -1579,8 +1550,7 @@ section{
 
   /* CARD SIZE BALANCE */
   .project-card,
-  .guidance-card,
-  .leader-card{
+  .guidance-card,{
     width:45%;
   }
 
@@ -1638,7 +1608,6 @@ section{
   .projects-container,
   .featured-programs,
   .guidance-container,
-  .leaders-container,
   .contact-wrapper{
     flex-direction:column;
     align-items:center;
@@ -1646,8 +1615,7 @@ section{
 
   /* CARD WIDTH FULL */
   .project-card,
-  .guidance-card,
-  .leader-card{
+  .guidance-card,{
     width:100%;
     max-width:350px;
   }
@@ -2025,7 +1993,7 @@ section{
 .timeline-item{
   background:white;
   padding:15px;
-  border-radius:10px;
+  border-radius:18px;
   box-shadow:0 4px 12px rgba(0,0,0,0.08);
   font-size:14px;
   font-weight:500;
@@ -2036,7 +2004,7 @@ section{
 
 /* HOVER */
 .timeline-item:hover{
-  transform:translateY(-5px);
+  transform:translateY(-6px) scale(1.02);
   background:#145c3a;
   color:white;
 }
@@ -2545,4 +2513,86 @@ img{
 
 ::-webkit-scrollbar-thumb:hover{
   background:#ff9933;
+}
+
+.card-style{
+  background:white;
+  border-radius:20px;
+
+  box-shadow:
+  0 10px 30px rgba(0,0,0,0.08);
+
+  transition:0.3s ease;
+
+  overflow:hidden;
+}
+
+.card-style:hover{
+  transform:translateY(-8px);
+
+  box-shadow:
+  0 18px 40px rgba(0,0,0,0.12);
+}
+
+.project-card,
+.program-card,
+.camp-card,
+.achievement-card,
+.guidance-card,
+.stat,
+.contact-info-card,
+.contact-form-card{
+  background:white;
+  border-radius:20px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.08);
+  transition:0.3s ease;
+}
+
+/* ================= MODERN CARD SYSTEM ================= */
+
+.project-card,
+.program-card,
+.camp-card,
+.achievement-card,
+.guidance-card,
+.stat,
+.contact-info-card,
+.contact-form-card,
+.report-box,
+.timeline-item,
+.day-card,
+.volunteer-card,
+.featured-program,
+.event-content{
+
+  border-radius:24px !important;
+
+  box-shadow:
+  0 10px 30px rgba(0,0,0,0.08);
+
+  transition:0.35s ease;
+}
+
+/* HOVER */
+.project-card:hover,
+.program-card:hover,
+.camp-card:hover,
+.achievement-card:hover,
+.guidance-card:hover,
+.stat:hover,
+.timeline-item:hover,
+.day-card:hover,
+.volunteer-card:hover{
+
+  transform:translateY(-8px);
+  box-shadow:
+  0 18px 40px rgba(0,0,0,0.12);
+}
+
+html{
+  overflow-x:hidden;
+}
+
+body{
+  overflow-x:hidden;
 }
