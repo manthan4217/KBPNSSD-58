@@ -75,6 +75,23 @@
 
       <select id="activitySelect"></select>
 
+      <div class="form-box">
+
+        <label>QR Expiry Time (Minutes)</label>
+
+        <input
+          type="number"
+          id="attendanceDuration"
+          placeholder="Enter minutes"
+          value="2"
+          min="1"
+          max="30"
+        >
+
+      </div>
+
+      <div id="qrcodeBox"></div>
+
       <div class="btn-row">
         <button onclick="startSession()">Start Session</button>
         <button onclick="endSession()">End Session</button>
@@ -112,20 +129,40 @@
 
     </div>
 
+    <!-- PASSWORD RESET -->
+    <div class="dashboard-card">
+
+      <h2>🔐 Reset Volunteer Password</h2>
+
+      <div class="form-box">
+
+        <input
+          type="email"
+          id="resetEmail"
+          placeholder="Volunteer Email"
+        >
+
+        <button id="resetPasswordBtn">
+          Send Password Reset Link
+        </button>
+
+      </div>
+
+    </div>
   </div>
 </div>
 
-<script type="module" src="admin.js"></script>
+  <script type="module" src="admin.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+  <script>
+  function showTab(tabId){
+    document.querySelectorAll(".tab").forEach(t=>{
+      t.classList.remove("active");
+    });
 
-<script>
-function showTab(tabId){
-  document.querySelectorAll(".tab").forEach(t=>{
-    t.classList.remove("active");
-  });
-
-  document.getElementById(tabId).classList.add("active");
-}
-</script>
+    document.getElementById(tabId).classList.add("active");
+  }
+  </script>
 
 </body>
 </html>

@@ -98,9 +98,33 @@
 
       <input type="text" id="loginId" placeholder="Login ID (Auto Generated)" readonly>
 
-      <input type="password" id="password" placeholder="Create Password" required>
+      <div class="password-box">
 
-      <input type="password" id="confirmPassword" placeholder="Confirm Password" required>
+        <input
+        type="password"
+        id="password"
+        placeholder="Create Password"
+        required>
+
+        <button type="button" id="togglePass1">
+          👁️
+        </button>
+
+      </div>
+
+      <div class="password-box">
+
+        <input
+        type="password"
+        id="confirmPassword"
+        placeholder="Confirm Password"
+        required>
+
+        <button type="button" id="togglePass2">
+          👁️
+        </button>
+
+      </div>
 
     <!-- PERSONAL -->
     <h3>Personal Details</h3>
@@ -109,7 +133,11 @@
 
       <input type="tel" id="contact" placeholder="Contact Number" required>
 
-      <input type="email" id="email" placeholder="Email ID" required>
+      <input type="email" id="email" placeholder="Personal Email ID" required>
+
+      <small class="email-note">
+      Used for password recovery and important notices
+      </small>
 
       <input type="text" id="bloodGroup" placeholder="Blood Group" required>
 
@@ -144,7 +172,7 @@ Download Form
 </a>
 
 </div>
-<script type="module" src="script.js"></script>
+<script type="module" src="join.js"></script>
 
 </body>
 </html>

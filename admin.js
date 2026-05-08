@@ -16,6 +16,10 @@ import {
   deleteDoc
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
+import {
+  sendPasswordResetEmail
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
 
 // ================= AUTH GUARD =================
 onAuthStateChanged(auth, (user) => {
@@ -116,15 +120,48 @@ async function loadActivities() {
 window.startSession = async function () {
 
   const activityId = document.getElementById("activitySelect").value;
+  const token =
+    Math.random()
+    .toString(36)
+    .substring(2,10);
 
   const now = new Date();
-  const end = new Date(now.getTime() + 15 * 60000); // 15 min
+  const duration =
+    Number(
+      document.getElementById("attendanceDuration").value
+    );
 
-  await updateDoc(doc(db, "activities", activityId), {
-    status: "active",
-    startTime: now,
-    endTime: end
-  });
+    const end =
+    new Date(
+      now.getTime() + duration * 60000
+    ); // 15 min
+
+    await updateDoc(doc(db, "activities", activityId), {
+
+      status: "active",
+
+      startTime: now,
+
+      endTime: end,
+
+      attendanceToken: token
+
+    });
+
+    const qrData =
+    `${window.location.origin}/dashboard.html?activity=${activityId}&token=${token}`;
+
+    document.getElementById("qrcodeBox").innerHTML = "";
+
+    QRCode.toCanvas(qrData, function (err, canvas) {
+
+      if (err) return console.error(err);
+
+      document
+        .getElementById("qrcodeBox")
+        .appendChild(canvas);
+
+    });
 
   alert("Attendance Started ⏱️ (15 min)");
 };
@@ -184,9 +221,37 @@ document.getElementById("saveMarks")?.addEventListener("click", async () => {
 
   if (!id) return alert("Enter student ID");
 
-  const volunteerSnap = await getDoc(
-    doc(db, "volunteers", user.email.split("@")[0])
-  );
+  document.getElementById("saveMarks")?.addEventListener("click", async () => {
+
+    const id =
+      document.getElementById("markStudentId").value;
+
+    const attendance =
+      Number(document.getElementById("attendanceMarks").value);
+
+    const activity =
+      Number(document.getElementById("activityMarks").value);
+
+    if (!id) {
+      alert("Enter Student ID");
+      return;
+    }
+
+    await setDoc(doc(db, "marks", id), {
+
+      studentId: id,
+
+      attendanceMarks: attendance,
+
+      activityMarks: activity,
+
+      total: attendance + activity
+
+    });
+
+    alert("Marks Saved Successfully ✅");
+
+  });
 
   const volunteerData = volunteerSnap.data();
 
@@ -272,3 +337,46 @@ window.deleteActivity = async function (activityId) {
     alert("Error deleting activity ❌");
   }
 };
+// password reset
+document.getElementById("resetPasswordBtn")
+?.addEventListener("click", async () => {
+
+  const email =
+    document.getElementById("resetEmail").value.trim();
+
+  if (!email) {
+    alert("Enter volunteer email");
+    return;
+  }
+
+  try {
+
+    await sendPasswordResetEmail(auth, email);
+
+    alert(
+      "Reset link sent successfully ✅\n\nCheck inbox/spam folder."
+    );
+
+  } catch (error) {
+
+    console.log(error);
+
+    if (error.code === "auth/user-not-found") {
+
+      alert("Volunteer account not found ❌");
+
+    } else if (
+      error.code === "auth/invalid-email"
+    ) {
+
+      alert("Invalid email format ❌");
+
+    } else {
+
+      alert(error.message);
+
+    }
+
+  }
+
+});

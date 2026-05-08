@@ -3,81 +3,183 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NSS Dashboard</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<title>NSS Student Dashboard</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
 <link rel="stylesheet" href="style.css">
 </head>
 
-<body>
+<body class="dashboard-body">
 
-<!-- HEADER -->
-<header class="topbar">
-  <div class="brand">
-    <h2>NSS Portal</h2>
-    <span>Student Dashboard</span>
+<!-- ================= TOPBAR ================= -->
+
+<header class="dashboard-topbar">
+
+  <div class="dashboard-brand">
+    <h2>NSS D-58 Portal</h2>
+    <span>KBP College, Vashi</span>
   </div>
 
-  <button id="logoutBtn" class="btn-logout">Logout</button>
-</header>
+  <div class="topbar-right">
 
-<!-- MAIN -->
-<div class="dashboard">
-
-  <!-- PROFILE CARD -->
-  <div class="card profile">
-    <h3>👤 My Profile</h3>
-
-    <div class="profile-grid">
-      <div>
-        <label>Name</label>
-        <p id="d-name">Loading...</p>
+    <div class="student-mini">
+      <div class="avatar">
+        👤
       </div>
 
       <div>
-        <label>Student ID</label>
-        <p id="d-id">Loading...</p>
-      </div>
-
-      <div>
-        <label>Class</label>
-        <p id="d-class">Loading...</p>
-      </div>
-
-      <div>
-        <label>Contact</label>
-        <p id="d-contact">Loading...</p>
+        <h4 id="topName">Volunteer</h4>
+        <p>Student Dashboard</p>
       </div>
     </div>
-  </div>
 
-  <!-- ATTENDANCE CARD -->
-  <div class="card attendance">
-
-    <h3>📅 Live Attendance</h3>
-
-    <div id="activeActivityBox">
-      <p>Loading active activity...</p>
-    </div>
-
-    <select id="activitySelect"></select>
-
-    <button onclick="markAttendance()" class="btn-primary">
-      Mark Attendance
+    <button id="logoutBtn" class="logout-btn">
+      Logout
     </button>
 
-    <p id="attendanceStatus"></p>
+  </div>
+
+</header>
+
+<!-- ================= MAIN ================= -->
+
+<div class="dashboard-wrapper">
+
+  <!-- LEFT SIDE -->
+
+  <div class="dashboard-left">
+
+    <!-- PROFILE CARD -->
+
+    <div class="dashboard-card profile-card">
+
+      <div class="profile-header">
+
+        <div class="profile-avatar">
+          👤
+        </div>
+
+        <div>
+          <h3 id="d-name">Loading...</h3>
+          <span id="d-class">Loading...</span>
+        </div>
+
+      </div>
+
+      <div class="profile-grid">
+
+        <div class="profile-item">
+          <label>Student ID</label>
+          <p id="d-id">Loading...</p>
+        </div>
+
+        <div class="profile-item">
+          <label>Contact</label>
+          <p id="d-contact">Loading...</p>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- ATTENDANCE CARD -->
+
+    <div class="dashboard-card attendance-card-modern">
+
+      <div class="card-title">
+        <h3>🔥 Live Attendance</h3>
+      </div>
+
+      <div id="activeActivityBox">
+
+        <div class="loading-box">
+          Loading activity...
+        </div>
+
+      </div>
+
+      <div class="attendance-form">
+
+        <select id="activitySelect"></select>
+
+        <button onclick="markAttendance()" class="mark-btn">
+          Mark Attendance
+        </button>
+
+      </div>
+
+      <p id="attendanceStatus"></p>
+
+    </div>
 
   </div>
 
-  <!-- ACTIVITIES -->
-  <div class="card">
-    <h3>🎯 NSS Activities</h3>
+  <!-- RIGHT SIDE -->
 
-    <div class="activity-list">
-      <div class="activity">Cleanliness Drive</div>
-      <div class="activity">Blood Donation Camp</div>
-      <div class="activity">Village Survey</div>
+  <div class="dashboard-right">
+
+    <!-- STATS -->
+
+    <div class="stats-grid">
+
+      <div class="mini-stat">
+        <h2>25+</h2>
+        <p>Activities</p>
+      </div>
+
+      <div class="mini-stat">
+        <h2>95%</h2>
+        <p>Attendance</p>
+      </div>
+
+    </div>
+
+    <!-- ACTIVITIES -->
+
+    <div class="dashboard-card">
+
+      <div class="card-title">
+        <h3>🎯 NSS Activities</h3>
+      </div>
+
+      <div class="activity-list">
+
+        <div class="activity-pill">
+          Cleanliness Drive
+        </div>
+
+        <div class="activity-pill">
+          Blood Donation
+        </div>
+
+        <div class="activity-pill">
+          Tree Plantation
+        </div>
+
+        <div class="activity-pill">
+          Village Survey
+        </div>
+
+        <div class="activity-pill">
+          Awareness Rally
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- MOTIVATION -->
+
+    <div class="dashboard-card quote-card">
+
+      <h3>✨ NSS Motto</h3>
+
+      <p>
+        "Not Me But You"
+      </p>
+
     </div>
 
   </div>

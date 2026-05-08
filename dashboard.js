@@ -96,10 +96,25 @@ window.markAttendance = async function () {
     return;
   }
 
+  const volunteerSnap = await getDoc(
+    doc(db, "volunteers", studentId)
+  );
+
+  const volunteerData = volunteerSnap.data();
+
   await setDoc(attRef, {
+
     uid: user.uid,
+
+    studentId: volunteerData.studentId,
+    fullName: volunteerData.fullName,
+    className: volunteerData.className,
+    contact: volunteerData.contact,
+
     email: user.email,
+
     time: new Date()
+
   });
 
   document.getElementById("attendanceStatus").innerText =
