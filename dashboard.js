@@ -264,3 +264,50 @@ window.history.replaceState(
   document.title,
   window.location.pathname
 );
+
+// ================= QR SCANNER =================
+
+const scannerBtn =
+document.getElementById("openScannerBtn");
+
+if(scannerBtn){
+
+  scannerBtn.addEventListener("click", () => {
+
+    const html5QrCode =
+    new Html5Qrcode("reader");
+
+    html5QrCode.start(
+
+      { facingMode: "environment" },
+
+      {
+        fps: 10,
+        qrbox: 250
+      },
+
+      async (decodedText) => {
+
+        // stop camera
+        await html5QrCode.stop();
+
+        // redirect to qr link
+        window.location.href = decodedText;
+
+      },
+
+      (errorMessage) => {
+        // ignore scan errors
+      }
+
+    ).catch(err => {
+
+      alert("Camera error ❌");
+
+      console.log(err);
+
+    });
+
+  });
+
+}
