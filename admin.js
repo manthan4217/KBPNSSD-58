@@ -149,7 +149,7 @@ window.startSession = async function () {
     });
 
     const qrData =
-    `${window.location.origin}/dashboard.html?activity=${activityId}&token=${token}`;
+    `https://manthan4217.github.io/KBPNSSD-58/dashboard.html?activity=${activityId}&token=${token}`;
 
     document.getElementById("qrcodeBox").innerHTML = "";
 
