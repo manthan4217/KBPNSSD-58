@@ -272,41 +272,50 @@ document.getElementById("openScannerBtn");
 
 if(scannerBtn){
 
-  scannerBtn.addEventListener("click", () => {
+  scannerBtn.addEventListener("click", async () => {
+
+    const reader =
+    document.getElementById("reader");
+
+    reader.innerHTML = "";
 
     const html5QrCode =
     new Html5Qrcode("reader");
 
-    html5QrCode.start(
+    try {
 
-      { facingMode: "environment" },
+      await html5QrCode.start(
 
-      {
-        fps: 10,
-        qrbox: 250
-      },
+        {
+          facingMode: "environment"
+        },
 
-      async (decodedText) => {
+        {
+          fps: 10,
+          qrbox: 250
+        },
 
-        // stop camera
-        await html5QrCode.stop();
+        async (decodedText) => {
 
-        // redirect to qr link
-        window.location.href = decodedText;
+          console.log(decodedText);
 
-      },
+          // stop camera
+          await html5QrCode.stop();
 
-      (errorMessage) => {
-        // ignore scan errors
-      }
+          // open qr link
+          window.location.href = decodedText;
 
-    ).catch(err => {
+        }
 
-      alert("Camera error ❌");
+      );
+
+    } catch(err){
 
       console.log(err);
 
-    });
+      alert("Camera access denied ❌");
+
+    }
 
   });
 
