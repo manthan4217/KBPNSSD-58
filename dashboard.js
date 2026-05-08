@@ -36,6 +36,7 @@ onAuthStateChanged(auth, async (user) => {
 
   // ✅ ADD THIS LINE
   loadActiveActivity();
+  checkQRAndMarkAttendance();
 
 });
 
@@ -44,82 +45,6 @@ document.getElementById("logoutBtn")?.addEventListener("click", async () => {
   await signOut(auth);
   window.location.href = "login.html";
 });
-
-// ================= MARK ATTENDANCE =================
-window.markAttendance = async function () {
-
-  const user = auth.currentUser;
-
-  if (!user) {
-    alert("Not logged in");
-    return;
-  }
-
-  const activityId = document.getElementById("activitySelect").value;
-
-  if (!activityId) {
-    alert("Select activity");
-    return;
-  }
-
-  const activityRef = doc(db, "activities", activityId);
-  const snap = await getDoc(activityRef);
-
-  if (!snap.exists()) {
-    alert("Invalid activity");
-    return;
-  }
-
-  const data = snap.data();
-
-  // check active session
-  if (data.status !== "active") {
-    alert("Attendance not active ❌");
-    return;
-  }
-
-  const now = new Date();
-  const start = data.startTime.toDate();
-  const end = data.endTime.toDate();
-
-  if (now < start || now > end) {
-    alert("Attendance time expired ❌");
-    return;
-  }
-
-  // prevent double entry
-  const attRef = doc(db, "activities", activityId, "attendance", user.uid);
-  const attSnap = await getDoc(attRef);
-
-  if (attSnap.exists()) {
-    alert("Already marked ✅");
-    return;
-  }
-
-  const volunteerSnap = await getDoc(
-    doc(db, "volunteers", studentId)
-  );
-
-  const volunteerData = volunteerSnap.data();
-
-  await setDoc(attRef, {
-
-    uid: user.uid,
-
-    studentId: volunteerData.studentId,
-    fullName: volunteerData.fullName,
-    className: volunteerData.className,
-    contact: volunteerData.contact,
-
-    email: user.email,
-
-    time: new Date()
-
-  });
-
-  document.getElementById("attendanceStatus").innerText =
-    "Attendance marked successfully ✅";
-};
 
 //to show activity attendance
 window.loadActiveActivity = async function () {
@@ -163,3 +88,144 @@ window.loadActiveActivity = async function () {
     box.innerHTML = `<p style="color:red;">No active attendance session</p>`;
   }
 };
+
+// ================= QR ATTENDANCE =================
+
+async function checkQRAndMarkAttendance() {
+
+  const params =
+  new URLSearchParams(window.location.search);
+
+  const activityId =
+  params.get("activity");
+
+  const token =
+  params.get("token");
+
+  // no QR
+  if (!activityId || !token) {
+    return;
+  }
+
+  const user = auth.currentUser;
+
+  if (!user) return;
+
+  const studentId =
+  user.email.split("@")[0];
+
+  // activity ref
+  const activityRef =
+  doc(db, "activities", activityId);
+
+  const activitySnap =
+  await getDoc(activityRef);
+
+  if (!activitySnap.exists()) {
+    alert("Invalid QR ❌");
+    return;
+  }
+
+  const activityData =
+  activitySnap.data();
+
+  // token check
+  if (activityData.attendanceToken !== token) {
+
+    alert("Fake QR Code ❌");
+
+    return;
+  }
+
+  // status check
+  if (activityData.status !== "active") {
+
+    alert("Attendance closed ❌");
+
+    return;
+  }
+
+  // expiry check
+  const now = new Date();
+
+  const end =
+  activityData.endTime.toDate();
+
+  if (now > end) {
+
+    alert("QR Expired ❌");
+
+    return;
+  }
+
+  // prevent double attendance
+  const attRef = doc(
+    db,
+    "activities",
+    activityId,
+    "attendance",
+    studentId
+  );
+
+  const attSnap =
+  await getDoc(attRef);
+
+  if (attSnap.exists()) {
+
+    alert("Attendance already marked ✅");
+
+    return;
+  }
+
+  // volunteer data
+  const volunteerSnap =
+  await getDoc(
+    doc(db, "volunteers", studentId)
+  );
+
+  const volunteerData =
+  volunteerSnap.data();
+
+  // save attendance
+  await setDoc(attRef, {
+
+    uid: user.uid,
+
+    studentId:
+    volunteerData.studentId,
+
+    fullName:
+    volunteerData.fullName,
+
+    className:
+    volunteerData.className,
+
+    contact:
+    volunteerData.contact,
+
+    email: user.email,
+
+    time: new Date()
+
+  });
+
+  // success UI
+  document.getElementById(
+    "qrAttendanceBox"
+  ).innerHTML = `
+
+    <div class="success-box">
+
+      <h3>
+        Attendance Marked ✅
+      </h3>
+
+      <p>
+        ${activityData.name}
+      </p>
+
+    </div>
+
+  `;
+
+}
