@@ -100,140 +100,164 @@ window.loadActiveActivity = async function () {
 
 // ================= QR ATTENDANCE =================
 
-async function checkQRAndMarkAttendance(user) {
+  async function checkQRAndMarkAttendance(user) {
 
-  const params =
-  new URLSearchParams(window.location.search);
+    try {
 
-  const activityId =
-  params.get("activity");
+      console.log("QR function started");
 
-  const token =
-  params.get("token");
+      const params =
+      new URLSearchParams(window.location.search);
 
-  // no QR
-  if (!activityId || !token) {
-    return;
+      const activityId =
+      params.get("activity");
+
+      const token =
+      params.get("token");
+
+      console.log(activityId);
+      console.log(token);
+
+      // no qr
+      if (!activityId || !token) {
+        return;
+      }
+
+      const studentId =
+      user.email.split("@")[0];
+
+      const activityRef =
+      doc(db, "activities", activityId);
+
+      const activitySnap =
+      await getDoc(activityRef);
+
+      if (!activitySnap.exists()) {
+
+        alert("Invalid QR ❌");
+
+        return;
+      }
+
+      const activityData =
+      activitySnap.data();
+
+      console.log(activityData);
+
+      // token check
+      if (activityData.attendanceToken !== token) {
+
+        alert("Fake QR ❌");
+
+        return;
+      }
+
+      // status
+      if (activityData.status !== "active") {
+
+        alert("Attendance closed ❌");
+
+        return;
+      }
+
+      // expiry
+      const now = new Date();
+
+      const end =
+      activityData.endTime.toDate();
+
+      if (now > end) {
+
+        alert("QR expired ❌");
+
+        return;
+      }
+
+      // attendance ref
+      const attRef = doc(
+        db,
+        "activities",
+        activityId,
+        "attendance",
+        studentId
+      );
+
+      const attSnap =
+      await getDoc(attRef);
+
+      if (attSnap.exists()) {
+
+        alert("Already marked ✅");
+
+        return;
+      }
+
+      // volunteer data
+      const volunteerSnap =
+      await getDoc(
+        doc(db, "volunteers", studentId)
+      );
+
+      const volunteerData =
+      volunteerSnap.data();
+
+      // save
+      await setDoc(attRef, {
+
+        uid: user.uid,
+
+        studentId:
+        volunteerData.studentId,
+
+        fullName:
+        volunteerData.fullName,
+
+        className:
+        volunteerData.className,
+
+        contact:
+        volunteerData.contact,
+
+        email: user.email,
+
+        time: new Date()
+
+      });
+
+      // success ui
+      document.getElementById(
+        "qrAttendanceBox"
+      ).innerHTML = `
+
+        <div class="success-box">
+
+          <h3>
+            Attendance Marked ✅
+          </h3>
+
+          <p>
+            ${activityData.name}
+          </p>
+
+        </div>
+      `;
+
+      // clean url
+      window.history.replaceState(
+        {},
+        document.title,
+        window.location.pathname
+      );
+
+    } catch(error) {
+
+      console.error(error);
+
+      alert(error.message);
+
+    }
+
   }
-
-  const studentId =
-  user.email.split("@")[0];
-
-  // activity ref
-  const activityRef =
-  doc(db, "activities", activityId);
-
-  const activitySnap =
-  await getDoc(activityRef);
-
-  if (!activitySnap.exists()) {
-    alert("Invalid QR ❌");
-    return;
-  }
-
-  const activityData =
-  activitySnap.data();
-
-  // token check
-  if (activityData.attendanceToken !== token) {
-
-    alert("Fake QR Code ❌");
-
-    return;
-  }
-
-  // status check
-  if (activityData.status !== "active") {
-
-    alert("Attendance closed ❌");
-
-    return;
-  }
-
-  // expiry check
-  const now = new Date();
-
-  const end =
-  activityData.endTime.toDate();
-
-  if (now > end) {
-
-    alert("QR Expired ❌");
-
-    return;
-  }
-
-  // prevent double attendance
-  const attRef = doc(
-    db,
-    "activities",
-    activityId,
-    "attendance",
-    studentId
-  );
-
-  const attSnap =
-  await getDoc(attRef);
-
-  if (attSnap.exists()) {
-
-    alert("Attendance already marked ✅");
-
-    return;
-  }
-
-  // volunteer data
-  const volunteerSnap =
-  await getDoc(
-    doc(db, "volunteers", studentId)
-  );
-
-  const volunteerData =
-  volunteerSnap.data();
-
-  // save attendance
-  await setDoc(attRef, {
-
-    uid: user.uid,
-
-    studentId:
-    volunteerData.studentId,
-
-    fullName:
-    volunteerData.fullName,
-
-    className:
-    volunteerData.className,
-
-    contact:
-    volunteerData.contact,
-
-    email: user.email,
-
-    time: new Date()
-
-  });
-
-  // success UI
-  document.getElementById(
-    "qrAttendanceBox"
-  ).innerHTML = `
-
-    <div class="success-box">
-
-      <h3>
-        Attendance Marked ✅
-      </h3>
-
-      <p>
-        ${activityData.name}
-      </p>
-
-    </div>
-
-  `;
-
-}
 
 window.history.replaceState(
   {},
