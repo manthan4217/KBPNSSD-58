@@ -224,23 +224,37 @@ window.loadActiveActivity = async function () {
 
       });
 
-      // success ui
-      document.getElementById(
-        "qrAttendanceBox"
-      ).innerHTML = `
+      // success popup
 
-        <div class="success-box">
+      const popup =
+      document.getElementById("successPopup");
 
-          <h3>
-            Attendance Marked ✅
-          </h3>
+      popup.style.display = "block";
 
-          <p>
-            ${activityData.name}
-          </p>
+        setTimeout(() => {
 
-        </div>
-      `;
+          popup.style.display = "none";
+
+        }, 3000);
+
+      // success box
+
+        document.getElementById(
+          "qrAttendanceBox"
+        ).innerHTML = `
+
+          <div class="success-box">
+
+            <h3>
+              Attendance Marked ✅
+            </h3>
+
+            <p>
+              ${activityData.name}
+            </p>
+
+          </div>
+        `;
 
       // clean url
       window.history.replaceState(

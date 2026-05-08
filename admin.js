@@ -253,17 +253,28 @@ document.getElementById("saveMarks")?.addEventListener("click", async () => {
 
   });
 
+  // get volunteer details
+  const volunteerSnap = await getDoc(
+    doc(db, "volunteers", studentId)
+  );
+
   const volunteerData = volunteerSnap.data();
 
+  // save attendance
   await setDoc(attRef, {
 
     uid: user.uid,
+
     studentId: volunteerData.studentId,
+
     fullName: volunteerData.fullName,
+
     className: volunteerData.className,
+
     contact: volunteerData.contact,
 
     email: user.email,
+
     time: new Date()
 
   });

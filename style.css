@@ -3253,3 +3253,28 @@ body{
 .step-content.active{
   display:block;
 }
+
+.success-popup{
+
+  position:fixed;
+
+  top:20px;
+  right:20px;
+
+  background:#16a34a;
+
+  color:white;
+
+  padding:15px 25px;
+
+  border-radius:14px;
+
+  font-weight:600;
+
+  display:none;
+
+  z-index:9999;
+
+  box-shadow:0 10px 25px rgba(0,0,0,0.2);
+
+}
