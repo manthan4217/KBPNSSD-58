@@ -13,32 +13,41 @@ import {
   collection
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-onAuthStateChanged(auth, async (user) => {
+  onAuthStateChanged(auth, async (user) => {
 
-  if (!user) {
-    window.location.href = "login.html";
-    return;
-  }
+    if (!user) {
+      window.location.href = "login.html";
+      return;
+    }
 
-  const studentId = user.email.split("@")[0];
+    const studentId = user.email.split("@")[0];
 
-  document.getElementById("d-id").innerText = studentId;
+    document.getElementById("d-id").innerText = studentId;
 
-  const docSnap = await getDoc(doc(db, "volunteers", studentId));
+    const docSnap =
+    await getDoc(doc(db, "volunteers", studentId));
 
-  if (docSnap.exists()) {
-    const data = docSnap.data();
+    if (docSnap.exists()) {
 
-    document.getElementById("d-name").innerText = data.fullName;
-    document.getElementById("d-class").innerText = data.className;
-    document.getElementById("d-contact").innerText = data.contact;
-  }
+      const data = docSnap.data();
 
-  // ✅ ADD THIS LINE
-  loadActiveActivity();
-  checkQRAndMarkAttendance();
+      document.getElementById("d-name").innerText =
+      data.fullName;
 
-});
+      document.getElementById("d-class").innerText =
+      data.className;
+
+      document.getElementById("d-contact").innerText =
+      data.contact;
+    }
+
+    loadActiveActivity();
+
+    // ✅ IMPORTANT
+    await checkQRAndMarkAttendance(user);
+
+  });
+
 
 // logout
 document.getElementById("logoutBtn")?.addEventListener("click", async () => {
@@ -91,7 +100,7 @@ window.loadActiveActivity = async function () {
 
 // ================= QR ATTENDANCE =================
 
-async function checkQRAndMarkAttendance() {
+async function checkQRAndMarkAttendance(user) {
 
   const params =
   new URLSearchParams(window.location.search);
@@ -106,10 +115,6 @@ async function checkQRAndMarkAttendance() {
   if (!activityId || !token) {
     return;
   }
-
-  const user = auth.currentUser;
-
-  if (!user) return;
 
   const studentId =
   user.email.split("@")[0];
