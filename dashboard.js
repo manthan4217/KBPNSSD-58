@@ -39,9 +39,13 @@ import {
 
       document.getElementById("d-contact").innerText =
       data.contact;
+
+      document.getElementById("d-email").innerText =
+      user.email;
     }
 
     loadActiveActivity();
+    loadActivityStats(user);
 
     // ✅ IMPORTANT
     await checkQRAndMarkAttendance(user);
@@ -229,13 +233,25 @@ window.loadActiveActivity = async function () {
       const popup =
       document.getElementById("successPopup");
 
+      popup.innerHTML = `
+
+        ✅ Attendance Marked Successfully
+
+        <br><br>
+
+        <small>
+          ${activityData.name}
+        </small>
+
+      `;
+
       popup.style.display = "block";
 
-        setTimeout(() => {
+      setTimeout(() => {
 
-          popup.style.display = "none";
+        popup.style.display = "none";
 
-        }, 3000);
+      }, 4000);
 
       // success box
 
@@ -333,4 +349,85 @@ if(scannerBtn){
 
   });
 
+}
+
+// ================= ACTIVITY STATS =================
+
+async function loadActivityStats(user){
+
+  const studentId =
+  user.email.split("@")[0];
+
+  // total activities
+  const activitiesSnap =
+  await getDocs(collection(db,"activities"));
+
+  const totalActivities =
+  activitiesSnap.size;
+
+  let attended = 0;
+
+  let activityHTML = "";
+
+  for(const activityDoc of activitiesSnap.docs){
+
+    const attRef = doc(
+      db,
+      "activities",
+      activityDoc.id,
+      "attendance",
+      studentId
+    );
+
+    const attSnap =
+    await getDoc(attRef);
+
+    if(attSnap.exists()){
+
+      attended++;
+
+      const data =
+      activityDoc.data();
+
+      activityHTML += `
+
+        <div class="detail-item">
+
+          <h4>${data.name}</h4>
+
+          <p>${data.date}</p>
+
+        </div>
+      `;
+    }
+  }
+
+  // count
+  document.getElementById(
+    "activityCount"
+  ).innerText =
+  `${attended} / ${totalActivities}`;
+
+  // percentage
+  const percentage =
+  totalActivities > 0
+  ? Math.round(
+      (attended / totalActivities) * 100
+    )
+  : 0;
+
+  // details
+  document.getElementById(
+    "activityDetails"
+  ).innerHTML = `
+
+    <p>
+      Attendance Percentage:
+      <b>${percentage}%</b>
+    </p>
+
+    <div class="details-list">
+      ${activityHTML || "No activity attended yet"}
+    </div>
+  `;
 }

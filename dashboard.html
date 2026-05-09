@@ -80,6 +80,11 @@
           <p id="d-contact">Loading...</p>
         </div>
 
+        <div>
+          <label>Email</label>
+          <p id="d-email">Loading...</p>
+        </div>
+
       </div>
 
     </div>
@@ -126,17 +131,23 @@
 
     <!-- STATS -->
 
-    <div class="stats-grid">
+    <div class="card stats-card">
 
-      <div class="mini-stat">
-        <h2>25+</h2>
-        <p>Activities</p>
+      <h3>🎯 Activity Attendance</h3>
+
+      <div class="big-stat" id="activityCount">
+        0 / 0
       </div>
 
-      <div class="mini-stat">
-        <h2>95%</h2>
-        <p>Attendance</p>
-      </div>
+      <p>
+        Activities Attended
+      </p>
+
+      <button class="view-btn" id="viewActivitiesBtn">
+        View Details
+      </button>
+
+      <div id="activityDetails"></div>
 
     </div>
 
@@ -191,7 +202,7 @@
 </div>
 
 <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
-
+<div id="successPopup" class="success-popup"></div>
 <script type="module" src="dashboard.js"></script>
 
 </body>
