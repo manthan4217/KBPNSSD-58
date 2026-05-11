@@ -1,64 +1,1529 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Shiv Jayanti Celebration | NSS Unit</title>
-  <link rel="stylesheet" href="style.css">
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Shiv Jayanti 2026 | NSS Unit D-58</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+
+/* ================= GLOBAL ================= */
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  font-family:'Poppins',sans-serif;
+  background:#081c15;
+  color:white;
+  overflow-x:hidden;
+}
+
+/* ================= HERO ================= */
+
+.shiv-hero{
+  position:relative;
+  height:100vh;
+
+  background:
+  linear-gradient(
+    rgba(0,0,0,0.65),
+    rgba(0,0,0,0.75)
+  ),
+  url("images/shivjayanti242.jpeg");
+
+  background-size:cover;
+  background-position:center;
+  background-attachment:fixed;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  text-align:center;
+}
+
+.hero-content{
+  max-width:900px;
+  padding:20px;
+  animation:fadeUp 1s ease;
+}
+
+.hero-badge{
+  display:inline-block;
+
+  background:rgba(255,153,51,0.15);
+
+  border:1px solid rgba(255,153,51,0.4);
+
+  color:#ffd166;
+
+  padding:10px 20px;
+
+  border-radius:50px;
+
+  margin-bottom:25px;
+
+  backdrop-filter:blur(10px);
+}
+
+.hero-content h1{
+
+  font-size:clamp(3rem,8vw,7rem);
+
+  line-height:1;
+
+  margin-bottom:25px;
+
+  font-weight:800;
+
+  background:linear-gradient(
+    90deg,
+    #ffffff,
+    #ffd166
+  );
+
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+.hero-content p{
+
+  font-size:20px;
+
+  line-height:1.9;
+
+  color:#f1f1f1;
+
+  max-width:800px;
+
+  margin:auto auto 40px;
+}
+
+/* BUTTONS */
+
+.hero-buttons{
+  display:flex;
+  gap:20px;
+  justify-content:center;
+  flex-wrap:wrap;
+}
+
+.hero-btn{
+
+  padding:15px 32px;
+
+  border-radius:50px;
+
+  text-decoration:none;
+
+  font-weight:600;
+
+  transition:0.3s ease;
+
+  background:#ff9933;
+
+  color:white;
+}
+
+.hero-btn.outline{
+
+  background:transparent;
+
+  border:1px solid rgba(255,255,255,0.3);
+}
+
+.hero-btn:hover{
+  transform:translateY(-4px);
+}
+
+/* SCROLL */
+
+.scroll-down{
+
+  position:absolute;
+
+  bottom:30px;
+  left:50%;
+
+  transform:translateX(-50%);
+
+  font-size:32px;
+
+  animation:bounce 1.5s infinite;
+}
+
+/* ================= INTRO ================= */
+
+.shiv-intro{
+
+  padding:120px 10%;
+
+  background:
+  linear-gradient(
+    135deg,
+    #081c15,
+    #1b4332
+  );
+}
+
+.intro-container{
+
+  display:grid;
+
+  grid-template-columns:1.2fr 0.8fr;
+
+  gap:60px;
+
+  align-items:center;
+}
+
+.intro-left h2{
+
+  font-size:52px;
+
+  margin-bottom:25px;
+
+  color:#ffd166;
+}
+
+.intro-left p{
+
+  line-height:2;
+
+  color:#eee;
+
+  margin-bottom:20px;
+
+  font-size:18px;
+}
+
+.stats-column{
+  display:flex;
+  flex-direction:column;
+  gap:25px;
+}
+
+.stat-card{
+
+  background:rgba(255,255,255,0.06);
+
+  border:1px solid rgba(255,255,255,0.08);
+
+  backdrop-filter:blur(10px);
+
+  padding:35px;
+
+  border-radius:30px;
+
+  text-align:center;
+
+  transition:0.4s ease;
+}
+
+.stat-card:hover{
+
+  transform:translateY(-8px);
+
+  background:rgba(255,153,51,0.12);
+}
+
+.stat-card h3{
+
+  font-size:56px;
+
+  color:#ffd166;
+
+  margin-bottom:10px;
+}
+
+/* ================= TIMELINE ================= */
+
+.timeline-section{
+
+  padding:120px 8%;
+
+  background:#f8f9fa;
+
+  color:#111;
+}
+
+.section-title{
+
+  text-align:center;
+
+  margin-bottom:80px;
+}
+
+.section-title span{
+
+  color:#ff7b00;
+
+  letter-spacing:3px;
+
+  text-transform:uppercase;
+
+  font-weight:700;
+}
+
+.section-title h2{
+
+  font-size:60px;
+
+  margin-top:15px;
+}
+
+/* ROW */
+
+.timeline-row{
+
+  display:grid;
+
+  grid-template-columns:1fr 1fr;
+
+  gap:60px;
+
+  align-items:center;
+
+  margin-bottom:120px;
+}
+
+.timeline-row.reverse .timeline-image{
+  order:2;
+}
+
+.timeline-row.reverse .timeline-content{
+  order:1;
+}
+
+/* IMAGE */
+
+.timeline-image img{
+
+  width:100%;
+
+  height:500px;
+
+  object-fit:cover;
+
+  border-radius:35px;
+
+  box-shadow:
+  0 20px 40px rgba(0,0,0,0.15);
+}
+
+/* CONTENT */
+
+.timeline-content span{
+
+  color:#ff7b00;
+
+  font-weight:700;
+
+  letter-spacing:2px;
+}
+
+.timeline-content h3{
+
+  font-size:48px;
+
+  margin:20px 0;
+}
+
+.timeline-content p{
+
+  line-height:2;
+
+  color:#555;
+
+  font-size:17px;
+}
+
+/* ================= GALLERY ================= */
+
+.shiv-gallery{
+
+  padding:120px 8%;
+
+  background:
+  linear-gradient(
+    135deg,
+    #111827,
+    #1f2937
+  );
+}
+
+.gallery-title{
+
+  text-align:center;
+
+  margin-bottom:70px;
+}
+
+.gallery-title h2{
+
+  font-size:60px;
+
+  color:#ffd166;
+}
+
+.gallery-grid{
+
+  display:grid;
+
+  grid-template-columns:
+  repeat(auto-fit,minmax(280px,1fr));
+
+  gap:25px;
+}
+
+.gallery-grid img{
+
+  width:100%;
+
+  height:350px;
+
+  object-fit:cover;
+
+  border-radius:28px;
+
+  transition:0.4s ease;
+}
+
+.gallery-grid img:hover{
+
+  transform:scale(1.04);
+
+  box-shadow:
+  0 20px 40px rgba(0,0,0,0.35);
+}
+
+/* ================= CONCLUSION ================= */
+
+.shiv-conclusion{
+
+  padding:140px 10%;
+
+  background:
+  linear-gradient(
+    135deg,
+    #7b0000,
+    #3d0000
+  );
+
+  text-align:center;
+}
+
+.shiv-conclusion h2{
+
+  font-size:64px;
+
+  margin-bottom:30px;
+}
+
+.shiv-conclusion p{
+
+  max-width:900px;
+
+  margin:auto;
+
+  line-height:2;
+
+  font-size:19px;
+
+  color:#f1f1f1;
+}
+
+/* ================= FOOTER ================= */
+
+.footer{
+
+  background:#081c15;
+
+  padding:80px 10% 40px;
+}
+
+.footer-container{
+
+  display:grid;
+
+  grid-template-columns:
+  repeat(auto-fit,minmax(250px,1fr));
+
+  gap:40px;
+}
+
+.footer h3,
+.footer h4{
+
+  margin-bottom:20px;
+
+  color:#ffd166;
+}
+
+.footer p,
+.footer a{
+
+  color:#ddd;
+
+  line-height:2;
+
+  text-decoration:none;
+}
+
+.footer a:hover{
+  color:#ff9933;
+}
+
+.social-icons{
+
+  display:flex;
+
+  gap:15px;
+
+  margin-top:20px;
+}
+
+.social-icons a{
+
+  width:45px;
+  height:45px;
+
+  border-radius:50%;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  background:rgba(255,255,255,0.08);
+
+  transition:0.3s ease;
+}
+
+.social-icons a:hover{
+
+  background:#ff9933;
+
+  transform:translateY(-5px);
+}
+
+.footer-bottom{
+
+  margin-top:50px;
+
+  text-align:center;
+
+  border-top:1px solid rgba(255,255,255,0.1);
+
+  padding-top:25px;
+}
+
+/* ================= ANIMATIONS ================= */
+
+@keyframes bounce{
+
+  0%,100%{
+    transform:translate(-50%,0);
+  }
+
+  50%{
+    transform:translate(-50%,10px);
+  }
+}
+
+@keyframes fadeUp{
+
+  from{
+    opacity:0;
+    transform:translateY(50px);
+  }
+
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+/* ================= MOBILE ================= */
+
+@media(max-width:900px){
+
+  .timeline-row,
+  .intro-container{
+
+    grid-template-columns:1fr;
+  }
+
+  .timeline-row.reverse .timeline-image,
+  .timeline-row.reverse .timeline-content{
+
+    order:unset;
+  }
+
+  .timeline-image img{
+    height:350px;
+  }
+
+  .section-title h2,
+  .gallery-title h2,
+  .shiv-conclusion h2{
+
+    font-size:40px;
+  }
+
+  .timeline-content h3{
+
+    font-size:34px;
+  }
+
+  .intro-left h2{
+
+    font-size:40px;
+  }
+
+}
+
+@media(max-width:600px){
+
+  .hero-content p{
+    font-size:16px;
+  }
+
+  .hero-buttons{
+    flex-direction:column;
+  }
+
+  .hero-btn{
+    width:100%;
+  }
+
+  .timeline-image img{
+    height:280px;
+  }
+
+}
+
+/* ================= HEADER ================= */
+
+.modern-header{
+  width:100%;
+  background:#fff;
+  box-shadow:0 4px 20px rgba(0,0,0,0.08);
+  position:relative;
+  z-index:1000;
+}
+
+/* TOP STRIP */
+
+.header-strip{
+  background:linear-gradient(90deg,#ff6a00,#ff8800);
+  color:#fff;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:8px 8%;
+  font-size:14px;
+  font-weight:500;
+}
+
+.header-strip span{
+  font-style:italic;
+}
+
+/* MAIN HEADER */
+
+.header-main{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:22px 8%;
+  gap:20px;
+}
+
+/* LOGOS */
+
+.header-logos{
+  display:flex;
+  align-items:center;
+  gap:15px;
+}
+
+.logo-box{
+  width:85px;
+  height:85px;
+  background:#fff;
+  border-radius:18px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 4px 15px rgba(0,0,0,0.08);
+  transition:0.3s;
+}
+
+.logo-box:hover{
+  transform:translateY(-5px);
+}
+
+.logo-box img{
+  width:75%;
+  object-fit:contain;
+}
+
+/* CENTER */
+
+.header-center{
+  text-align:center;
+  flex:1;
+}
+
+.header-org{
+  color:#ff6a00;
+  font-size:15px;
+  font-weight:600;
+  letter-spacing:1px;
+}
+
+.header-center h1{
+  font-size:34px;
+  color:#111;
+  margin:8px 0;
+  font-weight:800;
+}
+
+.header-sub{
+  color:#666;
+  font-size:15px;
+  margin-bottom:15px;
+}
+
+.header-divider{
+  width:80px;
+  height:4px;
+  background:#ff6a00;
+  margin:12px auto;
+  border-radius:20px;
+}
+
+.header-center h2{
+  color:#222;
+  font-size:24px;
+  margin-bottom:12px;
+}
+
+.unit-badge{
+  display:inline-block;
+  background:#ff6a00;
+  color:#fff;
+  padding:10px 22px;
+  border-radius:40px;
+  font-weight:700;
+  letter-spacing:1px;
+  box-shadow:0 4px 12px rgba(255,106,0,0.3);
+}
+
+/* ================= NAVBAR ================= */
+
+.modern-navbar{
+  width:100%;
+  background:#111;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:14px 8%;
+  position:sticky;
+  top:0;
+  z-index:999;
+}
+
+/* BRAND */
+
+.nav-brand{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.nav-brand img{
+  width:50px;
+  height:50px;
+  border-radius:50%;
+  background:#fff;
+  padding:4px;
+}
+
+.brand-text h3{
+  color:#fff;
+  font-size:20px;
+}
+
+.brand-text p{
+  color:#bbb;
+  font-size:13px;
+}
+
+/* NAV LINKS */
+
+.modern-nav-links{
+  display:flex;
+  align-items:center;
+  gap:30px;
+  list-style:none;
+}
+
+.modern-nav-links a{
+  text-decoration:none;
+  color:#fff;
+  font-size:15px;
+  font-weight:500;
+  position:relative;
+  transition:0.3s;
+}
+
+.modern-nav-links a::after{
+  content:'';
+  position:absolute;
+  left:0;
+  bottom:-6px;
+  width:0%;
+  height:2px;
+  background:#ff6a00;
+  transition:0.3s;
+}
+
+.modern-nav-links a:hover{
+  color:#ff8800;
+}
+
+.modern-nav-links a:hover::after{
+  width:100%;
+}
+
+/* HAMBURGER */
+
+.modern-hamburger{
+  display:none;
+  color:#fff;
+  font-size:30px;
+  cursor:pointer;
+}
+
+/* ================= MOBILE ================= */
+
+@media(max-width:992px){
+
+  .header-main{
+    flex-direction:column;
+    text-align:center;
+  }
+
+  .header-center h1{
+    font-size:26px;
+  }
+
+  .header-center h2{
+    font-size:20px;
+  }
+
+  .modern-hamburger{
+    display:block;
+  }
+
+  .modern-nav-links{
+    position:absolute;
+    top:100%;
+    left:0;
+    width:100%;
+    background:#111;
+    flex-direction:column;
+    gap:20px;
+    padding:25px 0;
+    display:none;
+  }
+
+  .modern-nav-links.active{
+    display:flex;
+  }
+
+  .hide-mobile{
+    display:none;
+  }
+
+  .header-strip{
+    flex-direction:column;
+    gap:5px;
+    text-align:center;
+  }
+
+}
+
+@media(max-width:600px){
+
+  .logo-box{
+    width:70px;
+    height:70px;
+  }
+
+  .header-center h1{
+    font-size:22px;
+  }
+
+  .unit-badge{
+    padding:8px 18px;
+    font-size:14px;
+  }
+
+}
+
+</style>
 </head>
 
 <body>
+<!-- ================= MODERN TOP HEADER ================= -->
+<header class="modern-header">
 
-  <header class="event-header">
-    <h1>Shiv Jayanti Celebration Week</h1>
-    <p>NSS Unit Activity Report</p>
-  </header>
+  <!-- TOP STRIP -->
+  <div class="header-strip">
+    <p>National Service Scheme Unit D-58</p>
+    <span>"Not Me But You"</span>
+  </div>
 
-  <section class="event-content">
+  <!-- MAIN HEADER -->
+  <div class="header-main">
 
-    <h2>📌 Overview</h2>
+    <!-- LEFT LOGOS -->
+    <div class="header-logos left">
+
+      <div class="logo-box">
+        <img src="images/clglogo.png" alt="College Logo">
+      </div>
+
+      <div class="logo-box hide-mobile">
+        <img src="images/univesity11-removebg-preview.png" alt="University Logo">
+      </div>
+
+    </div>
+
+    <!-- CENTER CONTENT -->
+    <div class="header-center">
+
+      <p class="header-org">
+        Rayat Shikshan Sanstha's
+      </p>
+
+      <h1>
+        Karmaveer Bhaurao Patil College, Vashi
+      </h1>
+
+      <p class="header-sub">
+        Empowered Autonomous College
+      </p>
+
+      <div class="header-divider"></div>
+
+      <h2>
+        National Service Scheme
+      </h2>
+
+      <span class="unit-badge">
+        Unit D-58
+      </span>
+
+    </div>
+
+    <!-- RIGHT LOGOS -->
+    <div class="header-logos right">
+
+      <div class="logo-box hide-mobile">
+        <img src="images/mybharatlogo_opt_2x.png" alt="My Bharat Logo">
+      </div>
+
+      <div class="logo-box">
+        <img src="images/founder.png" alt="Founder">
+      </div>
+
+    </div>
+
+  </div>
+
+</header>
+
+<div id="home"></div>
+
+<!-- ================= MODERN NAVBAR ================= -->
+<nav class="modern-navbar" id="navbar">
+
+  <!-- LEFT -->
+  <div class="nav-brand">
+
+    <img src="images/nsslogo.png" alt="NSS Logo">
+
+    <div class="brand-text">
+      <h3>NSS D-58</h3>
+      <p>KBP College</p>
+    </div>
+
+  </div>
+
+  <!-- HAMBURGER -->
+  <div class="modern-hamburger" onclick="toggleMenu()">
+    ☰
+  </div>
+
+  <!-- MENU -->
+  <ul class="modern-nav-links" id="navLinks">
+
+    <li><a href="#home">Home</a></li>
+
+    <li><a href="#projects">Projects</a></li>
+
+    <li><a href="#achievements">Achievements</a></li>
+
+    <li><a href="#camps">Camps</a></li>
+
+    <li><a href="#special-programs">Programs</a></li>
+
+    <li><a href="#gallery">Gallery</a></li>
+
+    <li><a href="#contact">Contact</a></li>
+
+  </ul>
+
+</nav>
+
+<!-- HERO -->
+
+<section class="shiv-hero">
+
+  <div class="hero-content">
+
+    <span class="hero-badge">
+      NSS UNIT D-58 PRESENTS
+    </span>
+
+    <h1>
+      SHIV JAYANTI 2026
+    </h1>
+
     <p>
-      The NSS Unit celebrated the week of Shiv Jayanti with great enthusiasm and unity.
-      Various social, cultural, and community-based activities were organized throughout
-      the week to spread the values and inspiration of Chhatrapati Shivaji Maharaj
-      among students and society.
+
+      A grand week-long celebration inspired by
+      the courage, leadership, sacrifice,
+      and vision of
+      Chhatrapati Shivaji Maharaj.
+
     </p>
 
-    <h2>📅 Week Activities</h2>
-    <p>
-      During Shiv Jayanti week, Shiv Paryan was conducted continuously for seven days
-      with active participation from volunteers and students. A Blood Donation Camp
-      was also organized in the college to encourage social responsibility and help needy patients.
-      Along with this, several meaningful activities such as an Old Age Home Visit,
-      awareness programs, and social service activities were conducted.
-    </p>
+    <div class="hero-buttons">
 
-    <h2>🎉 Main Day Celebration</h2>
-    <p>
-      On the main day of Shiv Jayanti, all NSS volunteers gathered together and started
-      the celebration with an energetic Lezim performance, creating a traditional and
-      enthusiastic atmosphere in the college campus.
-    </p>
+      <a href="#timeline" class="hero-btn">
+        Explore Celebration
+      </a>
 
-    <p>
-      After the opening procession, a grand cultural program was organized in the auditorium.
-      Every year, a special theme is decided for the celebration, and students perform
-      various acts, dances, and cultural presentations based on that theme.
-    </p>
+      <a href="#gallery" class="hero-btn outline">
+        View Gallery
+      </a>
 
-    <h2>🏹 Message</h2>
-    <p>
-      The program highlighted the bravery, leadership, and ideals of Chhatrapati Shivaji Maharaj
-      and inspired students with the message of unity, courage, and social service.
-    </p>
+    </div>
 
-    <h2>🤝 Conclusion</h2>
-    <p>
-      The entire celebration was successfully carried out with teamwork, discipline,
-      and active participation from volunteers, teachers, and students, making the
-      Shiv Jayanti week memorable and meaningful for everyone.
-    </p>
+  </div>
 
-  </section>
+  <div class="scroll-down">
+    ↓
+  </div>
+
+</section>
+
+<!-- INTRO -->
+
+<section class="shiv-intro">
+
+  <div class="intro-container">
+
+    <div class="intro-left">
+
+      <h2>
+        A Celebration Beyond Tradition
+      </h2>
+
+      <p>
+
+        NSS Unit D-58 celebrated Shiv Jayanti
+        with unmatched enthusiasm,
+        discipline, cultural pride,
+        and social responsibility.
+
+      </p>
+
+      <p>
+
+        The week included blood donation drives,
+        heritage conservation,
+        social initiatives,
+        environmental awareness,
+        and cultural programs.
+
+      </p>
+
+    </div>
+
+    <div class="stats-column">
+
+      <div class="stat-card">
+        <h3>7</h3>
+        <p>Days Celebration</p>
+      </div>
+
+      <div class="stat-card">
+        <h3>300+</h3>
+        <p>Volunteer Participation</p>
+      </div>
+
+      <div class="stat-card">
+        <h3>100+</h3>
+        <p>Blood Bags Collected</p>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+<!-- TIMELINE -->
+
+<!-- SECTION TITLE -->
+
+<section class="timeline-section" id="timeline">
+
+  <div class="section-title">
+
+    <span>Week Long Activities</span>
+
+    <h2>
+      Celebration Highlights
+    </h2>
+
+  </div>
+
+  <!-- ACTIVITY 1 -->
+
+  <div class="timeline-row">
+
+    <div class="timeline-image">
+      <img src="images/shiv1.jpg" loading="lazy">
+    </div>
+
+    <div class="timeline-content">
+
+      <span>SPIRITUAL ACTIVITY</span>
+
+      <h3>
+        Shiv Parayan
+      </h3>
+
+      <p>
+
+        As a part of the Shiv Jayanti celebration,
+        NSS volunteers and students actively participated
+        in Shiv Parayan conducted throughout the week.
+
+        The activity focused on spreading awareness about
+        the life, leadership, administration,
+        discipline, and inspirational ideals of
+        Chhatrapati Shivaji Maharaj.
+
+      </p>
+
+      <p>
+
+        Students gathered together daily to listen,
+        read, and discuss important incidents from
+        Maharaj’s life which motivated volunteers
+        towards leadership, courage,
+        patriotism, and social responsibility.
+
+      </p>
+
+    </div>
+
+  </div>
+
+  <!-- ACTIVITY 2 -->
+
+  <div class="timeline-row reverse">
+
+    <div class="timeline-image">
+      <img src="images/shiv2.jpg" loading="lazy">
+    </div>
+
+    <div class="timeline-content">
+
+      <span>SOCIAL SERVICE</span>
+
+      <h3>
+        Blood Donation Camp
+      </h3>
+
+      <p>
+
+        NSS Unit D-58 successfully organized
+        a large-scale blood donation camp
+        during the Shiv Jayanti celebration.
+
+        Students, volunteers, teaching staff,
+        and citizens enthusiastically participated
+        in the initiative to support emergency
+        healthcare services and save lives.
+
+      </p>
+
+      <p>
+
+        The camp created awareness regarding
+        the importance of blood donation
+        and encouraged youth participation
+        in humanitarian activities.
+
+      </p>
+
+    </div>
+
+  </div>
+
+  <!-- ACTIVITY 3 -->
+
+  <div class="timeline-row">
+
+    <div class="timeline-image">
+      <img src="images/shiv3.jpg" loading="lazy">
+    </div>
+
+    <div class="timeline-content">
+
+      <span>HERITAGE CONSERVATION</span>
+
+      <h3>
+        Fort Cleaning Drive
+      </h3>
+
+      <p>
+
+        Volunteers conducted a fort cleaning drive
+        to promote cleanliness,
+        environmental awareness,
+        and preservation of historical heritage.
+
+      </p>
+
+      <p>
+
+        Through this activity,
+        NSS volunteers spread awareness about
+        protecting historical monuments
+        and maintaining cleanliness at
+        important heritage sites connected
+        with the legacy of Chhatrapati Shivaji Maharaj.
+
+      </p>
+
+    </div>
+
+  </div>
+
+  <!-- ACTIVITY 4 -->
+
+  <div class="timeline-row reverse">
+
+    <div class="timeline-image">
+      <img src="images/shiv4.jpg" loading="lazy">
+    </div>
+
+    <div class="timeline-content">
+
+      <span>SOCIAL AWARENESS</span>
+
+      <h3>
+        Cloth Bag Distribution Drive
+      </h3>
+
+      <p>
+
+        NSS volunteers organized a cloth bag
+        distribution campaign to spread awareness
+        regarding the harmful effects of plastic usage.
+
+      </p>
+
+      <p>
+
+        Eco-friendly cloth bags were distributed
+        among local citizens and shopkeepers
+        encouraging people to adopt sustainable
+        and environmentally responsible habits
+        in their daily lives.
+
+      </p>
+
+    </div>
+
+  </div>
+
+  <!-- ACTIVITY 5 -->
+
+  <div class="timeline-row">
+
+    <div class="timeline-image">
+      <img src="images/shiv1.jpg" loading="lazy">
+    </div>
+
+    <div class="timeline-content">
+
+      <span>HUMANITARIAN ACTIVITY</span>
+
+      <h3>
+        Maayechi Ubb
+      </h3>
+
+      <p>
+
+        Under the initiative "Maayechi Ubb",
+        volunteers stitched warm blankets
+        using old sarees and reusable materials
+        to help homeless and needy individuals.
+
+      </p>
+
+      <p>
+
+        The activity promoted kindness,
+        compassion,
+        recycling,
+        and social responsibility among students
+        while supporting underprivileged people
+        during difficult conditions.
+
+      </p>
+
+    </div>
+
+  </div>
+
+  <!-- ACTIVITY 6 -->
+
+  <div class="timeline-row reverse">
+
+    <div class="timeline-image">
+      <img src="images/shiv2.jpg" loading="lazy">
+    </div>
+
+    <div class="timeline-content">
+
+      <span>DEMOCRATIC AWARENESS</span>
+
+      <h3>
+        Voter Registration Drive
+      </h3>
+
+      <p>
+
+        NSS volunteers conducted a voter registration drive
+        to encourage youth participation in democracy
+        and increase awareness regarding voting rights.
+
+      </p>
+
+      <p>
+
+        Students guided citizens regarding
+        the voter registration process
+        and highlighted the importance of
+        responsible voting for the development
+        of society and the nation.
+
+      </p>
+
+    </div>
+
+  </div>
+
+  <!-- ACTIVITY 7 -->
+
+  <div class="timeline-row">
+
+    <div class="timeline-image">
+      <img src="images/shiv3.jpg" loading="lazy">
+    </div>
+
+    <div class="timeline-content">
+
+      <span>COMMUNITY SERVICE</span>
+
+      <h3>
+        Old Age Home Visit
+      </h3>
+
+      <p>
+
+        NSS volunteers visited an old age home
+        and spent quality time with elderly citizens
+        through conversations,
+        cultural interaction,
+        and social engagement activities.
+
+      </p>
+
+      <p>
+
+        The visit aimed to spread happiness,
+        emotional support,
+        and care among senior citizens
+        while teaching students the values
+        of respect, empathy, and humanity.
+
+      </p>
+
+    </div>
+
+  </div>
+
+</section>
+
+<!-- GALLERY -->
+
+<section class="shiv-gallery" id="gallery">
+
+  <div class="gallery-title">
+
+    <h2>
+      Moments From Celebration
+    </h2>
+
+  </div>
+
+  <div class="gallery-grid">
+
+    <img src="images/shiv1.jpg" loading="lazy">
+    <img src="images/shiv2.jpg" loading="lazy">
+    <img src="images/shiv3.jpg" loading="lazy">
+    <img src="images/shiv4.jpg" loading="lazy">
+
+  </div>
+
+</section>
+
+<!-- CONCLUSION -->
+
+<section class="shiv-conclusion">
+
+  <h2>
+    Legacy Of Swarajya
+  </h2>
+
+  <p>
+
+    Shiv Jayanti at NSS Unit D-58
+    stands as more than a cultural event.
+
+    It inspires students to practice leadership,
+    courage,
+    discipline,
+    unity,
+    and service towards society.
+
+    Through social initiatives,
+    cultural performances,
+    and volunteer participation,
+    the celebration continues to leave
+    a lasting impact across campus.
+
+  </p>
+
+</section>
+
+<!-- FOOTER -->
+
+<footer class="footer">
+
+  <div class="footer-container">
+
+    <!-- LEFT -->
+    <div class="footer-section">
+      <h3>NSS Unit D-58</h3>
+
+      <p>Karmaveer Bhaurao Patil College, Vashi</p>
+      <p>"Not Me But You"</p>
+    </div>
+
+    <!-- QUICK LINKS -->
+    <div class="footer-section">
+      <h4>Quick Links</h4>
+
+      <ul>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#achievements">Achievements</a></li>
+        <li><a href="#camps">Camps</a></li>
+        <li><a href="#gallery">Gallery</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+
+    <!-- CONTACT -->
+    <div class="footer-section">
+      <h4>Contact</h4>
+
+      <p>📍 Vashi, Navi Mumbai</p>
+      <p>📧 nssd58@kbpcollege.in</p>
+      <p>⏰ 10:00 AM – 5:00 PM</p>
+    </div>
+
+    <!-- DEVELOPER -->
+    <div class="footer-section">
+      <h4>Developed By</h4>
+
+      <p>Manthan Vitthal Rajdev</p>
+      <p>NSS Volunteer & Web Developer</p>
+
+      <div class="social-icons">
+
+        <a href="https://www.instagram.com/kbp_nss?igsh=c2JscjFqeTBmbXYx">
+          <i class="fab fa-instagram"></i>
+        </a>
+
+        <a href="https://www.youtube.com/@kbpnss8858">
+          <i class="fab fa-youtube"></i>
+        </a>
+
+        <a href="#">
+          <i class="fab fa-facebook"></i>
+        </a>
+
+        <a href="#">
+          <i class="fab fa-whatsapp"></i>
+        </a>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- BOTTOM -->
+  <div class="footer-bottom">
+    <p>© 2026 NSS Unit D-58 | All Rights Reserved</p>
+  </div>
+
+</footer>
 
 </body>
 </html>

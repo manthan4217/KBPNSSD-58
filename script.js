@@ -202,7 +202,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const password = document.getElementById("password").value;
 
         // CREATE AUTH USER
-        await th, email, password);
+        await th, email, password;
 
         // SAVE TO FIRESTORE
         await setDoc(doc(db, "volunteers", data.studentId), data);

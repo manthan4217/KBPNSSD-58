@@ -3374,3 +3374,246 @@ body{
   }
 
 }
+
+.report-section{
+
+  padding:80px 20px;
+
+  background:#f8f9fb;
+}
+
+.report-container{
+
+  max-width:1100px;
+
+  margin:auto;
+
+  background:white;
+
+  padding:50px;
+
+  border-radius:25px;
+
+  box-shadow:
+  0 10px 30px rgba(0,0,0,0.08);
+}
+
+.report-container h1{
+
+  text-align:center;
+
+  color:#7a1c1c;
+
+  margin-bottom:40px;
+
+  font-size:42px;
+}
+
+.report-container h2{
+
+  margin-top:50px;
+
+  color:#0b3b68;
+
+  font-size:30px;
+}
+
+.report-container p{
+
+  line-height:2;
+
+  color:#444;
+
+  font-size:17px;
+}
+
+.activity-box{
+
+  margin-top:25px;
+
+  padding:25px;
+
+  border-left:6px solid #ff7b00;
+
+  background:#fff7ef;
+
+  border-radius:15px;
+}
+
+.activity-box h3{
+
+  margin-bottom:12px;
+
+  color:#111827;
+}
+
+@media(max-width:768px){
+
+  .report-container{
+
+    padding:30px 20px;
+  }
+
+  .report-container h1{
+
+    font-size:32px;
+  }
+
+  .report-container h2{
+
+    font-size:24px;
+  }
+
+}
+
+.shiv-hero{
+
+  height:90vh;
+
+  background:
+  linear-gradient(
+    rgba(0,0,0,0.55),
+    rgba(0,0,0,0.6)
+  ),
+  url("images/shivjaynati.jpeg");
+
+  background-size:cover;
+  background-position:center;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  text-align:center;
+
+  color:white;
+
+  position:relative;
+}
+
+.shiv-overlay h1{
+
+  font-size:80px;
+
+  font-weight:700;
+
+  letter-spacing:3px;
+
+  margin-bottom:20px;
+}
+
+.shiv-overlay p{
+
+  font-size:24px;
+
+  opacity:0.9;
+}
+
+.activity-timeline{
+
+  padding:100px 8%;
+}
+
+.timeline-grid{
+
+  display:grid;
+
+  grid-template-columns:
+  repeat(auto-fit,minmax(280px,1fr));
+
+  gap:30px;
+
+  margin-top:50px;
+}
+
+.timeline-card{
+
+  background:white;
+
+  padding:35px;
+
+  border-radius:25px;
+
+  transition:0.4s;
+
+  box-shadow:
+  0 10px 25px rgba(0,0,0,0.08);
+}
+
+.timeline-card:hover{
+
+  transform:
+  translateY(-10px);
+
+  box-shadow:
+  0 20px 40px rgba(0,0,0,0.15);
+}
+
+.gallery-grid{
+
+  display:grid;
+
+  grid-template-columns:
+  repeat(auto-fit,minmax(250px,1fr));
+
+  gap:20px;
+}
+
+.gallery-grid img{
+
+  width:100%;
+
+  height:280px;
+
+  object-fit:cover;
+
+  border-radius:20px;
+
+  transition:0.4s;
+}
+
+.gallery-grid img:hover{
+
+  transform:scale(1.03);
+}
+
+.shiv-conclusion{
+
+  padding:120px 8%;
+
+  background:
+  linear-gradient(
+    135deg,
+    #06294d,
+    #0b3b68
+  );
+
+  color:white;
+
+  text-align:center;
+}
+
+.conclusion-content{
+
+  max-width:900px;
+
+  margin:auto;
+}
+
+.conclusion-content h2{
+
+  font-size:48px;
+
+  margin-bottom:30px;
+}
+
+.conclusion-content p{
+
+  line-height:2;
+
+  font-size:18px;
+
+  opacity:0.92;
+
+  margin-bottom:20px;
+}
