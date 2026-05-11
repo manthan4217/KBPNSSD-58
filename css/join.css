@@ -1,0 +1,269 @@
+/* ===== Join NSS ===== */
+body{
+  font-family:Poppins;
+  margin:0;
+  background:#f4f7f6;
+}
+
+/* HERO */
+.join-hero{
+  background:linear-gradient(135deg,#0f3d2e,#145c3a);
+  color:white;
+  text-align:center;
+  padding:70px 20px;
+}
+
+/* STEPS */
+.steps-indicator{
+  display:flex;
+  justify-content:center;
+  gap:15px;
+  margin:30px 0;
+}
+
+.step-box{
+  padding:8px 18px;
+  background:#ccc;
+  border-radius:20px;
+}
+
+.step-box.active{
+  background:#145c3a;
+  color:white;
+}
+
+/* CONTENT */
+.step-content{
+  display:none;
+  padding:40px 10%;
+}
+
+.step-content.active{
+  display:block;
+}
+
+/* RULES */
+.rules{
+  max-width:700px;
+  margin:auto;
+  line-height:1.8;
+}
+
+/* FORM */
+form{
+  max-width:600px;
+  margin:auto;
+  background:white;
+  padding:30px;
+  border-radius:var(--radius);
+  box-shadow:0 8px 20px rgba(0,0,0,0.1);
+}
+
+input{
+  width:100%;
+  padding:12px;
+  margin:10px 0;
+  border:1px solid #ccc;
+  border-radius:6px;
+}
+
+/* BUTTON */
+.btn{
+  padding:12px 25px;
+  background:#145c3a;
+  color:white;
+  border:none;
+  border-radius:25px;
+  cursor:pointer;
+}
+
+.btn:hover{
+  background:#ff9933;
+}
+
+/* login */
+.login-container{
+  max-width:400px;
+  margin:100px auto;
+  background:white;
+  padding:30px;
+  border-radius:var(--radius);
+  box-shadow:0 10px 25px rgba(0,0,0,0.1);
+  text-align:center;
+}
+
+.login-container input{
+  width:100%;
+  padding:12px;
+  margin:10px 0;
+  border:1px solid #ccc;
+  border-radius:6px;
+}
+
+/* ================= JOIN PASSWORD BOX ================= */
+
+.password-box{
+  position:relative;
+  margin-bottom:20px;
+}
+
+.password-box input{
+  width:100%;
+  padding-right:50px;
+}
+
+.password-box button{
+
+  position:absolute;
+
+  right:15px;
+  top:50%;
+
+  transform:translateY(-50%);
+
+  border:none;
+  background:none;
+
+  cursor:pointer;
+
+  font-size:18px;
+}
+
+/* EMAIL NOTE */
+
+.email-note{
+  display:block;
+  margin-top:-10px;
+  margin-bottom:20px;
+  color:#666;
+  font-size:13px;
+}
+
+.step-content{
+  display:none;
+}
+
+.step-content.active{
+  display:block;
+}
+
+.success-popup{
+
+  position:fixed;
+
+  top:20px;
+  right:20px;
+
+  background:#16a34a;
+
+  color:white;
+
+  padding:15px 25px;
+
+  border-radius:14px;
+
+  font-weight:600;
+
+  display:none;
+
+  z-index:9999;
+
+  box-shadow:0 10px 25px rgba(0,0,0,0.2);
+
+}
+
+.big-stat{
+
+  font-size:42px;
+
+  font-weight:700;
+
+  color:#ff7b00;
+
+  margin:20px 0;
+
+}
+
+.view-btn{
+
+  border:none;
+
+  background:#06294d;
+
+  color:white;
+
+  padding:12px 20px;
+
+  border-radius:12px;
+
+  cursor:pointer;
+
+  margin-top:10px;
+
+}
+
+.detail-item{
+
+  background:#f4f4f4;
+
+  padding:15px;
+
+  border-radius:14px;
+
+  margin-top:12px;
+
+}
+
+.success-popup{
+
+  position:fixed;
+
+  top:20px;
+  right:20px;
+
+  background:#16a34a;
+
+  color:white;
+
+  padding:18px 25px;
+
+  border-radius:16px;
+
+  font-weight:600;
+
+  display:none;
+
+  z-index:9999;
+
+  box-shadow:
+  0 10px 30px rgba(0,0,0,0.25);
+
+  animation:popupSlide 0.4s ease;
+
+  max-width:300px;
+
+  line-height:1.7;
+
+}
+
+.success-popup small{
+
+  opacity:0.9;
+
+  font-size:13px;
+
+}
+
+@keyframes popupSlide{
+
+  from{
+    transform:translateX(100px);
+    opacity:0;
+  }
+
+  to{
+    transform:translateX(0);
+    opacity:1;
+  }
+
+}
