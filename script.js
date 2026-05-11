@@ -32,80 +32,209 @@ document.querySelectorAll(".nav-links a").forEach(link => {
   });
 });
 
-// gallery 
-// WAIT FOR PAGE LOAD
-window.onload = function () {
+/* ================= GALLERY LIGHTBOX ================= */
 
-  let expanded = false;
+const galleryImages = document.querySelectorAll(".gallery-img");
 
-  const btn = document.getElementById("toggleGalleryBtn");
+const lightbox = document.getElementById("lightbox");
+const lightboxImg = document.getElementById("lightbox-img");
 
-  // ❗ IMPORTANT SAFETY CHECK
-  if (!btn) {
-    console.warn("toggleGalleryBtn not found on this page");
-    return;
+/* OPEN IMAGE */
+
+galleryImages.forEach(img => {
+
+  img.addEventListener("click", () => {
+
+    lightbox.style.display = "flex";
+
+    lightboxImg.src = img.src;
+
+    document.body.style.overflow = "hidden";
+
+  });
+
+});
+
+/* CLOSE IMAGE */
+
+function closeImage(){
+
+  lightbox.style.display = "none";
+
+  document.body.style.overflow = "auto";
+
+}
+
+/* CLOSE BUTTON */
+
+document.querySelector(".close-btn")
+.addEventListener("click", closeImage);
+
+/* OUTSIDE CLICK */
+
+lightbox.addEventListener("click", function(e){
+
+  if(e.target === lightbox){
+
+    closeImage();
+
   }
 
-  btn.addEventListener("click", function () {
+});
 
-    const extraImages = document.querySelectorAll(".gallery-img.extra");
+/* ESC KEY */
 
-    if (!expanded) {
-      extraImages.forEach(img => img.classList.remove("hidden"));
-      btn.textContent = "Show Less";
-      expanded = true;
-    } else {
-      extraImages.forEach(img => img.classList.add("hidden"));
-      btn.textContent = "Load More";
-      expanded = false;
+document.addEventListener("keydown", function(e){
 
-      document.getElementById("gallery")?.scrollIntoView({ behavior: "smooth" });
+  if(e.key === "Escape"){
+
+    closeImage();
+
+  }
+
+});
+
+/* ================= LOAD MORE GALLERY ================= */
+
+const toggleGalleryBtn = document.getElementById("toggleGalleryBtn");
+
+const extraImages = document.querySelectorAll(".gallery-img.extra");
+
+let galleryExpanded = false;
+
+if(toggleGalleryBtn){
+
+  toggleGalleryBtn.addEventListener("click", () => {
+
+    galleryExpanded = !galleryExpanded;
+
+    extraImages.forEach(img => {
+
+      img.classList.toggle("hidden");
+
+    });
+
+    if(galleryExpanded){
+
+      toggleGalleryBtn.innerHTML = "Show Less";
+
+    }else{
+
+      toggleGalleryBtn.innerHTML = "Load More";
+
     }
 
   });
 
-};
-
-// ===== LIGHTBOX FUNCTIONS =====
-function openImage(src){
-  document.getElementById("lightbox").style.display = "flex";
-  document.getElementById("lightbox-img").src = src;
 }
 
-function closeImage(){
-  document.getElementById("lightbox").style.display = "none";
-}
+document.querySelectorAll(
+'.project-card,.program-card,.camp-card,.achievement-card'
+).forEach(card=>{
+
+  card.addEventListener('mousemove',e=>{
+
+    const rect = card.getBoundingClientRect();
+
+    card.style.setProperty(
+      '--x',
+      `${e.clientX - rect.left}px`
+    );
+
+    card.style.setProperty(
+      '--y',
+      `${e.clientY - rect.top}px`
+    );
+  });
+
+});
+
+const reveals = document.querySelectorAll('.reveal');
+
+window.addEventListener('scroll',()=>{
+
+  reveals.forEach(reveal=>{
+
+    const top = reveal.getBoundingClientRect().top;
+    const windowHeight = window.innerHeight;
+
+    if(top < windowHeight - 100){
+      reveal.classList.add('active');
+    }
+
+  });
+
+});
+
+const glow = document.querySelector('.cursor-glow');
+
+document.addEventListener('mousemove',e=>{
+
+  glow.style.left = e.clientX + 'px';
+  glow.style.top = e.clientY + 'px';
+
+});
 
 // form
-const form = document.querySelector("form");
-const status = document.getElementById("form-status");
+/* ================= CONTACT FORM ================= */
 
-if (form) {
-  form.addEventListener("submit", async (e) => {
+const form = document.getElementById("contactForm");
+const statusText = document.getElementById("form-status");
+const submitBtn = document.getElementById("submitBtn");
+
+if(form){
+
+  form.addEventListener("submit", async function(e){
+
     e.preventDefault();
 
-    const data = new FormData(form);
+    const formData = new FormData(form);
 
-    status.innerHTML = "⏳ Sending...";
+    submitBtn.innerHTML = "Sending...";
+    submitBtn.disabled = true;
 
-    fetch(form.action, {
-      method: form.method,
-      body: data,
-      headers: {
-        'Accept': 'application/json'
-      }
-    }).then(response => {
-      if (response.ok) {
-        status.innerHTML = "✅ Message sent successfully!";
+    try{
+
+      const response = await fetch(form.action,{
+        method:"POST",
+        body:formData,
+        headers:{
+          'Accept':'application/json'
+        }
+      });
+
+      if(response.ok){
+
+        statusText.innerHTML =
+        "✅ Message sent successfully!";
+
+        statusText.style.color = "#145c3a";
+
         form.reset();
-      } else {
-        status.innerHTML = "❌ Oops! Something went wrong.";
+
+      }else{
+
+        statusText.innerHTML =
+        "❌ Failed to send message.";
+
+        statusText.style.color = "red";
       }
-    }).catch(() => {
-      status.innerHTML = "❌ Network error!";
-    });
+
+    }catch(error){
+
+      statusText.innerHTML =
+      "❌ Network error. Please try again.";
+
+      statusText.style.color = "red";
+    }
+
+    submitBtn.innerHTML = "Send Message";
+    submitBtn.disabled = false;
+
   });
+
 }
+
 
 // back to home button
 document.addEventListener("DOMContentLoaded", function () {

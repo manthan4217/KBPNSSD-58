@@ -3,7 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <title>NSS Unit D-58</title>
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Official NSS Unit D-58 portal of Karmaveer Bhaurao Patil College, Vashi showcasing social activities, camps, leadership and community service initiatives.">
+<meta name="keywords" content="NSS, NSS D-58, Karmaveer Bhaurao Patil College, Vashi, NSS Unit, social service, NSS activities, NSS camp, Navi Mumbai">
+
+<meta name="author" content="Manthan Vitthal Rajdev">
+
+<meta property="og:title" content="NSS Unit D-58 | KBP College Vashi">
+
+<meta property="og:description" content="Official NSS portal of Karmaveer Bhaurao Patil College, Vashi showcasing activities, camps, leadership and social initiatives.">
+
+<meta property="og:image" content="images/nsslogo.png">
+
+<meta property="og:type" content="website">
+
 <link rel="icon" href="images/nsslogo.png">
 <link rel="stylesheet" href="css/style.css">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -309,7 +323,7 @@
     </div>
 
     <div class="volunteer-card">
-      <h4>Mr. Ujjwala Manjrekar</h4>
+      <h4>Ms. Ujjwala Manjrekar</h4>
       <span class="badge">2018–19</span>
     </div>
 
@@ -444,12 +458,11 @@
     <div class="featured-programs">
 
       <div class="featured-program">
-        <h3>Shiv Jayanti Celebration</h3>
+         <a href="shivjayanti.html" class="event-btn">Shiv Jayanti Celebration</a>
         <p>
           One of the largest Shiv Jayanti celebrations among colleges across Navi Mumbai,
           bringing together students through cultural programs, unity, and leadership.
         </p>
-        <a href="shivjayanti.html" class="event-btn">Shiv Jayanti Report</a>
       </div>
 
       <div class="featured-program">
@@ -489,6 +502,9 @@
 
   </section>
 
+  <section class="about reveal"></section>
+  <div class="cursor-glow"></div>
+
 <!-- ================= GALLERY ================= -->
 <section class="gallery" id="gallery">
 
@@ -503,7 +519,7 @@
 
   <div class="gallery-container">
 
-    <img src="images/mycamp.jpeg" class="gallery-img" onclick="openImage(this.src)">
+    <img src="images/mycamp.jpeg" class="gallery-img">
     <img src="images/camp.jpeg" class="gallery-img" onclick="openImage(this.src)">
     <img src="images/shivjayanti24.jpeg" class="gallery-img" onclick="openImage(this.src)">
     <img src="images/campsupport.jpeg" class="gallery-img" onclick="openImage(this.src)">
@@ -524,8 +540,13 @@
 
 <!-- LIGHTBOX -->
 <div id="lightbox">
-  <span onclick="closeImage()" class="close-btn">&times;</span>
+
+  <span onclick="closeImage()" class="close-btn">
+    &times;
+  </span>
+
   <img id="lightbox-img">
+
 </div>
 
 <!-- ================= YEARLY REPORT ================= -->
@@ -647,11 +668,11 @@
 
         <h3>NSS Unit D-58</h3>
 
-        <p><strong>Main Programme Officer</strong><br>
+        <p><strong>NSS Chairman & Programme Officer</strong><br>
         Dr. Pranita Bhale</p>
 
         <p><strong>Phone</strong><br>
-        +91 XXXXX XXXXX</p>
+        +91 79727 59261</p>
 
         <p><strong>Email</strong><br>
         kbp.nssunit@gmail.com</p>
@@ -659,26 +680,41 @@
       </div>
 
       <!-- RIGHT: FORM -->
-      <form class="contact-form-card" action="https://formspree.io/f/mvzlzegn" method="POST">
+      <form
+        class="contact-form-card"
+        id="contactForm"
+        action="https://formspree.io/f/mvzlzegn"
+        method="POST"
+      >
 
+        <!-- NAME -->
         <div class="input-group">
           <input type="text" name="name" required>
           <label>Your Name</label>
         </div>
 
+        <!-- EMAIL -->
         <div class="input-group">
           <input type="email" name="email" required>
           <label>Your Email</label>
         </div>
 
+        <!-- MESSAGE -->
         <div class="input-group">
-          <textarea name="message" rows="4" required></textarea>
+          <textarea name="message" rows="5" required></textarea>
           <label>Your Message</label>
         </div>
 
-        <button type="submit">Send Message</button>
+        <!-- BUTTON -->
+        <button type="submit" id="submitBtn">
+          Send Message
+        </button>
+
+        <!-- STATUS -->
+        <p id="form-status"></p>
 
       </form>
+
       <p id="form-status"></p>
       
     </div>
@@ -738,12 +774,12 @@
           <i class="fab fa-youtube"></i>
         </a>
 
-        <a href="#">
+        <a href="https://www.facebook.com/share/14WKLa8i8Rs/">
           <i class="fab fa-facebook"></i>
         </a>
 
         <a href="#">
-          <i class="fab fa-whatsapp"></i>
+          <i class="fab fa-twitter"></i>
         </a>
 
       </div>
