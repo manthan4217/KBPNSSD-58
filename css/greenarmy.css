@@ -1,0 +1,1316 @@
+/* =====================================================
+GREEN ARMY — TREE PLANTATION THEME
+PREMIUM ECO UI
+ONLY FOR GREENARMY PAGE
+===================================================== */
+
+/* BODY */
+
+body{
+  background:#eef7ee;
+  overflow-x:hidden;
+  font-family:'Poppins',sans-serif;
+  color:#1d1d1d;
+}
+
+/* =====================================================
+HERO SECTION
+===================================================== */
+
+.camp-banner{
+  position:relative;
+
+  height:100vh;
+  min-height:750px;
+
+  overflow:hidden;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+/* HERO IMAGE */
+
+.camp-banner img{
+  position:absolute;
+  inset:0;
+
+  width:100%;
+  height:100%;
+
+  object-fit:cover;
+
+  animation:heroZoom 18s ease-in-out infinite alternate;
+}
+
+/* FOREST OVERLAY */
+
+.camp-banner::before{
+  content:"";
+
+  position:absolute;
+  inset:0;
+
+  background:
+  linear-gradient(
+  to bottom,
+  rgba(5,35,15,0.45),
+  rgba(7,48,24,0.82)
+  );
+
+  z-index:1;
+}
+
+/* SUNLIGHT EFFECT */
+
+.camp-banner::after{
+  content:"";
+
+  position:absolute;
+
+  width:700px;
+  height:700px;
+
+  background:
+  radial-gradient(
+  circle,
+  rgba(255,209,102,0.18),
+  transparent 70%
+  );
+
+  top:-250px;
+  right:-120px;
+
+  z-index:2;
+}
+
+/* HERO CONTENT */
+
+.camp-banner-overlay{
+  position:relative;
+  z-index:5;
+
+  text-align:center;
+
+  max-width:900px;
+
+  padding:20px;
+}
+
+/* TITLE */
+
+.camp-banner-overlay h1{
+  font-size:82px;
+  line-height:1.05;
+
+  margin-bottom:28px;
+
+  font-weight:700;
+
+  background:
+  linear-gradient(
+  90deg,
+  #d7ffcb,
+  #ffffff,
+  #ffd166
+  );
+
+  background-size:300%;
+
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+
+  text-shadow:
+  0 10px 35px rgba(0,0,0,0.35);
+
+  animation:
+  gradientMove 6s linear infinite,
+  fadeUp 1s ease;
+}
+
+/* SUBTEXT */
+
+.camp-banner-overlay p{
+  font-size:24px;
+  line-height:1.8;
+
+  color:#f5f5f5;
+
+  text-shadow:
+  0 5px 20px rgba(0,0,0,0.25);
+
+  animation:fadeUp 1.4s ease;
+}
+
+/* =====================================================
+COMMON SECTION STYLE
+===================================================== */
+
+/* SECTION SPACING */
+
+.about{
+  padding:80px 8% 35px;
+  position:relative;
+}
+
+.about-stats{
+  padding:35px 8% 80px;
+  position:relative;
+}
+
+.projects,
+.leaders-section,
+.report{
+  padding:100px 8%;
+  position:relative;
+}
+
+/* ORGANIC CURVE FLOW */
+
+.projects,
+.leaders-section,
+.report{
+  border-radius:60px 60px 0 0;
+
+  margin-top:-45px;
+}
+
+/* =====================================================
+SOFT ECO GLOW BLOBS
+===================================================== */
+
+.about::before,
+.projects::before,
+.leaders-section::before{
+  content:"";
+
+  position:absolute;
+
+  width:420px;
+  height:420px;
+
+  border-radius:50%;
+
+  filter:blur(90px);
+
+  opacity:0.08;
+
+  z-index:0;
+}
+
+.about::before{
+  background:#2f8f5b;
+
+  top:-120px;
+  left:-100px;
+}
+
+.projects::before{
+  background:#ffd166;
+
+  bottom:-120px;
+  right:-100px;
+}
+
+.leaders-section::before{
+  background:#145c3a;
+
+  top:0;
+  right:-120px;
+}
+
+/* =====================================================
+ABOUT SECTION
+===================================================== */
+
+.about{
+  background:
+  linear-gradient(
+  to bottom,
+  #f3faf2,
+  #edf7ed
+  );
+}
+
+.about-container{
+  display:flex;
+  align-items:center;
+  gap:70px;
+  flex-wrap:wrap;
+
+  position:relative;
+  z-index:2;
+}
+
+.about-text{
+  flex:1;
+}
+
+.about-text h2{
+  font-size:52px;
+  color:#145c3a;
+
+  margin-bottom:30px;
+}
+
+.about-text p{
+  font-size:17px;
+  line-height:2;
+
+  color:#444;
+
+  margin-bottom:22px;
+}
+
+/* MOTTO */
+
+.motto{
+  font-size:20px !important;
+
+  color:#145c3a !important;
+
+  font-weight:600;
+}
+
+/* IMAGE */
+
+.about-image{
+  flex:1;
+}
+
+.about-image img{
+  width:100%;
+
+  border-radius:40px;
+
+  box-shadow:
+  0 30px 60px rgba(0,0,0,0.16);
+
+  transition:0.5s ease;
+}
+
+
+
+/* =====================================================
+COMPACT PREMIUM ECO STATS
+===================================================== */
+
+.about-stats{
+  padding:80px 8%;
+
+  background:
+  linear-gradient(
+  to bottom,
+  #edf7ed,
+  #e7f5e7
+  );
+
+  display:grid;
+
+  grid-template-columns:
+  repeat(auto-fit,minmax(190px,1fr));
+
+  gap:22px;
+}
+
+/* CARD */
+
+.stat{
+  background:white;
+
+  border-radius:24px;
+
+  padding:28px 18px;
+
+  text-align:center;
+
+  box-shadow:
+  0 10px 25px rgba(20,92,58,0.06);
+
+  border:
+  1px solid rgba(20,92,58,0.06);
+
+  transition:0.35s ease;
+
+  position:relative;
+
+  overflow:hidden;
+}
+
+/* TOP ACCENT */
+
+.stat::before{
+  content:"";
+
+  position:absolute;
+
+  top:0;
+  left:0;
+
+  width:100%;
+  height:4px;
+
+  background:
+  linear-gradient(
+  90deg,
+  #145c3a,
+  #4caf50
+  );
+}
+
+/* HOVER */
+
+.stat:hover{
+  transform:translateY(-6px);
+
+  box-shadow:
+  0 18px 35px rgba(20,92,58,0.12);
+}
+
+/* NUMBER */
+
+.stat h3{
+  font-size:38px;
+
+  color:#145c3a;
+
+  margin-bottom:10px;
+
+  font-weight:700;
+
+  line-height:1.1;
+}
+
+/* TEXT */
+
+.stat p{
+  font-size:14px;
+
+  color:#666;
+
+  line-height:1.5;
+
+  font-weight:500;
+}
+
+/* MOBILE */
+
+@media(max-width:768px){
+
+  .about-stats{
+    padding:60px 5%;
+    gap:18px;
+  }
+
+  .stat{
+    padding:24px 16px;
+  }
+
+  .stat h3{
+    font-size:32px;
+  }
+
+  .stat p{
+    font-size:13px;
+  }
+
+}
+
+/* =====================================================
+PROJECTS SECTION
+===================================================== */
+
+.projects{
+  background:#edf7ed;
+
+  text-align:center;
+}
+
+.projects h2{
+  font-size:52px;
+
+  color:#145c3a;
+
+  margin-bottom:70px;
+}
+
+.projects-container{
+  display:grid;
+
+  grid-template-columns:
+  repeat(auto-fit,minmax(330px,1fr));
+
+  gap:35px;
+
+  position:relative;
+  z-index:2;
+}
+
+/* ECO CARD */
+
+.project-card{
+  position:relative;
+
+  overflow:hidden;
+
+  background:
+  rgba(255,255,255,0.78);
+
+  backdrop-filter:blur(18px);
+
+  border-radius:40px 40px 40px 12px;
+
+  padding:38px;
+
+  text-align:left;
+
+  border:
+  1px solid rgba(255,255,255,0.7);
+
+  box-shadow:
+  0 18px 45px rgba(0,0,0,0.08);
+
+  transition:0.45s ease;
+}
+
+/* REMOVE GLOBAL EFFECT */
+
+.project-card::before{
+  display:none !important;
+}
+
+/* LIGHT LEAF GLOW */
+
+.project-card::after{
+  content:"";
+
+  position:absolute;
+  inset:0;
+
+  background:
+  linear-gradient(
+  135deg,
+  rgba(255,255,255,0.3),
+  transparent 40%
+  );
+
+  pointer-events:none;
+}
+
+.project-card:hover{
+  transform:
+  translateY(-12px)
+  rotate(-1deg);
+
+  box-shadow:
+  0 25px 60px rgba(20,92,58,0.18);
+}
+
+.project-card h3{
+  font-size:28px;
+
+  color:#145c3a;
+
+  margin-bottom:22px;
+}
+
+.project-card p,
+.project-card li{
+  color:#555;
+
+  line-height:1.9;
+}
+
+/* =====================================================
+LEADER SECTION
+===================================================== */
+
+.leaders-section{
+  text-align:center;
+
+  background:
+  linear-gradient(
+  to bottom,
+  #f8fcf7,
+  #eef7ee
+  );
+}
+
+.leaders-section h2{
+  font-size:52px;
+
+  color:#145c3a;
+
+  margin-bottom:60px;
+}
+
+.leaders-container{
+  display:flex;
+  justify-content:center;
+
+  position:relative;
+  z-index:2;
+}
+
+/* CARD */
+
+.leader-card{
+  width:340px;
+
+  background:white;
+
+  border-radius:40px;
+
+  overflow:hidden;
+
+  box-shadow:
+  0 25px 60px rgba(0,0,0,0.12);
+
+  transition:0.45s ease;
+}
+
+.leader-card:hover{
+  transform:
+  translateY(-12px)
+  scale(1.02);
+}
+
+.leader-card img{
+  width:100%;
+  height:380px;
+
+  object-fit:cover;
+}
+
+.name{
+  font-size:24px;
+
+  font-weight:700;
+
+  color:#145c3a;
+
+  margin-top:25px;
+}
+
+.role{
+  display:inline-block;
+
+  margin:22px 0 32px;
+
+  padding:10px 24px;
+
+  border-radius:50px;
+
+  background:#145c3a;
+
+  color:white;
+
+  font-size:14px;
+  font-weight:600;
+}
+
+/* =====================================================
+REPORT SECTION
+===================================================== */
+
+.report{
+  text-align:center;
+
+  background:
+  linear-gradient(
+  135deg,
+  #145c3a,
+  #0d3527
+  );
+
+  color:white;
+}
+
+.report h2{
+  font-size:52px;
+
+  color: white;
+
+  margin-bottom:40px;
+}
+
+.report-box{
+  max-width:750px;
+
+  margin:auto;
+
+  background:
+  rgba(255,255,255,0.1);
+
+  backdrop-filter:blur(18px);
+
+  padding:55px;
+
+  border-radius:40px;
+
+  border:
+  1px solid rgba(255,255,255,0.12);
+
+  position:relative;
+  z-index:2;
+}
+
+.report-box p{
+  font-size:18px;
+
+  line-height:2;
+
+  color:#f1f1f1;
+}
+
+/* BUTTON */
+
+.report-btn{
+  display:inline-block;
+
+  margin-top:35px;
+
+  padding:15px 34px;
+
+  border-radius:50px;
+
+  background:#ffd166;
+
+  color:#111;
+
+  text-decoration:none;
+
+  font-weight:700;
+
+  transition:0.35s ease;
+}
+
+.report-btn:hover{
+  background:white;
+
+  transform:
+  translateY(-5px)
+  scale(1.03);
+}
+
+/* =====================================================
+ANIMATIONS
+===================================================== */
+
+@keyframes fadeUp{
+
+  from{
+    opacity:0;
+    transform:translateY(40px);
+  }
+
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+@keyframes heroZoom{
+
+  from{
+    transform:scale(1.05);
+  }
+
+  to{
+    transform:scale(1.15);
+  }
+}
+
+@keyframes gradientMove{
+
+  0%{
+    background-position:0%;
+  }
+
+  100%{
+    background-position:300%;
+  }
+}
+
+/* =====================================================
+MOBILE
+===================================================== */
+
+@media(max-width:768px){
+
+  .camp-banner{
+    height:90vh;
+    min-height:650px;
+  }
+
+  .camp-banner-overlay h1{
+    font-size:46px;
+  }
+
+  .camp-banner-overlay p{
+    font-size:18px;
+  }
+
+  .about,
+  .projects,
+  .leaders-section,
+  .report,
+  .about-stats{
+    padding:80px 5%;
+  }
+
+  .about-text h2,
+  .projects h2,
+  .leaders-section h2,
+  .report h2{
+    font-size:36px;
+  }
+
+  .projects,
+  .leaders-section,
+  .report{
+    border-radius:35px 35px 0 0;
+  }
+
+  .project-card{
+    padding:30px;
+  }
+
+  .leader-card{
+    width:100%;
+    max-width:340px;
+  }
+
+  .leader-card img{
+    height:320px;
+  }
+
+  .report-box{
+    padding:35px 25px;
+  }
+
+  .stat h3{
+    font-size:42px;
+  }
+
+}
+
+/* REMOVE GAP BETWEEN REPORT & FOOTER */
+
+.report{
+  margin-bottom:0 !important;
+  padding-bottom:70px;
+}
+
+.footer{
+  margin-top:0 !important;
+}
+
+/* =====================================================
+1. WHY TREES MATTER SECTION
+===================================================== */
+
+.importance-section{
+  padding:90px 8%;
+  background:#eef6ee;
+}
+
+.importance-container{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:30px;
+}
+
+.importance-card{
+  background:white;
+
+  padding:40px 30px;
+
+  border-radius:28px;
+
+  box-shadow:
+  0 10px 30px rgba(0,0,0,0.06);
+
+  transition:0.35s ease;
+
+  border-top:5px solid #1d6b43;
+}
+
+.importance-card:hover{
+  transform:translateY(-10px);
+
+  box-shadow:
+  0 20px 45px rgba(0,0,0,0.1);
+}
+
+.importance-card h3{
+  font-size:28px;
+  color:#145c3a;
+  margin-bottom:18px;
+}
+
+.importance-card p{
+  font-size:16px;
+  line-height:1.8;
+  color:#555;
+}
+
+/* =====================================================
+2. QUOTE SECTION
+===================================================== */
+
+.green-quote{
+  padding:120px 8%;
+
+  background:
+  linear-gradient(
+  rgba(0,0,0,0.55),
+  rgba(0,0,0,0.55)
+  ),
+  url("../images/treeplantation.jpeg");
+
+  background-size:cover;
+  background-position:center;
+  background-attachment:fixed;
+
+  text-align:center;
+}
+
+.green-quote h2{
+  max-width:1000px;
+
+  margin:auto;
+
+  font-size:48px;
+  line-height:1.5;
+
+  color:white;
+
+  font-weight:700;
+
+  text-shadow:
+  0 10px 30px rgba(0,0,0,0.35);
+}
+
+/* =====================================================
+3. PLANTATION GALLERY
+===================================================== */
+
+.plantation-gallery{
+  padding:100px 8%;
+  background:#f6fbf6;
+}
+
+.plantation-gallery h2{
+  text-align:center;
+
+  font-size:48px;
+
+  color:#145c3a;
+
+  margin-bottom:60px;
+}
+
+.gallery-grid{
+  display:grid;
+
+  grid-template-columns:
+  repeat(auto-fit,minmax(250px,1fr));
+
+  gap:25px;
+}
+
+.gallery-grid img{
+  width:100%;
+  height:320px;
+
+  object-fit:cover;
+
+  border-radius:28px;
+
+  transition:0.45s ease;
+
+  box-shadow:
+  0 12px 30px rgba(0,0,0,0.1);
+}
+
+.gallery-grid img:hover{
+  transform:
+  scale(1.04)
+  rotate(-1deg);
+
+  box-shadow:
+  0 22px 50px rgba(0,0,0,0.18);
+}
+
+/* =====================================================
+5. IMPACT BANNER
+===================================================== */
+
+.impact-banner{
+  position:relative;
+
+  padding:130px 8%;
+
+  background:
+  linear-gradient(
+  rgba(0,0,0,0.65),
+  rgba(0,0,0,0.65)
+  ),
+  url("../images/tree.jpeg");
+
+  background-size:cover;
+  background-position:center;
+
+  text-align:center;
+
+  overflow:hidden;
+}
+
+.impact-overlay{
+  position:relative;
+  z-index:2;
+}
+
+.impact-banner h2{
+  font-size:52px;
+
+  color:white;
+
+  margin-bottom:25px;
+
+  line-height:1.4;
+
+  text-shadow:
+  0 12px 30px rgba(0,0,0,0.35);
+}
+
+.impact-banner p{
+  max-width:850px;
+
+  margin:auto;
+
+  font-size:20px;
+
+  line-height:1.9;
+
+  color:#f3f3f3;
+}
+
+/* =====================================================
+MOBILE RESPONSIVE
+===================================================== */
+
+@media(max-width:768px){
+
+  .importance-section,
+  .plantation-gallery,
+  .impact-banner,
+  .green-quote{
+    padding:70px 5%;
+  }
+
+  .green-quote h2{
+    font-size:30px;
+  }
+
+  .plantation-gallery h2,
+  .impact-banner h2{
+    font-size:34px;
+  }
+
+  .impact-banner p{
+    font-size:17px;
+  }
+
+  .gallery-grid img{
+    height:240px;
+  }
+
+  .importance-card{
+    padding:30px 24px;
+  }
+
+}
+
+/* =========================================
+GREEN GALLERY
+========================================= */
+
+.green-gallery{
+  padding:100px 8%;
+  background:#f7fbf7;
+}
+
+.section-title{
+  text-align:center;
+  margin-bottom:60px;
+}
+
+.section-title h2{
+  font-size:48px;
+  color:#145c3a;
+  margin-bottom:15px;
+}
+
+.section-title p{
+  color:#666;
+  font-size:18px;
+}
+
+/* GRID */
+
+.gallery-grid{
+  display:grid;
+
+  grid-template-columns:
+  repeat(auto-fit,minmax(260px,1fr));
+
+  grid-auto-rows:240px;
+
+  gap:20px;
+}
+
+/* ITEMS */
+
+.gallery-item{
+  position:relative;
+  overflow:hidden;
+  border-radius:28px;
+
+  box-shadow:
+  0 15px 40px rgba(0,0,0,0.12);
+
+  cursor:pointer;
+}
+
+/* DIFFERENT SIZES */
+
+.gallery-item.tall{
+  grid-row:span 2;
+}
+
+.gallery-item.wide{
+  grid-column:span 2;
+}
+
+/* IMAGE */
+
+.gallery-item img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+
+  transition:0.6s ease;
+}
+
+/* HOVER */
+
+.gallery-item:hover img{
+  transform:scale(1.08);
+}
+
+/* OVERLAY */
+
+.gallery-item::after{
+  content:"";
+
+  position:absolute;
+  inset:0;
+
+  background:
+  linear-gradient(
+  to top,
+  rgba(0,0,0,0.35),
+  transparent
+  );
+
+  opacity:0;
+  pointer-events:none;
+
+  transition:0.4s ease;
+}
+
+.gallery-item:hover::after{
+  opacity:1;
+}
+
+/* MOBILE */
+
+@media(max-width:768px){
+
+  .green-gallery{
+    padding:70px 5%;
+  }
+
+  .section-title h2{
+    font-size:34px;
+  }
+
+  .section-title p{
+    font-size:15px;
+  }
+
+  .gallery-grid{
+    grid-template-columns:1fr;
+    grid-auto-rows:220px;
+  }
+
+  .gallery-item.wide,
+  .gallery-item.tall{
+    grid-column:span 1;
+    grid-row:span 1;
+  }
+
+}
+
+/* =========================================
+LIGHTBOX
+========================================= */
+
+
+
+/* CLOSE BUTTON */
+
+.close-lightbox{
+  position:absolute;
+  top:30px;
+  right:40px;
+
+  color:white;
+  font-size:45px;
+  cursor:pointer;
+}
+
+/* ANIMATION */
+
+@keyframes zoomIn{
+
+  from{
+    transform:scale(0.8);
+    opacity:0;
+  }
+
+  to{
+    transform:scale(1);
+    opacity:1;
+  }
+}
+
+/* MOBILE */
+
+@media(max-width:768px){
+
+  .gallery-item img{
+    height:220px;
+  }
+
+  .section-title h2{
+    font-size:34px;
+  }
+
+  .close-lightbox{
+    top:20px;
+    right:25px;
+    font-size:38px;
+  }
+}
+
+/* =========================================
+LIGHTBOX FIX
+========================================= */
+
+.lightbox{
+  position:fixed;
+  inset:0;
+
+  background:rgba(0,0,0,0.92);
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  opacity:0;
+  visibility:hidden;
+
+  transition:0.35s ease;
+
+  z-index:999999;
+}
+
+.lightbox.show{
+  opacity:1;
+  visibility:visible;
+}
+
+.lightbox-img{
+  max-width:90%;
+  max-height:85vh;
+
+  border-radius:20px;
+
+  object-fit:contain;
+
+  box-shadow:
+  0 20px 60px rgba(0,0,0,0.5);
+
+  animation:zoomIn 0.4s ease;
+}
+
+/* CLOSE BUTTON */
+
+.close-lightbox{
+  position:absolute;
+
+  top:25px;
+  right:35px;
+
+  color:white;
+
+  font-size:50px;
+
+  cursor:pointer;
+
+  transition:0.3s ease;
+
+  z-index:1000000;
+}
+
+.close-lightbox:hover{
+  transform:scale(1.15);
+  color:#ffd166;
+}
+
+/* ANIMATION */
+
+@keyframes zoomIn{
+
+  from{
+    transform:scale(0.8);
+    opacity:0;
+  }
+
+  to{
+    transform:scale(1);
+    opacity:1;
+  }
+}
+
+/* MOBILE */
+
+@media(max-width:768px){
+
+  .lightbox-img{
+    max-width:95%;
+    max-height:75vh;
+  }
+
+  .close-lightbox{
+    top:18px;
+    right:22px;
+    font-size:40px;
+  }
+
+}
+

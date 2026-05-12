@@ -236,25 +236,31 @@ if(form){
 }
 
 
-// back to home button
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", () => {
 
-  const hero = document.querySelector(".camp-banner");
   const backBtn = document.getElementById("backHomeBtn");
+  const heroSection = document.querySelector(".camp-banner");
 
-  if (!hero || !backBtn) return;
+  if(backBtn && heroSection){
 
-  function handleScroll() {
-    const trigger = hero.offsetHeight * 0.5;
+    window.addEventListener("scroll", () => {
 
-    if (window.scrollY > trigger) {
-      backBtn.classList.add("show");
-    } else {
-      backBtn.classList.remove("show");
-    }
+      const triggerPoint = heroSection.offsetHeight / 2;
+
+      if(window.scrollY >= triggerPoint){
+
+        backBtn.classList.add("show");
+
+      } else {
+
+        backBtn.classList.remove("show");
+
+      }
+
+    });
+
   }
 
-  window.addEventListener("scroll", handleScroll);
 });
 
 //join nss passport size photo
@@ -355,3 +361,64 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 
+/* ================= GALLERY LIGHTBOX ================= */
+
+const galleryImages = document.querySelectorAll(".gallery-img");
+
+const lightbox = document.getElementById("lightbox");
+const lightboxImg = document.getElementById("lightbox-img");
+
+/* OPEN IMAGE */
+
+galleryImages.forEach(img => {
+
+  img.addEventListener("click", () => {
+
+    lightbox.style.display = "flex";
+
+    lightboxImg.src = img.src;
+
+    document.body.style.overflow = "hidden";
+
+  });
+
+});
+
+/* CLOSE IMAGE */
+
+function closeImage(){
+
+  lightbox.style.display = "none";
+
+  document.body.style.overflow = "auto";
+
+}
+
+/* CLOSE BUTTON */
+
+document.querySelector(".close-btn")
+.addEventListener("click", closeImage);
+
+/* OUTSIDE CLICK */
+
+lightbox.addEventListener("click", function(e){
+
+  if(e.target === lightbox){
+
+    closeImage();
+
+  }
+
+});
+
+/* ESC KEY */
+
+document.addEventListener("keydown", function(e){
+
+  if(e.key === "Escape"){
+
+    closeImage();
+
+  }
+
+});

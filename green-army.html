@@ -5,9 +5,12 @@
 <title>NSS Unit D-58</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/greenarmy.css">
+
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
+<link rel="icon" href="images/nsslogo.png">
 </head>
 
 <body>
@@ -56,9 +59,9 @@
 
   <!-- MENU -->
   <ul class="nav-links" id="navLinks">
-    <li><a href="#home">Home</a></li>
-    <li><a href="#projects">Projects</a></li>
-    <li><a href="#achievements">Achievements</a></li>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="/index.html/#projects">Projects</a></li>
+    <li><a href="/index.html/#achievements">Achievements</a></li>
     <li><a href="#camps">Camps</a></li>
     <li><a href="#special-programs">Special Programs</a></li>
     <li><a href="#gallery">Gallery</a></li>
@@ -67,11 +70,13 @@
 
 </nav>
 
-    <a href="index.html" id="backHomeBtn">⬅ Home</a>
+<a href="index.html" id="backHomeBtn">
+  ⬅ Home
+</a>
 
 <!-- HERO -->
 <section class="camp-banner">
-  <img src="images/green-army.jpg" alt="Green Army Tree Plantation">
+  <img src="images/treeplantation.jpeg" alt="Green Army Tree Plantation">
   <div class="camp-banner-overlay">
     <h1>Green Army Initiative</h1>
     <p>“Plant Today, Protect Tomorrow” 🌱</p>
@@ -118,10 +123,42 @@
     </div>
 
     <div class="about-image">
-      <img src="images/tree-plantation.jpg" alt="Tree Plantation Activity">
+      <img src="images/tree.jpeg" alt="Tree Plantation Activity">
     </div>
 
   </div>
+</section>
+
+<section class="importance-section">
+
+  <div class="importance-container">
+
+    <div class="importance-card">
+      <h3>🌍 Cleaner Environment</h3>
+      <p>
+        Trees absorb carbon dioxide and release oxygen,
+        helping create a cleaner and healthier atmosphere.
+      </p>
+    </div>
+
+    <div class="importance-card">
+      <h3>💧 Water Conservation</h3>
+      <p>
+        Plantation helps maintain groundwater levels
+        and prevents soil erosion during heavy rains.
+      </p>
+    </div>
+
+    <div class="importance-card">
+      <h3>🌱 Sustainable Future</h3>
+      <p>
+        Every tree planted today contributes towards
+        a greener and safer tomorrow for future generations.
+      </p>
+    </div>
+
+  </div>
+
 </section>
 
 <!-- STATS -->
@@ -145,6 +182,15 @@
         <h3>2018–2026</h3>
         <p>Years of Impact</p>
     </div>
+</section>
+
+<section class="green-quote">
+
+  <h2>
+    “The best time to plant a tree was 20 years ago.
+    The second best time is now.”
+  </h2>
+
 </section>
 
 <!-- ACTIVITIES -->
@@ -203,6 +249,61 @@
   </div>
 </section>
 
+<!-- ================= GREEN ARMY GALLERY ================= -->
+<section class="green-gallery">
+
+  <div class="section-title">
+    <h2>Green Army Moments</h2>
+    <p>Capturing our plantation drives and environmental activities 🌱</p>
+  </div>
+
+  <div class="gallery-grid">
+
+    <div class="gallery-item tall">
+      <img src="images/tree1.jpeg" class="gallery-img" onclick="openImage(this.src)">
+    </div>
+
+    <div class="gallery-item">
+      <img src="images/tree2.jpeg" class="gallery-img" onclick="openImage(this.src)">
+    </div>
+
+    <div class="gallery-item wide">
+      <img src="images/tree3.jpeg" class="gallery-img" onclick="openImage(this.src)">
+    </div>
+
+    <div class="gallery-item">
+      <img src="images/tree4.jpeg" class="gallery-img" onclick="openImage(this.src)">
+    </div>
+
+    <div class="gallery-item">
+      <img src="https://picsum.photos/500/500" class="gallery-img" onclick="openImage(this.src)">
+    </div>
+
+    <div class="gallery-item tall">
+      <img src="images/tree1.jpeg" class="gallery-img" onclick="openImage(this.src)">
+    </div>
+
+    <div class="gallery-item wide">
+      <img src="https://picsum.photos/500/500" class="gallery-img" onclick="openImage(this.src)">
+    </div>
+
+    <div class="gallery-item">
+      <img src="https://picsum.photos/500/500" class="gallery-img" onclick="openImage(this.src)">
+    </div>
+
+  </div>
+
+  <!-- LIGHTBOX -->
+  <div id="lightbox" class="lightbox">
+
+    <span class="close-btn">&times;</span>
+
+    <img id="lightbox-img" class="lightbox-img">
+
+  </div>
+
+</section>
+
 <!-- ================= STUDENT LEADERS ================= -->
 <section class="leaders-section">
 
@@ -233,46 +334,88 @@
   </div>
 </section>
 
+<section class="impact-banner">
+
+  <div class="impact-overlay">
+
+    <h2>Together We Are Building A Greener Navi Mumbai 🌿</h2>
+
+    <p>
+      NSS Volunteers continue to create environmental awareness
+      through plantation drives and sustainable initiatives.
+    </p>
+
+  </div>
+
+</section>
+
 <!-- ================= FOOTER ================= -->
-<footer class="footer">
+  <footer class="footer">
 
   <div class="footer-container">
 
     <!-- LEFT -->
     <div class="footer-section">
       <h3>NSS Unit D-58</h3>
+
       <p>Karmaveer Bhaurao Patil College, Vashi</p>
       <p>"Not Me But You"</p>
     </div>
 
-    <!-- MIDDLE -->
+    <!-- QUICK LINKS -->
     <div class="footer-section">
       <h4>Quick Links</h4>
+
       <ul>
-        <li><a href="#">Home</a></li>
+        <li><a href="#home">Home</a></li>
         <li><a href="#projects">Projects</a></li>
         <li><a href="#achievements">Achievements</a></li>
         <li><a href="#camps">Camps</a></li>
+        <li><a href="#gallery">Gallery</a></li>
         <li><a href="#contact">Contact</a></li>
       </ul>
     </div>
 
-    <!-- RIGHT -->
+    <!-- CONTACT -->
     <div class="footer-section">
       <h4>Contact</h4>
-      <p>Email: kbp.nssunit@gmail.com</p>
-      <p>Phone: +91 XXXXX XXXXX</p>
+
+      <p>📍 Vashi, Navi Mumbai</p>
+      <p>📧 kbp.nssunit@gmail.com</p>
+      <p>⏰ 10:00 AM – 4:00 PM</p>
+    </div>
+
+    <!-- DEVELOPER -->
+    <div class="footer-section">
+      <h4>Developed By</h4>
+
+      <p>Manthan Vitthal Rajdev</p>
+      <p>NSS Volunteer & Web Developer</p>
 
       <div class="social-icons">
-        <a href="https://www.instagram.com/kbp_nss?igsh=c2JscjFqeTBmbXYx"><i class="fab fa-instagram"></i></a>
-        <a href="https://www.youtube.com/@kbpnss8858"><i class="fab fa-youtube"></i></a>
-        <a href="#"><i class="fab fa-facebook"></i></a>
-        <a href="#"><i class="fab fa-whatsapp"></i></a>
+
+        <a href="https://www.instagram.com/kbp_nss?igsh=c2JscjFqeTBmbXYx">
+          <i class="fab fa-instagram"></i>
+        </a>
+
+        <a href="https://www.youtube.com/@kbpnss8858">
+          <i class="fab fa-youtube"></i>
+        </a>
+
+        <a href="https://www.facebook.com/share/14WKLa8i8Rs/">
+          <i class="fab fa-facebook"></i>
+        </a>
+
+        <a href="#">
+          <i class="fab fa-twitter"></i>
+        </a>
+
       </div>
     </div>
 
   </div>
 
+  <!-- BOTTOM -->
   <div class="footer-bottom">
     <p>© 2026 NSS Unit D-58 | All Rights Reserved</p>
   </div>
@@ -280,6 +423,31 @@
 </footer>
 
 <script type="module" src="script.js"></script>
+
+<script>
+
+  /* =========================
+  BACK BUTTON SHOW/HIDE
+  ========================= */
+
+  window.addEventListener("scroll", function(){
+
+    const backBtn = document.getElementById("backHomeBtn");
+
+    if(window.scrollY > 350){
+
+      backBtn.classList.add("show");
+
+    }else{
+
+      backBtn.classList.remove("show");
+
+    }
+
+  });
+
+</script>
+
 </body>
 
 </html>
