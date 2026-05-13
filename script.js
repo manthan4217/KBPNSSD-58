@@ -8,6 +8,7 @@ import {
   doc,
   setDoc
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
 // navbar
 window.addEventListener("scroll", function () {
   const navbar = document.getElementById("navbar");
@@ -40,6 +41,7 @@ const galleryImages = document.querySelectorAll(
 
 const lightbox = document.getElementById("lightbox");
 const lightboxImg = document.getElementById("lightbox-img");
+const closeBtn = document.querySelector(".close-btn");
 
 /* OPEN IMAGE */
 
@@ -67,9 +69,13 @@ if(galleryImages.length && lightbox && lightboxImg){
 
 function closeImage(){
 
-  lightbox.classList.remove("show");
+  if(lightbox){
 
-  lightbox.style.display = "none";
+    lightbox.classList.remove("show");
+
+    lightbox.style.display = "none";
+
+  }
 
   document.body.style.overflow = "auto";
 
@@ -77,8 +83,11 @@ function closeImage(){
 
 /* CLOSE BUTTON */
 
-document.querySelector(".close-btn")
-.addEventListener("click", closeImage);
+if(closeBtn){
+
+  closeBtn.addEventListener("click", closeImage);
+
+}
 
 /* OUTSIDE CLICK */
 
@@ -103,6 +112,37 @@ document.addEventListener("keydown", function(e){
   if(e.key === "Escape"){
 
     closeImage();
+
+  }
+
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+
+  const closeBtn = document.querySelector(".close-btn");
+  const lightbox = document.getElementById("lightbox");
+
+  if(closeBtn){
+
+    closeBtn.addEventListener("click", () => {
+
+      lightbox.style.display = "none";
+
+    });
+
+  }
+
+  if(lightbox){
+
+    lightbox.addEventListener("click", (e) => {
+
+      if(e.target === lightbox){
+
+        lightbox.style.display = "none";
+
+      }
+
+    });
 
   }
 
@@ -180,14 +220,6 @@ window.addEventListener('scroll',()=>{
 
 });
 
-const glow = document.querySelector('.cursor-glow');
-
-document.addEventListener('mousemove',e=>{
-
-  glow.style.left = e.clientX + 'px';
-  glow.style.top = e.clientY + 'px';
-
-});
 
 // form
 /* ================= CONTACT FORM ================= */
@@ -351,7 +383,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const password = document.getElementById("password").value;
 
         // CREATE AUTH USER
-        await th, email, password;
+        await createUserWithEmailAndPassword(auth, email, password);
 
         // SAVE TO FIRESTORE
         await setDoc(doc(db, "volunteers", data.studentId), data);
@@ -375,17 +407,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 
-function openImage(src){
-  document.getElementById("lightbox").style.display="flex";
-  document.getElementById("lightbox-img").src = src;
-}
+window.openImage = function(src){
 
-document.querySelector(".close-btn").addEventListener("click", function(){
-  document.getElementById("lightbox").style.display="none";
-});
+  const lightbox = document.getElementById("lightbox");
+  const lightboxImg = document.getElementById("lightbox-img");
 
-document.getElementById("lightbox").addEventListener("click", function(e){
-  if(e.target === this){
-    this.style.display="none";
+  if(lightbox && lightboxImg){
+
+    lightbox.style.display = "flex";
+    lightboxImg.src = src;
+
   }
-});
+
+}

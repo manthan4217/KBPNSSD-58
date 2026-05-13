@@ -330,6 +330,81 @@
   </div>
 </section>
 
+<!-- ================= EDUCATION GALLERY ================= -->
+
+<section class="education-gallery">
+
+  <div class="section-title">
+    <h2>Education Activity Moments</h2>
+
+    <p>
+      Capturing teaching sessions, student interaction,
+      learning activities and beautiful moments from our
+      “One Step for Education” initiative 📚
+    </p>
+  </div>
+
+  <div class="gallery-grid">
+
+    <div class="gallery-item tall">
+      <img src="images/onestepeducation1.jpeg" class="gallery-img" onclick="openImage(this.src)">
+    </div>
+
+    <div class="gallery-item">
+      <img src="images/onestepeducation2.jpeg"
+      class="gallery-img"
+      onclick="openImage(this.src)">
+    </div>
+
+    <div class="gallery-item wide">
+      <img src="https://picsum.photos/500/500"
+      class="gallery-img"
+      onclick="openImage(this.src)">
+    </div>
+
+    <div class="gallery-item">
+      <img src="https://picsum.photos/500/500"
+      class="gallery-img"
+      onclick="openImage(this.src)">
+    </div>
+
+    <div class="gallery-item">
+      <img src="https://picsum.photos/500/500"
+      class="gallery-img"
+      onclick="openImage(this.src)">
+    </div>
+
+    <div class="gallery-item tall">
+      <img src="https://picsum.photos/500/500"
+      class="gallery-img"
+      onclick="openImage(this.src)">
+    </div>
+
+    <div class="gallery-item wide">
+      <img src="images/onestepeducation3.jpeg"
+      class="gallery-img"
+      onclick="openImage(this.src)">
+    </div>
+
+    <div class="gallery-item">
+      <img src="images/mangroves.jpeg" class="gallery-img" onclick="openImage(this.src)" >
+    </div>
+
+  </div>
+
+  <!-- LIGHTBOX -->
+
+<!-- LIGHTBOX -->
+  <div id="lightbox" class="lightbox">
+
+    <span class="close-btn">&times;</span>
+
+    <img id="lightbox-img" class="lightbox-img">
+
+  </div>
+
+</section>
+
 <section class="leaders-section">
 
   <h2>Activity Lead</h2>
@@ -384,7 +459,7 @@
       <h4>Quick Links</h4>
 
       <ul>
-        <li><a href="#home">Home</a></li>
+        <li><a href="index.html">Home</a></li>
         <li><a href="#projects">Projects</a></li>
         <li><a href="#achievements">Achievements</a></li>
         <li><a href="#camps">Camps</a></li>
@@ -440,6 +515,30 @@
 </footer>
 
 <script type="module" src="script.js"></script>
+
+<script>
+/* =========================
+  BACK BUTTON SHOW/HIDE
+  ========================= */
+
+  window.addEventListener("scroll", function(){
+
+    const backBtn = document.getElementById("backHomeBtn");
+
+    if(window.scrollY > 350){
+
+      backBtn.classList.add("show");
+
+    }else{
+
+      backBtn.classList.remove("show");
+
+    }
+
+  });
+
+</script>
+
 </body>
 
 </html>
