@@ -1,231 +1,484 @@
-/* 🌟 CAMP HERO SECTION */
-.camp-hero {
-  text-align: center;
-  padding: 50px 20px;
-  background: linear-gradient(90deg, #0b3d2e, #146c43);
-  color: white;
+/* =========================================================
+🎯 PREMIUM NSS CAMP THEME (UNIFIED DESIGN SYSTEM)
+========================================================= */
+
+/* ================= ROOT ================= */
+:root{
+  --primary:#7f1d1d;      /* deep NSS maroon */
+  --primary-light:#991b1b;
+  --accent:#fca5a5;       /* soft highlight */
+  --gold:#fbbf24;         /* subtle premium accent */
+
+  --bg:#f5f6fa;
+  --card:#ffffff;
+  --text:#1f2937;
+
+  --shadow:0 12px 35px rgba(0,0,0,0.10);
+  --shadow-soft:0 8px 20px rgba(0,0,0,0.08);
+
+  --radius:18px;
+  --transition:0.35s ease;
 }
 
-.camp-hero h1 {
-  font-size: 32px;
-  margin-bottom: 10px;
+/* ================= GLOBAL ================= */
+body{
+  font-family:'Poppins',sans-serif;
+  margin:0;
+  padding:0;
+  background:var(--bg);
+  color:var(--text);
+  overflow-x:hidden;
 }
 
-.camp-hero p {
-  font-size: 18px;
-  opacity: 0.9;
-}
+/* =========================================================
+🌄 PREMIUM CAMP HERO (FIXED CINEMATIC)
+========================================================= */
 
-/* highlight tags */
-.camp-highlight {
-  margin-top: 15px;
-}
-
-.camp-highlight span {
-  display: inline-block;
-  background: rgba(255,255,255,0.15);
-  padding: 8px 12px;
-  margin: 5px;
-  border-radius: 20px;
-  font-size: 14px;
-}
-
-/* 📅 TIMELINE SECTION */
-.camp-timeline {
-  padding: 30px 20px;
-  text-align: center;
-}
-
-.camp-timeline h2 {
-  margin-bottom: 20px;
-  color: #0b3d2e;
-}
-
-/* 📦 DAY CARDS */
-.day-card {
-  background: white;
-  margin: 15px auto;
-  padding: 15px;
-  max-width: 800px;
-  border-left: 5px solid #0b3d2e;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-  transition: 0.3s;
-  text-align: left;
-  line-height: 1.7;
-}
-
-.day-card:hover {
-  transform: scale(1.02);
-}
-
-/* 📱 MOBILE RESPONSIVE */
-@media (max-width: 768px) {
-
-  .camp-hero h1 {
-    font-size: 24px;
-  }
-
-  .camp-hero p {
-    font-size: 14px;
-  }
-
-  .day-card {
-    width: 90%;
-  }
-}
-
-/* CAMP BANNER (LIKE HERO IMAGE STYLE) */
 .camp-banner{
   position:relative;
-  width:100%;
-  height:70vh;
-  margin: 0;
-  padding: 0;
+  height:100vh;
+  min-height:760px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
   overflow:hidden;
 }
 
 /* IMAGE */
 .camp-banner img{
+  position:absolute;
+  inset:0;
   width:100%;
   height:100%;
   object-fit:cover;
+  transform:scale(1.08);
+  animation:zoomSlow 20s ease-in-out infinite alternate;
 }
 
-/* DARK OVERLAY */
-.camp-banner-overlay{
+/* DARK CINEMATIC LAYER */
+.camp-banner::before{
+  content:"";
   position:absolute;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-  background:rgba(0,0,0,0.5);
+  inset:0;
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(0,0,0,0.35),
+      rgba(127,29,29,0.88),
+      rgba(0,0,0,0.80)
+    );
+  z-index:1;
+}
 
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
+/* SOFT LIGHT GLOW */
+.camp-banner::after{
+  content:"";
+  position:absolute;
+  width:800px;
+  height:800px;
+  background:radial-gradient(circle, rgba(252,165,165,0.12), transparent 70%);
+  top:-250px;
+  right:-200px;
+  z-index:2;
+}
+
+/* CONTENT */
+.camp-banner-overlay{
+  position:relative;
+  z-index:5;
   text-align:center;
-  color:white;
+  max-width:1000px;
   padding:20px;
 }
 
-/* TEXT */
+/* TITLE */
 .camp-banner-overlay h1{
-  font-size:36px;
-  margin-bottom:10px;
+  font-size:4.5rem;
+  font-weight:900;
+  letter-spacing:-2px;
+  line-height:1.05;
+
+  background:linear-gradient(90deg,#ffe2e2,#ffffff,#fca5a5);
+  background-size:300%;
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+
+  animation:fadeUp 1s ease, gradientMove 6s linear infinite;
 }
 
+/* SUBTITLE */
 .camp-banner-overlay p{
-  font-size:18px;
+  font-size:1.3rem;
+  color:#f3f4f6;
+  margin-top:15px;
   opacity:0.9;
+  animation:fadeUp 1.3s ease;
 }
 
-/* MOBILE */
-@media(max-width:768px){
+/* =========================================================
+📌 CAMP HERO INFO SECTION (FIXED COLORS)
+========================================================= */
 
-  .camp-banner{
-    height:50vh;
-  }
-
-  .camp-banner-overlay h1{
-    font-size:22px;
-  }
-
-  .camp-banner-overlay p{
-    font-size:14px;
-  }
-}
-
-.floating-back {
-  position: fixed;
-  top: 20px;
-  left: 20px;
-  background: #145c3a;
-  color: white;
-  padding: 10px 14px;
-  border-radius: 50%;
-  font-size: 18px;
-  text-decoration: none;
-  z-index: 999;
-}
-
-.floating-back:hover {
-  background: #ff9933;
-}
-
-#backHomeBtn{
-  position: fixed;
-  top: 20px;
-  left: 20px;
-
-  background: #145c3a;
-  color: white;
-  text-decoration: none;
-
-  padding: 10px 16px;
-  border-radius: 25px;
-
-  font-size: 14px;
-
-  opacity: 0;
-  transform: translateY(-20px);
-  pointer-events: none;
-
-  transition: 0.3s ease;
-  z-index: 999;
-}
-
-#backHomeBtn.show{
-  opacity: 1;
-  transform: translateY(0);
-  pointer-events: auto;
-}
-
-/* HOVER */
-#backHomeBtn:hover{
-  background: #ff9933;
-}
-
-/* TIMELINE SECTION */
-.timeline{
-  padding:70px 10%;
-  background:#f8f9fa;
+.camp-hero{
   text-align:center;
+  padding:80px 20px;
+  background:linear-gradient(180deg,#fff,#f9fafb);
 }
 
-.timeline h2{
-  margin-bottom:10px;
-  color:#1b4332;
+.camp-hero h1{
+  font-size:3rem;
+  color:var(--primary);
+  font-weight:900;
 }
 
-.timeline-sub{
-  margin-bottom:30px;
-  color:#555;
+.camp-hero p{
+  font-size:1.2rem;
+  color:#6b7280;
 }
 
-/* GRID */
-.timeline-container{
-  display:grid;
-  grid-template-columns:repeat(auto-fit, minmax(180px,1fr));
-  gap:15px;
+/* TAGS */
+.camp-highlight{
+  margin-top:25px;
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:12px;
 }
 
-/* ITEMS */
-.timeline-item{
-  background:white;
-  padding:15px;
-  border-radius:18px;
-  box-shadow:0 4px 12px rgba(0,0,0,0.08);
-  font-size:14px;
-  font-weight:500;
-  color:#145c3a;
-
+.camp-highlight span{
+  background:#fff;
+  border:1px solid rgba(127,29,29,0.15);
+  padding:10px 14px;
+  border-radius:30px;
+  font-size:13px;
+  color:var(--primary);
+  box-shadow:var(--shadow-soft);
   transition:var(--transition);
 }
 
-/* HOVER */
-.timeline-item:hover{
-  transform:translateY(-6px) scale(1.02);
-  background:#145c3a;
-  color:white;
+.camp-highlight span:hover{
+  transform:translateY(-4px);
+  background:var(--primary);
+  color:#fff;
+}
+
+/* =========================================================
+📅 SECTION HEADINGS (UNIFIED)
+========================================================= */
+
+h2{
+  text-align:center;
+  font-size:2.4rem;
+  font-weight:900;
+  color:var(--primary);
+  margin:60px 0 30px;
+  position:relative;
+}
+
+h2::after{
+  content:"";
+  width:80px;
+  height:4px;
+  background:linear-gradient(90deg,var(--primary),var(--accent));
+  position:absolute;
+  left:50%;
+  transform:translateX(-50%);
+  bottom:-10px;
+  border-radius:10px;
+}
+
+/* =========================================================
+📦 PREMIUM RESPONSIVE DAY CARD (FINAL)
+========================================================= */
+
+.day-card{
+  position:relative;
+
+  background:var(--card);
+  max-width:900px;
+  width:92%;
+
+  margin:28px auto;
+  padding:28px 26px 26px 34px;
+
+  border-radius:var(--radius);
+
+  box-shadow:var(--shadow);
+
+  overflow:hidden;
+
+  transition:var(--transition);
+
+  line-height:1.7;
+
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+/* LEFT PREMIUM ACCENT BAR */
+.day-card::before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:0;
+
+  width:6px;
+  height:100%;
+
+  background:linear-gradient(
+    to bottom,
+    var(--primary),
+    var(--accent)
+  );
+}
+
+/* TOP TITLE */
+.day-card h3{
+  font-size:1.45rem;
+  font-weight:800;
+
+  color:var(--primary);
+
+  margin:0;
+  letter-spacing:-0.3px;
+}
+
+/* DATE TEXT */
+.day-card p{
+  margin:0;
+  font-size:0.95rem;
+  color:#6b7280;
+}
+
+/* DATE STRONG STYLE */
+.day-card p strong{
+  color:#111827;
+}
+
+/* LIST RESET */
+.day-card ul{
+  margin:10px 0 0;
+  padding-left:18px;
+}
+
+/* LIST ITEMS */
+.day-card li{
+  margin-bottom:10px;
+  color:#374151;
+  font-size:0.98rem;
+
+  position:relative;
+  padding-left:6px;
+}
+
+/* CUSTOM BULLET */
+.day-card li::before{
+  content:"";
+  position:absolute;
+  left:-12px;
+  top:10px;
+
+  width:6px;
+  height:6px;
+
+  border-radius:50%;
+
+  background:var(--primary);
+  opacity:0.8;
+}
+
+/* HOVER EFFECT (PREMIUM FLOAT, NOT SCALE CHAOS) */
+.day-card:hover{
+  transform:translateY(-6px);
+  box-shadow:0 25px 60px rgba(127,29,29,0.18);
+}
+
+/* =========================================================
+📱 RESPONSIVE DESIGN
+========================================================= */
+
+@media (max-width: 768px){
+
+  .day-card{
+    width:94%;
+    padding:22px 18px 22px 26px;
+    border-radius:14px;
+  }
+
+  .day-card h3{
+    font-size:1.2rem;
+    line-height:1.4;
+  }
+
+  .day-card p{
+    font-size:0.85rem;
+  }
+
+  .day-card li{
+    font-size:0.9rem;
+  }
+}
+
+@media (max-width: 480px){
+
+  .day-card{
+    width:95%;
+    padding:18px 16px 18px 22px;
+  }
+
+  .day-card h3{
+    font-size:1.05rem;
+  }
+
+  .day-card li{
+    font-size:0.85rem;
+  }
+}
+
+/* =========================================================
+🖼️ GALLERY (UNIFIED GRID)
+========================================================= */
+
+.gallery-container{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:15px;
+  padding:20px 5%;
+}
+
+.gallery-img{
+  width:100%;
+  height:220px;
+  object-fit:cover;
+  border-radius:16px;
+  box-shadow:var(--shadow-soft);
+  cursor:pointer;
+  transition:var(--transition);
+}
+
+.gallery-img:hover{
+  transform:scale(1.06);
+}
+
+/* BUTTON */
+#toggleGalleryBtn{
+  display:block;
+  margin:20px auto;
+  padding:12px 20px;
+  border:none;
+  border-radius:30px;
+  background:var(--primary);
+  color:#fff;
+  cursor:pointer;
+  transition:var(--transition);
+}
+
+#toggleGalleryBtn:hover{
+  background:var(--primary-light);
+}
+
+/* =========================================================
+🖼️ LIGHTBOX
+========================================================= */
+
+#lightbox{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.92);
+  display:none;
+  justify-content:center;
+  align-items:center;
+  z-index:99999;
+}
+
+#lightbox-img{
+  max-width:90%;
+  max-height:85vh;
+  border-radius:12px;
+  animation:zoomIn 0.3s ease;
+}
+
+.close-btn{
+  position:absolute;
+  top:20px;
+  right:25px;
+  font-size:40px;
+  color:#fff;
+  cursor:pointer;
+}
+
+
+
+/* =========================================================
+📄 REPORT BOX
+========================================================= */
+
+.report-box{
+  background:#fff;
+  max-width:700px;
+  margin:20px auto;
+  padding:25px;
+  border-radius:18px;
+  box-shadow:var(--shadow);
+  text-align:center;
+}
+
+.report-btn{
+  display:inline-block;
+  margin-top:10px;
+  padding:12px 18px;
+  background:var(--primary);
+  color:#fff;
+  border-radius:30px;
+  text-decoration:none;
+  transition:var(--transition);
+}
+
+.report-btn:hover{
+  background:var(--primary-light);
+}
+
+
+/* =========================================================
+✨ ANIMATIONS
+========================================================= */
+
+@keyframes zoomSlow{
+  from{transform:scale(1.05);}
+  to{transform:scale(1.2);}
+}
+
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(25px);}
+  to{opacity:1;transform:translateY(0);}
+}
+
+@keyframes gradientMove{
+  0%{background-position:0%;}
+  100%{background-position:300%;}
+}
+
+@keyframes zoomIn{
+  from{transform:scale(0.8);opacity:0;}
+  to{transform:scale(1);opacity:1;}
+}
+
+/* =========================================================
+📱 RESPONSIVE
+========================================================= */
+
+@media(max-width:768px){
+
+  .camp-banner-overlay h1{
+    font-size:2.3rem;
+  }
+
+  .camp-hero h1{
+    font-size:2rem;
+  }
+
+  .gallery-img{
+    height:180px;
+  }
 }

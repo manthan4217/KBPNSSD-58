@@ -918,20 +918,31 @@ font-size:13px;
 margin-bottom:5px;
 }
 
-/* BUTTON */
 .camp-btn{
-display:inline-block;
-padding:8px 16px;
-background:#145c3a;
-color:white;
-border-radius:20px;
-text-decoration:none;
-font-size:13px;
-transition:var(--transition);
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+
+  padding:10px 18px;
+
+  background:linear-gradient(135deg,#145c3a,#0f3d2e);
+  color:white;
+
+  border-radius:25px;
+  text-decoration:none;
+
+  font-size:13px;
+  font-weight:600;
+
+  box-shadow:0 8px 20px rgba(20,92,58,0.25);
+
+  transition:0.3s ease;
 }
 
 .camp-btn:hover{
-background:#ff9933;
+  transform:translateY(-3px);
+  background:linear-gradient(135deg,#ff9933,#ff7a00);
+  box-shadow:0 12px 25px rgba(255,153,51,0.25);
 }
 
 /* ================= SPECIAL PROGRAMS ================= */
