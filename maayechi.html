@@ -6,6 +6,7 @@
 <title>Maayechi Ubb | NSS D-58</title>
 
 <link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/maayechi.css">
 </head>
 
 <body>
@@ -71,9 +72,23 @@
 <section class="camp-banner">
   <img src="images/maayechiubb.jpeg" alt="Maayechi Ubb Project">
   <div class="camp-banner-overlay">
-    <h1>Maayechi Ubb</h1>
-    <p>“Spreading Warmth with Compassion” ❤️</p>
-  </div>
+
+  <div class="hero-badge">🧣 NSS Social Initiative</div>
+
+  <h1>Maayechi Ubb</h1>
+  <p>“Spreading Warmth with Compassion” ❤️</p>
+
+  <a href="#more-info" class="hero-btn">Explore Project ↓</a>
+
+</div>
+</section>
+
+<section class="intro">
+  <h2>A Story of Warmth</h2>
+  <p>
+    Maayechi Ubb is not just a project — it is an emotion of care,
+    where old sarees transform into blankets of hope for those in need.
+  </p>
 </section>
 
 <!-- ABOUT -->
@@ -167,6 +182,25 @@
 <section class="report">
   <h2>Impact</h2>
 
+  <div class="impact-stats">
+
+    <div class="stat">
+      <h3>50+</h3>
+      <p>Blankets Distributed</p>
+    </div>
+
+    <div class="stat">
+      <h3>30+</h3>
+      <p>Volunteers Involved</p>
+    </div>
+
+    <div class="stat">
+      <h3>10+</h3>
+      <p>Locations Covered</p>
+    </div>
+
+  </div>
+
   <div class="report-box">
 
     <p>
@@ -185,6 +219,48 @@
     </p>
 
   </div>
+</section>
+
+<section class="more-info" id="more-info">
+
+  <h2>More Information</h2>
+
+  <div class="more-info-container">
+
+    <div class="info-card">
+      <h3>🎯 Objective</h3>
+      <p>
+        To provide warmth and dignity to homeless individuals during harsh weather
+        through recycled saree blankets made by volunteers.
+      </p>
+    </div>
+
+    <div class="info-card">
+      <h3>🤝 Community Participation</h3>
+      <p>
+        The project encourages active participation from students, building empathy,
+        teamwork, and social responsibility.
+      </p>
+    </div>
+
+    <div class="info-card">
+      <h3>♻️ Sustainability</h3>
+      <p>
+        By reusing old sarees, the initiative promotes eco-friendly practices and
+        reduces textile waste.
+      </p>
+    </div>
+
+    <div class="info-card">
+      <h3>🌍 Social Impact</h3>
+      <p>
+        The initiative not only provides physical warmth but also emotional support
+        to underprivileged people.
+      </p>
+    </div>
+
+  </div>
+
 </section>
 
 <!-- VISION -->
@@ -210,46 +286,142 @@
   </div>
 </section>
 
+<section class="maayechi-gallery">
+
+  <div class="section-title">
+
+    <h2>Warmth We Shared</h2>
+
+    <p>
+      Every blanket tells a story of care, compassion, and humanity —
+      made from old sarees and distributed with love ❤️
+    </p>
+  </div>
+
+  <div class="gallery-grid">
+
+    <div class="gallery-item">
+      <img src="images/maayechi.jpeg" class="gallery-img" onclick="openImage(this.src)">
+      <div class="img-caption">Saree Collection Drive</div>
+    </div>
+
+    <div class="gallery-item">
+      <img src="images/maayechiubb.jpeg" class="gallery-img" onclick="openImage(this.src)">
+      <div class="img-caption">Volunteers Stitching Blankets</div>
+    </div>
+
+    <div class="gallery-item">
+      <img src="images/maayechiubb1.jpeg" class="gallery-img" onclick="openImage(this.src)">
+      <div class="img-caption">Preparing Warm Blankets</div>
+    </div>
+
+    <div class="gallery-item">
+      <img src="images/maayechi4.jpeg" class="gallery-img" onclick="openImage(this.src)">
+      <div class="img-caption">Street Distribution Drive</div>
+    </div>
+
+    <div class="gallery-item">
+      <img src="images/maayechi5.jpeg" class="gallery-img" onclick="openImage(this.src)">
+      <div class="img-caption">Helping Homeless People</div>
+    </div>
+
+    <div class="gallery-item">
+      <img src="images/maayechi6.jpeg" class="gallery-img" onclick="openImage(this.src)">
+      <div class="img-caption">Team NSS D-58 Effort</div>
+    </div>
+
+    <div class="gallery-item">
+      <img src="images/maayechi6.jpeg" class="gallery-img" onclick="openImage(this.src)">
+      <div class="img-caption">Team NSS D-58 Effort</div>
+    </div>
+
+    <div class="gallery-item">
+      <img src="images/maayechi6.jpeg" class="gallery-img" onclick="openImage(this.src)">
+      <div class="img-caption">Team NSS D-58 Effort</div>
+    </div>
+
+  </div>
+
+</section>
+
+<!-- ================= LIGHTBOX ================= -->
+<!-- LIGHTBOX -->
+  <div id="lightbox" class="lightbox">
+
+    <span class="close-btn">&times;</span>
+
+    <img id="lightbox-img" class="lightbox-img">
+
+  </div>
+
+
 <!-- ================= FOOTER ================= -->
-<footer class="footer">
+  <footer class="footer">
 
   <div class="footer-container">
 
     <!-- LEFT -->
     <div class="footer-section">
       <h3>NSS Unit D-58</h3>
+
       <p>Karmaveer Bhaurao Patil College, Vashi</p>
       <p>"Not Me But You"</p>
     </div>
 
-    <!-- MIDDLE -->
+    <!-- QUICK LINKS -->
     <div class="footer-section">
       <h4>Quick Links</h4>
+
       <ul>
-        <li><a href="#">Home</a></li>
+        <li><a href="#home">Home</a></li>
         <li><a href="#projects">Projects</a></li>
         <li><a href="#achievements">Achievements</a></li>
         <li><a href="#camps">Camps</a></li>
+        <li><a href="#gallery">Gallery</a></li>
         <li><a href="#contact">Contact</a></li>
       </ul>
     </div>
 
-    <!-- RIGHT -->
+    <!-- CONTACT -->
     <div class="footer-section">
       <h4>Contact</h4>
-      <p>Email: kbp.nssunit@gmail.com</p>
-      <p>Phone: +91 XXXXX XXXXX</p>
+
+      <p>📍 Vashi, Navi Mumbai</p>
+      <p>📧 kbp.nssunit@gmail.com</p>
+      <p>⏰ 10:00 AM – 4:00 PM</p>
+    </div>
+
+    <!-- DEVELOPER -->
+    <div class="footer-section">
+      <h4>Developed By</h4>
+
+      <p>Manthan Vitthal Rajdev</p>
+      <p>NSS Volunteer & Web Developer</p>
 
       <div class="social-icons">
-        <a href="https://www.instagram.com/kbp_nss?igsh=c2JscjFqeTBmbXYx"><i class="fab fa-instagram"></i></a>
-        <a href="https://www.youtube.com/@kbpnss8858"><i class="fab fa-youtube"></i></a>
-        <a href="#"><i class="fab fa-facebook"></i></a>
-        <a href="#"><i class="fab fa-whatsapp"></i></a>
+
+        <a href="https://www.instagram.com/kbp_nss?igsh=c2JscjFqeTBmbXYx">
+          <i class="fab fa-instagram"></i>
+        </a>
+
+        <a href="https://www.youtube.com/@kbpnss8858">
+          <i class="fab fa-youtube"></i>
+        </a>
+
+        <a href="https://www.facebook.com/share/14WKLa8i8Rs/">
+          <i class="fab fa-facebook"></i>
+        </a>
+
+        <a href="#">
+          <i class="fab fa-twitter"></i>
+        </a>
+
       </div>
     </div>
 
   </div>
 
+  <!-- BOTTOM -->
   <div class="footer-bottom">
     <p>© 2026 NSS Unit D-58 | All Rights Reserved</p>
   </div>
