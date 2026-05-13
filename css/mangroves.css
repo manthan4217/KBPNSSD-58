@@ -53,7 +53,13 @@ section{
   content:'';
   position:absolute;
   inset:0;
-  background:linear-gradient(180deg,rgba(0,0,0,0.2),rgba(11,107,79,0.45));
+
+  /* CLEANER DARK + GREEN BALANCE */
+  background: linear-gradient(
+    180deg,
+    rgba(0,0,0,0.25),
+    rgba(6,78,59,0.35)
+  );
 }
 
 .camp-banner-overlay{
@@ -67,12 +73,42 @@ section{
 }
 
 .camp-banner-overlay h1{
-  font-size:3.5rem;
+  font-size:5.2rem;
+  line-height:1.05;
+  margin-bottom:25px;
   font-weight:800;
+  letter-spacing:-2px;
+
+  /* PURE THEME GRADIENT */
+  background: linear-gradient(
+    90deg,
+    var(--green),
+    var(--mint),
+    var(--sky)
+  );
+
+  background-size:300%;
+  background-clip:text;
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+
+  text-shadow:0 10px 35px rgba(0,0,0,0.25);
+
+  animation: gradientMove 6s linear infinite, fadeUp 1s ease;
 }
 
+/* SUBTEXT */
+
 .camp-banner-overlay p{
-  font-size:1.2rem;
+  font-size:1.35rem;
+  line-height:1.8;
+
+  color:white;
+
+  text-shadow:
+  0 5px 20px rgba(0,0,0,0.25);
+
+  animation:fadeUp 1.4s ease;
 }
 
 /* ================= ABOUT ================= */
@@ -451,3 +487,49 @@ section h2{
   text-align:center;
   font-size:1rem;
 }
+
+.camp-banner-overlay h1{
+  font-size:5.2rem;
+  line-height:1.05;
+
+  margin-bottom:25px;
+
+  font-weight:800;
+  letter-spacing:-2px;
+
+  background:
+  linear-gradient(
+    90deg,
+    #d7ffcb,
+    #ffffff,
+    #ffd166
+  );
+
+  background-size:300%;
+
+  background-clip:text;
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+
+  text-shadow:
+  0 10px 35px rgba(0,0,0,0.35);
+
+  animation:
+  gradientMove 6s linear infinite,
+  fadeUp 1s ease;
+}
+
+/* SUBTEXT */
+
+.camp-banner-overlay p{
+  font-size:1.35rem;
+  line-height:1.8;
+
+  color:white;
+
+  text-shadow:
+  0 5px 20px rgba(0,0,0,0.25);
+
+  animation:fadeUp 1.4s ease;
+}
+
