@@ -407,6 +407,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 
+// ================= LIGHTBOX =================
+
 window.openImage = function(src){
 
   const lightbox = document.getElementById("lightbox");
@@ -419,4 +421,35 @@ window.openImage = function(src){
 
   }
 
-}
+};
+
+document.addEventListener("DOMContentLoaded", () => {
+
+  const lightbox = document.getElementById("lightbox");
+  const closeBtn = document.querySelector(".close-btn");
+
+  if(closeBtn){
+
+    closeBtn.addEventListener("click", () => {
+
+      lightbox.style.display = "none";
+
+    });
+
+  }
+
+  if(lightbox){
+
+    lightbox.addEventListener("click", function(e){
+
+      if(e.target === lightbox){
+
+        lightbox.style.display = "none";
+
+      }
+
+    });
+
+  }
+
+});
