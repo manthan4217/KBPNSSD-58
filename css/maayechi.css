@@ -102,6 +102,7 @@ section{
 
   background-size:300%;
   -webkit-background-clip:text;
+  background-clip:text;
   -webkit-text-fill-color:transparent;
 
   text-shadow:0 10px 35px rgba(0,0,0,0.35);
