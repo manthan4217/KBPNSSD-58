@@ -1,12 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Official NSS Unit D-58 portal of Karmaveer Bhaurao Patil College, Vashi showcasing social activities, camps, leadership and community service initiatives.">
+<meta name="keywords" content="NSS, NSS D-58, Karmaveer Bhaurao Patil College, Vashi, NSS Unit, social service, NSS activities, NSS camp, Navi Mumbai">
 
-<title>NSS Student Dashboard</title>
+<meta name="author" content="Manthan Vitthal Rajdev">
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<meta property="og:title" content="NSS Unit D-58 | KBP College Vashi">
+
+<meta property="og:description" content="Official NSS portal of Karmaveer Bhaurao Patil College, Vashi showcasing activities, camps, leadership and social initiatives.">
+
+<meta property="og:image" content="images/nsslogo.png">
+
+<meta property="og:type" content="website">
+
+<title>NSS Volunteer Dashboard</title>
+
+<link rel="icon" href="images/nsslogo.png">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
 <link rel="stylesheet" href="css/style.css">
 <link rel="stylesheet" href="css/dashboard.css">
@@ -15,197 +31,461 @@
 
 <body class="dashboard-body">
 
-<!-- ================= TOPBAR ================= -->
+<div class="dashboard-layout">
 
-<header class="dashboard-topbar">
+  <!-- ===================================================== -->
+  <!-- SIDEBAR -->
+  <!-- ===================================================== -->
 
-  <div class="dashboard-brand">
-    <h2>NSS D-58 Portal</h2>
-    <span>KBP College, Vashi</span>
-  </div>
+  <aside class="dashboard-sidebar">
 
-  <div class="topbar-right">
+    <div class="sidebar-top">
 
-    <div class="student-mini">
-      <div class="avatar">
-        👤
-      </div>
+      <div class="sidebar-logo">
 
-      <div>
-        <h4 id="topName">Volunteer</h4>
-        <p>Student Dashboard</p>
-      </div>
-    </div>
-
-    <button id="logoutBtn" class="logout-btn">
-      Logout
-    </button>
-
-  </div>
-
-</header>
-
-<!-- ================= MAIN ================= -->
-
-<div class="dashboard-wrapper">
-
-  <!-- LEFT SIDE -->
-
-  <div class="dashboard-left">
-
-    <!-- PROFILE CARD -->
-
-    <div class="dashboard-card profile-card">
-
-      <div class="profile-header">
-
-        <div class="profile-avatar">
-          👤
-        </div>
+        <img src="images/nsslogo.png">
 
         <div>
-          <h3 id="d-name">Loading...</h3>
-          <span id="d-class">Loading...</span>
+          <h2>NSS</h2>
+          <p>National Service Scheme</p>
         </div>
 
       </div>
 
-      <div class="profile-grid">
+      <div class="sidebar-menu">
 
-        <div class="profile-item">
-          <label>Student ID</label>
-          <p id="d-id">Loading...</p>
+        <a href="#" class="menu-item active">
+          <span>🏠</span>
+          <p>Dashboard</p>
+        </a>
+
+        <a href="#" class="menu-item">
+          <span>👤</span>
+          <p>My Profile</p>
+        </a>
+
+        <a href="#" class="menu-item">
+          <span>📋</span>
+          <p>Activities</p>
+        </a>
+
+        <a href="#" class="menu-item">
+          <span>🎓</span>
+          <p>Lectures</p>
+        </a>
+
+        <a href="#" class="menu-item">
+          <span>✅</span>
+          <p>Attendance</p>
+        </a>
+
+        <a href="#" class="menu-item">
+          <span>🏆</span>
+          <p>Achievements</p>
+        </a>
+
+        <a href="#" class="menu-item">
+          <span>📢</span>
+          <p>Announcements</p>
+        </a>
+
+        <a href="#" class="menu-item">
+          <span>📜</span>
+          <p>Certificates</p>
+        </a>
+
+        <a href="#" class="menu-item">
+          <span>⚙️</span>
+          <p>Settings</p>
+        </a>
+
+        <a href="#" class="menu-item" id="logoutBtn">
+          <span>🚪</span>
+          <p>Logout</p>
+        </a>
+
+      </div>
+
+    </div>
+
+   
+
+  </aside>
+
+  <!-- ===================================================== -->
+  <!-- MAIN -->
+  <!-- ===================================================== -->
+
+  <main class="dashboard-main">
+
+    <!-- TOPBAR -->
+
+    <div class="dashboard-topbar">
+
+      <div class="topbar-left">
+
+        <div class="menu-toggle">
+          ☰
         </div>
 
-        <div class="profile-item">
-          <label>Contact</label>
-          <p id="d-contact">Loading...</p>
+        <div class="welcome-box">
+          <h3>
+            Welcome back,
+            <span id="topName">Manthan!</span> 👋
+          </h3>
+
+          <p>NSS Student Dashboard</p>
         </div>
 
-        <div>
-          <label>Email</label>
-          <p id="d-email">Loading...</p>
+      </div>
+
+      <div class="search-box">
+
+        <input type="text" placeholder="Search anything...">
+
+        <span>🔍</span>
+
+      </div>
+
+      <div class="topbar-right">
+
+        <div class="notification-btn">
+          🔔
+        </div>
+
+        <div class="profile-mini">
+
+          <img id="profileImage" src="images/profile.jpg">
+
+          <div>
+            <h4 id="d-name">Manthan Rajdev</h4>
+            <p>Volunteer</p>
+          </div>
+
         </div>
 
       </div>
 
     </div>
 
-    <!-- ATTENDANCE CARD -->
+    <!-- ===================================================== -->
+    <!-- GRID -->
+    <!-- ===================================================== -->
 
-    <div class="dashboard-card attendance-card-modern">
+    <div class="dashboard-grid">
 
-      <div class="card-title">
-        <h3>🔥 Live Attendance</h3>
-      </div>
+      <!-- LEFT SECTION -->
 
-      <div id="activeActivityBox">
+      <div class="left-section">
 
-        <div class="loading-box">
-          Loading activity...
+        <!-- PROFILE HERO -->
+
+        <div class="profile-hero">
+
+          <div class="dashboard-card profile-card">
+
+            <div class="profile-avatar">
+
+              <img id="profileImage" src="images/profile.jpg">
+
+              <div class="online-dot"></div>
+
+            </div>
+
+            <div class="profile-info">
+
+              <h2 id="heroName">Manthan Rajdev</h2>
+
+              <div class="volunteer-badge">
+                NSS Volunteer
+              </div>
+
+              <div class="profile-meta">
+
+              <p>
+                <b>NSS ID:</b>
+                <span id="studentId">Loading...</span>
+              </p>
+
+              <p>
+                <b>Unit:</b>
+                <span id="studentUnit">D-58</span>
+              </p>
+
+              <p>
+                <b>College:</b>
+                <span id="studentCollege">
+                  KBP College, Vashi
+                </span>
+              </p>
+
+              <p>
+                <b>Blood Group:</b>
+                <span id="studentBlood">
+                  Loading...
+                </span>
+              </p>
+
+              <p>
+                <b>Class:</b>
+                <span id="studentClass">
+                  Loading...
+                </span>
+              </p>
+
+              <p>
+                <b>Contact:</b>
+                <span id="studentContact">
+                  Loading...
+                </span>
+              </p>
+
+              <p>
+                <b>Email:</b>
+                <span id="studentEmail">
+                  Loading...
+                </span>
+              </p>
+
+            </div>
+
+            </div>
+
+          </div>
+
+          <!-- QUOTE -->
+
+          <div class="dashboard-card quote-box">
+
+            <h3>
+              The best way to find yourself is to lose yourself in the service of others.
+            </h3>
+
+            <p>
+              — Mahatma Gandhi
+            </p>
+
+          </div>
+
+        </div>
+
+        <!-- ================================================= -->
+        <!-- STATS -->
+        <!-- ================================================= -->
+
+        <div class="stats-grid">
+
+          <div class="dashboard-card stat-card">
+
+            <div class="stat-content">
+
+              <h4>Activities Attended</h4>
+
+              <h2>18</h2>
+
+              <p>Out of 25 Activities</p>
+
+            </div>
+
+            <div class="stat-icon green-bg">
+              👥
+            </div>
+
+          </div>
+
+          <div class="dashboard-card stat-card">
+
+            <div class="stat-content">
+
+              <h4>Lectures Attended</h4>
+
+              <h2>12</h2>
+
+              <p>Out of 16 Lectures</p>
+
+            </div>
+
+            <div class="stat-icon blue-bg">
+              📘
+            </div>
+
+          </div>
+
+          <div class="dashboard-card stat-card">
+
+            <div class="stat-content">
+
+              <h4>Attendance Percentage</h4>
+
+              <h2>92%</h2>
+
+              <p>Excellent</p>
+
+            </div>
+
+            <div class="stat-icon orange-bg">
+              📊
+            </div>
+
+          </div>
+
+          <div class="dashboard-card stat-card">
+
+            <div class="stat-content">
+
+              <h4>Volunteer Hours</h4>
+
+              <h2>64</h2>
+
+              <p>Keep it up!</p>
+
+            </div>
+
+            <div class="stat-icon purple-bg">
+              ⏰
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- RADAR -->
+
+        <div class="dashboard-card">
+
+          <div class="section-title">
+
+            <h3>Activity Performance Radar</h3>
+
+          </div>
+
+          <div class="radar-placeholder">
+
+            Radar Chart Here
+
+          </div>
+
         </div>
 
       </div>
 
-      <div id="qrAttendanceBox">
+      <!-- RIGHT SECTION -->
 
-        <button id="openScannerBtn" class="btn-primary">
-          📷 Scan Attendance QR
-        </button>
+      <div class="right-section">
 
-        <div id="reader" style="width:100%; margin-top:20px;"></div>
+        <!-- ANNOUNCEMENTS -->
 
-      </div>
+        <div class="dashboard-card">
 
-      <p id="attendanceStatus"></p>
+          <div class="section-title">
 
-      <div id="successPopup" class="success-popup">
-        Attendance Marked Successfully ✅
+            <h3>Announcements</h3>
+
+            <a href="#">View All</a>
+
+          </div>
+
+          <div class="announcement-list">
+
+            <div class="announcement-item">
+
+              <div class="announcement-icon green-icon">
+                📢
+              </div>
+
+              <div class="announcement-content">
+
+                <h4>Camp Registration Open</h4>
+
+                <p>
+                  Special camping programme registration is now open.
+                </p>
+
+                <span>2 hours ago</span>
+
+              </div>
+
+            </div>
+
+            <div class="announcement-item">
+
+              <div class="announcement-icon orange-icon">
+                🎓
+              </div>
+
+              <div class="announcement-content">
+
+                <h4>Meeting Tomorrow</h4>
+
+                <p>
+                  Unit meeting scheduled tomorrow at 4 PM.
+                </p>
+
+                <span>5 hours ago</span>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- UPCOMING -->
+
+        <div class="dashboard-card">
+
+          <div class="section-title">
+
+            <h3>Upcoming Activities</h3>
+
+            <a href="#">View All</a>
+
+          </div>
+
+          <div class="upcoming-list">
+
+            <div class="upcoming-item">
+
+              <div class="upcoming-left">
+
+                <img src="images/tree.jpg">
+
+                <div class="upcoming-info">
+
+                  <h4>Tree Plantation Drive</h4>
+
+                  <p>22 May 2026 • 8:00 AM</p>
+
+                  <a href="#" class="register-btn">
+                    Register
+                  </a>
+
+                </div>
+
+              </div>
+
+              <div class="days-box">
+
+                <h3>02</h3>
+
+                <span>Days</span>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
       </div>
 
     </div>
 
-  </div>
-
-  <!-- RIGHT SIDE -->
-
-  <div class="dashboard-right">
-
-    <!-- STATS -->
-
-    <div class="card stats-card">
-
-      <h3>🎯 Activity Attendance</h3>
-
-      <div class="big-stat" id="activityCount">
-        0 / 0
-      </div>
-
-      <p>
-        Activities Attended
-      </p>
-
-      <button class="view-btn" id="viewActivitiesBtn">
-        View Details
-      </button>
-
-      <div id="activityDetails"></div>
-
-    </div>
-
-    <!-- ACTIVITIES -->
-
-    <div class="dashboard-card">
-
-      <div class="card-title">
-        <h3>🎯 NSS Activities</h3>
-      </div>
-
-      <div class="activity-list">
-
-        <div class="activity-pill">
-          Cleanliness Drive
-        </div>
-
-        <div class="activity-pill">
-          Blood Donation
-        </div>
-
-        <div class="activity-pill">
-          Tree Plantation
-        </div>
-
-        <div class="activity-pill">
-          Village Survey
-        </div>
-
-        <div class="activity-pill">
-          Awareness Rally
-        </div>
-
-      </div>
-
-    </div>
-
-    <!-- MOTIVATION -->
-
-    <div class="dashboard-card quote-card">
-
-      <h3>✨ NSS Motto</h3>
-
-      <p>
-        "Not Me But You"
-      </p>
-
-    </div>
-
-  </div>
+  </main>
 
 </div>
-
-<script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
-<div id="successPopup" class="success-popup"></div>
-<script type="module" src="dashboard.js"></script>
-
+  <script type="module" src="dashboard.js"></script>
 </body>
 </html>
