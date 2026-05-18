@@ -134,6 +134,9 @@ document.getElementById("nssForm")
   const caste =
   document.getElementById("caste").value;
 
+  const photoFile =
+  document.getElementById("profilePhoto").files[0];
+
   // PASSWORD CHECK
 
   if(password !== confirmPassword){
@@ -159,10 +162,36 @@ document.getElementById("nssForm")
       password
     );
 
+    // ================= PHOTO UPLOAD =================
+
+      const formData = new FormData();
+
+      formData.append("file", photoFile);
+
+      formData.append(
+        "upload_preset",
+        "nss_profiles"
+      );
+
+      const cloudinaryResponse =
+      await fetch(
+        "https://api.cloudinary.com/v1_1/dstdl2ycg/image/upload",
+        {
+          method: "POST",
+          body: formData
+        }
+      );
+
+      const cloudinaryData =
+      await cloudinaryResponse.json();
+
+      const photoURL =
+      cloudinaryData.secure_url;
+
     // SAVE FIRESTORE DATA
 
     await setDoc(
-      doc(db, "volunteers", studentId),
+      doc(db, "volunteers", userCredential.user.uid),
       {
 
         uid:userCredential.user.uid,
@@ -180,6 +209,8 @@ document.getElementById("nssForm")
         dob,
         age,
         caste,
+
+        photoURL,
 
         joinedAt:new Date()
 

@@ -61,19 +61,18 @@ onAuthStateChanged(auth, async (user) => {
     // we must find matching volunteer
 
     const studentId =
-    prompt("Temporary: Enter Student ID");
+    localStorage.getItem("studentId");
 
     const docSnap =
-    await getDoc(
-      doc(db, "volunteers", studentId)
-    );
+    await getDoc(doc(db, "volunteers", user.uid));
 
     if(docSnap.exists()){
 
-      const data =
-      docSnap.data();
+      const data = docSnap.data();
 
-      // TOPBAR
+      document.querySelectorAll(".profileImage").forEach(img => {
+        img.src = data.photoURL || "images/profile.jpg";
+      });
 
       document.getElementById("topName").innerText =
       data.fullName;
@@ -84,16 +83,14 @@ onAuthStateChanged(auth, async (user) => {
       document.getElementById("heroName").innerText =
       data.fullName;
 
-      // PROFILE
-
       document.getElementById("studentId").innerText =
       data.studentId;
 
-      document.getElementById("studentClass").innerText =
-      data.className;
-
       document.getElementById("studentBlood").innerText =
       data.bloodGroup;
+
+      document.getElementById("studentClass").innerText =
+      data.className;
 
       document.getElementById("studentContact").innerText =
       data.contact;

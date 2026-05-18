@@ -155,7 +155,7 @@
 
         <div class="profile-mini">
 
-          <img id="profileImage" src="images/profile.jpg">
+          <img class="profileImage" src="images/profile.jpg">
 
           <div>
             <h4 id="d-name">Manthan Rajdev</h4>
@@ -186,7 +186,7 @@
 
             <div class="profile-avatar">
 
-              <img id="profileImage" src="images/profile.jpg">
+              <img class="profileImage" src="images/profile.jpg">
 
               <div class="online-dot"></div>
 
@@ -349,6 +349,40 @@
 
         </div>
 
+        <div class="dashboard-card attendance-card">
+
+          <div class="section-title">
+
+            <h3>Attendance System</h3>
+
+          </div>
+
+          <!-- ACTIVE SESSION -->
+
+          <div id="activeActivityBox">
+
+            <p>No active session</p>
+
+          </div>
+
+          <!-- SCAN BUTTON -->
+
+          <button id="openScannerBtn" class="scan-btn">
+
+            📷 Scan Attendance QR
+
+          </button>
+
+          <!-- CAMERA -->
+
+          <div id="reader"></div>
+
+          <!-- SUCCESS -->
+
+          <div id="qrAttendanceBox"></div>
+
+        </div>
+
         <!-- RADAR -->
 
         <div class="dashboard-card">
@@ -486,6 +520,7 @@
   </main>
 
 </div>
-  <script type="module" src="dashboard.js"></script>
+<script src="https://unpkg.com/html5-qrcode"></script>
+<script type="module" src="dashboard.js"></script>
 </body>
 </html>
