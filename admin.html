@@ -20,103 +20,248 @@
       <div class="sb-sub">Unit D-58</div>
     </div>
   </div>
-
   <nav id="nav">
     <button class="nav-btn active" data-tab="dashboard"><span class="nav-icon">📊</span><span class="nav-label">Dashboard</span></button>
-    <button class="nav-btn" data-tab="activities" id="tab-activities"><span class="nav-icon">📅</span><span class="nav-label">Activities</span></button>
-    <button class="nav-btn" data-tab="attendance" id="tab-attendance"><span class="nav-icon">✅</span><span class="nav-label">Attendance</span></button>
-    <button class="nav-btn" data-tab="volunteers" id="tab-volunteers"><span class="nav-icon">👥</span><span class="nav-label">Volunteers</span></button>
-    <button class="nav-btn" data-tab="marks" id="tab-marks"><span class="nav-icon">📝</span><span class="nav-label">Marks</span></button>
-    <button class="nav-btn" data-tab="settings" id="tab-settings"><span class="nav-icon">⚙️</span><span class="nav-label">Settings</span></button>
+    <button class="nav-btn" data-tab="activities"><span class="nav-icon">📅</span><span class="nav-label">Activities</span></button>
+    <button class="nav-btn" data-tab="attendance"><span class="nav-icon">✅</span><span class="nav-label">Attendance</span></button>
+    <button class="nav-btn" data-tab="volunteers"><span class="nav-icon">👥</span><span class="nav-label">Volunteers</span></button>
+    <button class="nav-btn" data-tab="marks"><span class="nav-icon">📝</span><span class="nav-label">Marks</span></button>
+    <button class="nav-btn" data-tab="settings"><span class="nav-icon">⚙️</span><span class="nav-label">Settings</span></button>
   </nav>
-
   <div class="sb-bottom">
-    <button class="collapse-btn" id="collapseBtn">
-      <span id="collapseArrow">◀</span>
-      <span class="collapse-lbl">Collapse</span>
-    </button>
-
-    <button class="logout-btn" onclick="openModal('logoutModal')">
-      <span>🚪</span>
-      <span class="logout-lbl">Logout</span>
-    </button>
+    <button class="collapse-btn" id="collapseBtn"><span id="collapseArrow">◀</span><span class="collapse-lbl">Collapse</span></button>
+    <button class="logout-btn" onclick="openModal('logoutModal')"><span>🚪</span><span class="logout-lbl">Logout</span></button>
   </div>
 </aside>
 
 <!-- ══ MAIN ════════════════════════════════════════════════════ -->
 <div id="main">
-
   <header>
     <div>
       <div class="hdr-title" id="hdrTitle">Dashboard</div>
       <div class="hdr-sub">KBP College Vashi · NSS D-58</div>
     </div>
-
     <div class="hdr-right">
-      <button class="notif-btn">
-        🔔
-        <span class="notif-badge">3</span>
-      </button>
-
+      <button class="notif-btn">🔔<span class="notif-badge">3</span></button>
       <div style="display:flex;align-items:center;gap:10px;">
         <div class="avatar">A</div>
-
-        <div>
-          <div class="admin-name">Admin</div>
-          <div class="admin-role">Programme Officer</div>
-        </div>
+        <div><div class="admin-name">Admin</div><div class="admin-role">Programme Officer</div></div>
       </div>
     </div>
   </header>
 
   <main>
 
-    <!-- DASHBOARD -->
+    <!-- ── DASHBOARD ── -->
     <div class="tab active" id="tab-dashboard">
       <div class="page-title">Welcome back, Admin 👋</div>
       <div class="page-sub">NSS Unit D-58 · KBP College, Vashi</div>
-
       <div class="cards" id="dash-cards"></div>
-
       <div class="quick-acts">
-        <button class="btn btn-blue" onclick="switchTab('activities')">+ New Activity</button>
-        <button class="btn btn-green" onclick="switchTab('attendance')">▶ Start Attendance</button>
-        <button class="btn btn-purple" onclick="switchTab('marks')">✏️ Assign Marks</button>
+        <button class="btn btn-blue" onclick="switchTab('activities')" style="box-shadow:0 4px 12px #2563eb44">+ New Activity</button>
+        <button class="btn btn-green" onclick="switchTab('attendance')" style="box-shadow:0 4px 12px #10b98144">▶ Start Attendance</button>
+        <button class="btn" style="background:#8b5cf6;color:#fff;box-shadow:0 4px 12px #8b5cf644" onclick="switchTab('marks')">✏️ Assign Marks</button>
       </div>
-
       <div class="tbl-wrap">
         <div class="tbl-head">Recent Activities</div>
+        <table><thead><tr><th>ACTIVITY</th><th>DATE</th><th>STATUS</th></tr></thead>
+        <tbody id="dash-recent"></tbody></table>
+      </div>
+    </div>
 
-        <table>
-          <thead>
-            <tr>
-              <th>ACTIVITY</th>
-              <th>DATE</th>
-              <th>STATUS</th>
-            </tr>
-          </thead>
+    <!-- ── ACTIVITIES ── -->
+    <div class="tab" id="tab-activities">
+      <div class="flex-between">
+        <div class="section-title">Activities</div>
+        <button class="btn btn-blue" id="newActBtn" onclick="toggleActForm()">+ New Activity</button>
+      </div>
+      <div class="form-box" id="actForm" style="display:none;">
+        <h3>Create New Activity</h3>
+        <div class="field"><label class="lbl">Activity Name</label><input class="inp" id="actName" placeholder="e.g. Blood Donation Camp"/><div class="err" id="actNameErr"></div></div>
+        <div class="field"><label class="lbl">Date</label><input type="date" class="inp" id="actDate"/><div class="err" id="actDateErr"></div></div>
+        <div class="field"><label class="lbl">Description</label><textarea class="inp" id="actDesc" rows="3" placeholder="Briefly describe the activity..." style="resize:vertical;"></textarea><div class="err" id="actDescErr"></div></div>
+        <button class="btn btn-blue" onclick="createActivity()">Create Activity</button>
+      </div>
+      <input class="inp search-inp" id="actSearch" placeholder="🔍  Search by name or date…" oninput="renderActivities()"/>
+      <div id="act-list"></div>
+    </div>
 
-          <tbody id="dash-recent"></tbody>
-        </table>
+    <!-- ── ATTENDANCE ── -->
+    <div class="tab" id="tab-attendance">
+      <div class="flex-between" style="margin-bottom:26px;">
+        <div class="section-title">Attendance</div>
+        <div id="sess-badge"></div>
+      </div>
+      <!-- steps -->
+      <div class="steps" id="att-steps">
+        <div class="step-item">
+          <div class="step-circle active" id="sc1">1</div>
+          <div class="step-lbl active" id="sl1">Select Activity</div>
+        </div>
+        <div class="step-line" id="line1"></div>
+        <div class="step-item">
+          <div class="step-circle" id="sc2">2</div>
+          <div class="step-lbl" id="sl2">Setup QR</div>
+        </div>
+        <div class="step-line" id="line2"></div>
+        <div class="step-item">
+          <div class="step-circle" id="sc3">3</div>
+          <div class="step-lbl" id="sl3">Live Session</div>
+        </div>
+      </div>
+      <!-- step 1 -->
+      <div class="settings-card">
+        <label class="lbl">Step 1 — Select Activity</label>
+        <select class="inp" id="attActSel" onchange="onAttActChange()">
+          <option value="">-- Choose an activity --</option>
+        </select>
+      </div>
+      <!-- step 2 -->
+      <div class="settings-card" id="att-step2" style="display:none;">
+        <label class="lbl">Step 2 — Set QR Expiry</label>
+        <div style="display:flex;align-items:center;gap:14px;margin:12px 0 16px;">
+          <input type="range" min="1" max="30" value="5" id="qrRange" oninput="document.getElementById('qrVal').textContent=this.value" style="flex:1;accent-color:#2563eb;height:4px;"/>
+          <span id="qrVal" style="background:#eff6ff;color:#2563eb;font-weight:800;font-size:18px;padding:6px 18px;border-radius:8px;min-width:70px;text-align:center;">5 min</span>
+        </div>
+        <button class="btn btn-green" id="startSessBtn" onclick="startSession()">▶ Generate QR &amp; Start Session</button>
+      </div>
+      <!-- step 3 -->
+      <div class="settings-card" id="att-step3" style="display:none;">
+        <label class="lbl" style="margin-bottom:18px;">Step 3 — Live Session</label>
+        <div style="display:flex;gap:24px;flex-wrap:wrap;align-items:flex-start;">
+          <div class="qr-wrap">
+            <div class="qr-box" id="qrBox"></div>
+            <p style="font-size:11px;color:#64748b;margin-top:8px;">Expires in <span id="qrExpLbl">5</span> min</p>
+            <p style="font-size:10px;color:#94a3b8;margin:0;">Students scan to mark present</p>
+          </div>
+          <div style="flex:1;min-width:200px;">
+            <div style="display:flex;justify-content:space-between;margin-bottom:10px;">
+              <span style="font-weight:700;font-size:14px;color:#0f172a;">Present: <span id="presentCount" style="color:#10b981;">0</span></span>
+              <span id="refreshLabel" style="color:#94a3b8;font-size:11px;display:none;">Auto-refreshing…</span>
+            </div>
+            <div id="presentList"><p style="color:#94a3b8;font-size:13px;font-style:italic;">Waiting for students to scan…</p></div>
+          </div>
+        </div>
+        <div style="margin-top:20px;">
+          <button class="btn btn-red" id="endSessBtn" onclick="openModal('endModal')" style="display:none;">⏹ End Session</button>
+        </div>
+        <div class="summary-box" id="sess-summary" style="display:none;"></div>
+      </div>
+    </div>
+
+    <!-- ── VOLUNTEERS ── -->
+    <div class="tab" id="tab-volunteers">
+      <div class="flex-between">
+        <div class="section-title">Volunteers <span style="font-size:14px;color:#94a3b8;font-weight:400;" id="vol-count"></span></div>
+        <button class="btn btn-green" style="font-size:12px;" onclick="exportCsv()">📥 Export CSV</button>
+      </div>
+      <input class="inp search-inp" id="volSearch" placeholder="🔍  Search by name or student ID…" oninput="renderVolunteers()"/>
+      <div id="sel-bar" style="display:none;" class="selected-bar">
+        <span id="sel-count"></span>
+        <button class="btn-xs" style="background:rgba(255,255,255,.2);color:#fff;" onclick="bulkReset()">📧 Send Reset Links</button>
+        <button class="btn-xs" style="background:rgba(255,255,255,.1);color:#fff;margin-left:auto;" onclick="clearSel()">✕ Clear</button>
+      </div>
+      <div class="tbl-wrap">
+        <div style="overflow-x:auto;">
+          <table class="vol-tbl">
+            <thead><tr id="vol-head"></tr></thead>
+            <tbody id="vol-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── MARKS ── -->
+    <div class="tab" id="tab-marks">
+      <div class="section-title" style="margin-bottom:22px;">Marks System</div>
+      <div class="settings-card">
+        <h3>Assign / Update Marks</h3>
+        <div class="field">
+          <label class="lbl">Select Volunteer</label>
+          <select class="inp" id="mVolSel"><option value="">-- Choose volunteer --</option></select>
+          <div class="err" id="mVolErr"></div>
+        </div>
+        <div class="flex-row">
+          <div class="field" style="flex:1;min-width:130px;">
+            <label class="lbl">Attendance Marks</label>
+            <input type="number" class="inp" id="mAtt" placeholder="0 – 50" min="0" max="50" oninput="updateTotal()"/>
+            <div class="err" id="mAttErr"></div>
+          </div>
+          <div class="field" style="flex:1;min-width:130px;">
+            <label class="lbl">Activity Marks</label>
+            <input type="number" class="inp" id="mAct" placeholder="0 – 50" min="0" max="50" oninput="updateTotal()"/>
+            <div class="err" id="mActErr"></div>
+          </div>
+        </div>
+        <div class="total-preview" id="totalPreview" style="display:none;">
+          <span style="color:#334155;font-size:13px;">Total Marks:</span>
+          <span class="total-num" id="totalNum">0</span>
+          <span style="color:#94a3b8;font-size:12px;">/ 100</span>
+          <div class="progress-bar-wrap"><div class="progress-bar-fill" id="totalBar" style="width:0%;"></div></div>
+        </div>
+        <button class="btn btn-blue" onclick="saveMarks()">💾 Save Marks</button>
+      </div>
+      <div class="tbl-wrap">
+        <div class="tbl-head">All Assigned Marks</div>
+        <div id="marks-body-wrap"></div>
+      </div>
+    </div>
+
+    <!-- ── SETTINGS ── -->
+    <div class="tab" id="tab-settings">
+      <div class="section-title" style="margin-bottom:22px;">Settings</div>
+      <div class="settings-card">
+        <h3>📋 Unit Information</h3>
+        <div class="field"><label class="lbl">Unit Name</label><input class="inp" id="sUnitName" value="NSS Unit D-58"/></div>
+        <div class="field"><label class="lbl">Programme Officer</label><input class="inp" id="sPO" value="Dr. Pranita Bhale"/></div>
+        <div class="field"><label class="lbl">Contact Email</label><input type="email" class="inp" id="sEmail" value="kbp.nssunit@gmail.com"/></div>
+        <button class="btn btn-blue" onclick="showToast('Unit info saved!','success')">Save Changes</button>
+      </div>
+      <div class="settings-card">
+        <h3>🔐 Reset Volunteer Password</h3>
+        <div class="flex-row">
+          <input type="email" class="inp" id="rstEmail" placeholder="Volunteer email address" style="flex:1;min-width:200px;"/>
+          <button class="btn btn-amber" onclick="sendReset()">Send Reset Link</button>
+        </div>
+      </div>
+      <div class="danger-card">
+        <h3>⚠️ Danger Zone</h3>
+        <p style="color:#64748b;font-size:12px;line-height:1.7;margin-bottom:14px;">Permanently deletes all volunteers, activities, marks, and attendance data. Cannot be undone.</p>
+        <button class="btn btn-red" onclick="openModal('clearModal')">🗑️ Clear All Data</button>
       </div>
     </div>
 
   </main>
 </div>
 
-<!-- TOAST -->
+<!-- ══ TOAST CONTAINER ═══════════════════════════════════════════ -->
 <div id="toast-container"></div>
 
-<!-- MODALS -->
+<!-- ══ MODALS ════════════════════════════════════════════════════ -->
 <div class="modal-overlay" id="logoutModal">
   <div class="modal-box">
-    <h3>Logout?</h3>
-
-    <p>Are you sure you want to logout from admin panel?</p>
-
+    <h3>Logout?</h3><p>Are you sure you want to logout from the admin panel?</p>
     <div class="modal-actions">
       <button class="btn btn-outline" onclick="closeModal('logoutModal')">Cancel</button>
-      <button class="btn btn-red">Logout</button>
+      <button class="btn btn-red" onclick="closeModal('logoutModal');showToast('Logged out.','warning')">Logout</button>
+    </div>
+  </div>
+</div>
+<div class="modal-overlay" id="clearModal">
+  <div class="modal-box">
+    <h3>Clear All Data?</h3><p>This permanently deletes all volunteers, activities, marks, and attendance. This cannot be undone.</p>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeModal('clearModal')">Cancel</button>
+      <button class="btn btn-red" onclick="clearAll()">Yes, Clear Everything</button>
+    </div>
+  </div>
+</div>
+<div class="modal-overlay" id="endModal">
+  <div class="modal-box">
+    <h3>End Attendance Session?</h3><p>This will close the QR and save current attendance. This cannot be undone.</p>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeModal('endModal')">Cancel</button>
+      <button class="btn btn-red" onclick="endSession()">End Session</button>
     </div>
   </div>
 </div>
