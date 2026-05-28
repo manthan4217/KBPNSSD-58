@@ -1049,7 +1049,7 @@ function generateQRCode(sessionId){
   qrBox.innerHTML = '';
 
   const attendanceURL =
-    `attendance.html?session=${sessionId}`;
+  `${window.location.origin}/attendance.html?session=${sessionId}`;
 
   new QRCode(qrBox, {
     text: attendanceURL,

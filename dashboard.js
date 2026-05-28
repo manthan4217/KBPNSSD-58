@@ -208,14 +208,34 @@ document.getElementById("openScannerBtn")
 
       async(decodedText)=>{
 
-        console.log(decodedText);
+      console.log("QR RESULT:", decodedText);
 
-        // SESSION CHECK
-        if(
-          !decodedText.includes(activeSessionId)
-        ){
+      try{
 
-          alert("Invalid QR Code");
+        // GET SESSION ID FROM QR
+        const url =
+        new URL(decodedText, window.location.href);
+
+        const scannedSessionId =
+        url.searchParams.get("session");
+
+        console.log(
+          "Scanned Session:",
+          scannedSessionId
+        );
+
+        // INVALID
+        if(!scannedSessionId){
+
+          alert("Invalid QR");
+          return;
+
+        }
+
+        // CHECK ACTIVE SESSION
+        if(scannedSessionId !== activeSessionId){
+
+          alert("Wrong attendance session");
           return;
 
         }
@@ -228,7 +248,15 @@ document.getElementById("openScannerBtn")
         // MARK ATTENDANCE
         await markAttendance();
 
+      }catch(err){
+
+        console.log(err);
+
+        alert("QR Read Failed");
+
       }
+
+    }
 
     );
 
