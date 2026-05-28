@@ -7,17 +7,25 @@ import {
   addDoc,
   getDocs,
   deleteDoc,
-  doc
+  doc,
+  onSnapshot,
+  setDoc,
+  updateDoc,
+  serverTimestamp,
+  getDoc,
+  query,
+  where
 } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
 
 // YOUR FIREBASE CONFIG
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT.appspot.com",
-  messagingSenderId: "XXXXXXXX",
-  appId: "XXXXXXXX"
+  apiKey: "AIzaSyCYJtqBXt719s28KazYEdFkhVjqm5ytHlw",
+  authDomain: "nss-d58.firebaseapp.com",
+  projectId: "nss-d58",
+  storageBucket: "nss-d58.appspot.com",
+  messagingSenderId: "851449633649",
+  appId: "1:851449633649:web:025a6a1f044fed8b6db4d0",
+  measurementId: "G-5M01SRSGZ8"
 };
 
 // INIT
@@ -31,15 +39,13 @@ const db = getFirestore(app);
    DATA
 ═══════════════════════════════════════════════════════════════ */
 let vols = [];
-async function loadVolunteers(){
+function loadVolunteers(){
 
-  try{
-
-    const querySnapshot = await getDocs(collection(db,"volunteers"));
+  onSnapshot(collection(db,"volunteers"), (snapshot)=>{
 
     vols = [];
 
-    querySnapshot.forEach((docSnap)=>{
+    snapshot.forEach((docSnap)=>{
 
       const data = docSnap.data();
 
@@ -61,36 +67,128 @@ async function loadVolunteers(){
 
     });
 
-    console.log("Loaded volunteers:", vols);
+    console.log("Realtime volunteers:", vols);
 
     renderVolunteers();
     renderDashboard();
     populateVolSelect();
 
-  }catch(err){
+  }, (err)=>{
 
     console.error("Firebase Volunteer Error:", err);
 
     showToast('Failed to load volunteers','error');
+
+  });
+
+}
+
+// calculate attendance percentage automatically
+async function calculateAttendance(studentId){
+
+  try{
+
+    // TOTAL ACTIVITIES
+    const actSnap = await getDocs(
+      collection(db,"activities")
+    );
+
+    const totalActivities = actSnap.size;
+
+    // TOTAL ATTENDANCE RECORDS
+    const attSnap = await getDocs(
+      collection(db,"attendanceRecords")
+    );
+
+    let attended = 0;
+
+    attSnap.forEach(docSnap=>{
+
+      const data = docSnap.data();
+
+      if(data.studentId === studentId){
+        attended++;
+      }
+
+    });
+
+    // PERCENTAGE
+    let percentage = 0;
+
+    if(totalActivities > 0){
+
+      percentage = Math.round(
+        (attended / totalActivities) * 100
+      );
+
+    }
+
+    return {
+      attended,
+      totalActivities,
+      percentage
+    };
+
+  }catch(err){
+
+    console.error(err);
+
+    return {
+      attended:0,
+      totalActivities:0,
+      percentage:0
+    };
 
   }
 
 }
 
 let acts = [
-  {id:1,name:"Green Army Drive",        date:"2026-05-10",desc:"Tree plantation & environmental awareness in Sector 7.",status:"Completed"},
-  {id:2,name:"Blood Donation Camp",     date:"2026-05-15",desc:"Annual blood donation drive — 45 units collected.",status:"Completed"},
-  {id:3,name:"Mangroves Cleanup",       date:"2026-05-22",desc:"Coastal cleanup at Vashi mangroves, removing plastic waste.",status:"Upcoming"},
-  {id:4,name:"Shiv Jayanti Celebration",date:"2026-06-01",desc:"Largest Shiv Jayanti among Navi Mumbai colleges.",status:"Upcoming"},
-  {id:5,name:"Anti-Plastic Rally",      date:"2026-04-28",desc:"Awareness rally promoting plastic-free lifestyle.",status:"Completed"},
+   
 ];
-let marks = [
-  {sid:"NSS001",name:"Priya Sharma",att:42,act:36,date:"2026-05-10"},
-  {sid:"NSS002",name:"Rahul Patil", att:46,act:42,date:"2026-05-10"},
-  {sid:"NSS004",name:"Kiran Desai", att:48,act:46,date:"2026-05-12"},
-];
+
+let marks = [];
+
+function loadMarks(){
+
+  onSnapshot(
+
+    collection(db,"marks"),
+
+    (snapshot)=>{
+
+      marks = [];
+
+      snapshot.forEach((docSnap)=>{
+
+        marks.push({
+          id: docSnap.id,
+          ...docSnap.data()
+        });
+
+      });
+
+      console.log("Realtime marks:", marks);
+
+      renderMarksTable();
+
+    },
+
+    (err)=>{
+
+      console.error(err);
+
+      showToast('Failed to load marks','error');
+
+    }
+
+  );
+
+}
+
 let selVols=[], sortKey="name", sortDir="asc";
 let attStep=1, sessionOn=false, sessionDone=false, presentList=[];
+let currentSessionId = null;
 
 /* ═══════════════════════════════════════════════════════════════
    NAVIGATION
@@ -201,8 +299,21 @@ function renderActivities(){
         <div class="act-desc">${a.desc}</div>
       </div>
       <div class="act-actions">
-        <button class="btn-xs" style="background:#eff6ff;color:#2563eb;font-weight:600;" onclick="goAttendance(${a.id})">✅ Attendance</button>
-        <button class="btn-xs" style="background:#fee2e2;color:#ef4444;" onclick="deleteAct(${a.id})">🗑️</button>
+        <button
+          class="btn-xs"
+          style="background:#eff6ff;color:#2563eb;font-weight:600;"
+          onclick="goAttendance('${a.id}')"
+        >
+          ✅ Attendance
+        </button>
+
+        <button
+          class="btn-xs"
+          style="background:#fee2e2;color:#ef4444;"
+          onclick="deleteAct('${a.id}')"
+        >
+          🗑️
+        </button>
       </div>
     </div>`).join('');
 }
@@ -260,28 +371,55 @@ async function createActivity(){
   }
 }
 
-async function loadActivities(){
+function loadActivities(){
 
-  const querySnapshot = await getDocs(collection(db,"activities"));
+  onSnapshot(collection(db,"activities"), (snapshot)=>{
 
-  acts = [];
+    acts = [];
 
-  querySnapshot.forEach((docSnap)=>{
-    acts.push({
-      id:docSnap.id,
-      ...docSnap.data()
+    snapshot.forEach((docSnap)=>{
+
+      acts.push({
+        id: docSnap.id,
+        ...docSnap.data()
+      });
+
     });
+
+    console.log("Realtime activities:", acts);
+
+    renderActivities();
+    renderDashboard();
+    renderAttendanceSelects();
+
+  }, (err)=>{
+
+    console.error(err);
+
+    showToast('Failed to load activities','error');
+
   });
 
-  renderActivities();
-  renderDashboard();
 }
 
-function deleteAct(id){
-  acts=acts.filter(a=>a.id!==id);
-  renderActivities();
-  showToast('Activity deleted.','warning');
+async function deleteAct(id){
+
+  try{
+
+    await deleteDoc(doc(db,"activities",id));
+
+    showToast('Activity deleted.','warning');
+
+  }catch(err){
+
+    console.error(err);
+
+    showToast('Delete failed','error');
+
+  }
+
 }
+
 function goAttendance(id){
   switchTab('attendance');
   document.getElementById('attActSel').value=id;
@@ -317,54 +455,174 @@ function buildQR(){
     <div class="qr-corner" style="bottom:4px;left:4px;"></div>
     <div class="qr-dots">${Array.from({length:100},(_,i)=>`<div class="qr-dot" style="background:${Math.sin(i*7+3)>0?'#fff':'transparent'}"></div>`).join('')}</div>`;
 }
-function startSession(){
-  if(!document.getElementById('attActSel').value){showToast('Select an activity first.','error');return;}
-  sessionOn=true; sessionDone=false; presentList=[];
-  document.getElementById('att-step3').style.display='block';
-  document.getElementById('endSessBtn').style.display='inline-block';
-  document.getElementById('startSessBtn').disabled=true;
-  document.getElementById('startSessBtn').style.background='#e2e8f0';
-  document.getElementById('refreshLabel').style.display='block';
-  document.getElementById('sess-summary').style.display='none';
-  const mins=document.getElementById('qrRange').value;
-  document.getElementById('qrExpLbl').textContent=mins;
-  document.getElementById('sess-badge').innerHTML='<div class="session-badge"><span class="session-dot"></span>SESSION ACTIVE</div>';
-  buildQR(); setStepUI(3); updatePresent();
-  const mock=[
-    {name:"Priya Sharma",roll:"NSS001",time:"10:32 AM"},
-    {name:"Rahul Patil", roll:"NSS002",time:"10:35 AM"},
-    {name:"Kiran Desai", roll:"NSS004",time:"10:38 AM"},
-  ];
-  setTimeout(()=>{presentList=[mock[0]];updatePresent();},2500);
-  setTimeout(()=>{presentList=mock.slice(0,2);updatePresent();},5000);
-  setTimeout(()=>{presentList=mock;updatePresent();},8000);
-  showToast('QR Session started!');
+async function startSession(){
+
+  const actId = document.getElementById('attActSel').value;
+
+  if(!actId){
+    showToast('Select an activity first.','error');
+    return;
+  }
+
+  const activity = acts.find(a => a.id === actId);
+
+  const mins = Number(document.getElementById('qrRange').value);
+
+  try{
+
+    // CREATE FIREBASE SESSION
+    const docRef = await addDoc(
+      collection(db,"attendanceSessions"),
+      {
+        activityId: activity.id,
+        activityName: activity.name,
+        expiryMinutes: mins,
+        active: true,
+        createdAt: serverTimestamp()
+      }
+    );
+
+    currentSessionId = docRef.id;
+
+    console.log("Session Created:", currentSessionId);
+
+    // UI
+    sessionOn=true;
+    sessionDone=false;
+    presentList=[];
+
+    document.getElementById('att-step3').style.display='block';
+    document.getElementById('endSessBtn').style.display='inline-block';
+
+    document.getElementById('qrExpLbl').textContent=mins;
+
+    document.getElementById('sess-badge').innerHTML=
+      '<div class="session-badge"><span class="session-dot"></span>SESSION ACTIVE</div>';
+
+    // GENERATE REAL QR
+generateQRCode(currentSessionId);
+
+    setStepUI(3);
+
+    listenAttendance(currentSessionId);
+
+    showToast('Attendance session started!');
+
+  }catch(err){
+
+    console.error(err);
+
+    showToast('Failed to create session','error');
+
+  }
+
 }
+
+//LIVE ATTENDANCE LISTENER
+function listenAttendance(sessionId){
+
+  onSnapshot(
+    collection(db,"attendanceRecords"),
+
+    (snapshot)=>{
+
+      presentList = [];
+
+      snapshot.forEach(docSnap=>{
+
+        const data = docSnap.data();
+
+        if(data.sessionId === sessionId){
+
+          presentList.push(data);
+
+        }
+
+      });
+
+      updatePresent();
+
+    }
+  );
+
+}
+
 function updatePresent(){
-  document.getElementById('presentCount').textContent=presentList.length;
-  const pl=document.getElementById('presentList');
-  pl.innerHTML=presentList.length?presentList.map(s=>`
+
+  document.getElementById('presentCount').textContent =
+    presentList.length;
+
+  const pl = document.getElementById('presentList');
+
+  if(!presentList.length){
+
+    pl.innerHTML = `
+      <p style="color:#94a3b8;font-size:13px;font-style:italic;">
+        Waiting for students to scan…
+      </p>
+    `;
+
+    return;
+  }
+
+  pl.innerHTML = presentList.map(s=>`
+
     <div class="live-row">
-      <span style="font-weight:600;color:#0f172a;">${s.name}</span>
-      <span style="color:#64748b;">${s.roll}</span>
-      <span style="color:#10b981;font-weight:700;">${s.time}</span>
-    </div>`).join(''):'<p style="color:#94a3b8;font-size:13px;font-style:italic;">Waiting for students to scan…</p>';
+
+      <span style="font-weight:600;color:#0f172a;">
+        ${s.studentName}
+      </span>
+
+      <span style="color:#64748b;">
+        ${s.studentId}
+      </span>
+
+    </div>
+
+  `).join('');
+
 }
-function endSession(){
+async function endSession(){
+
   closeModal('endModal');
-  sessionOn=false; sessionDone=true;
-  document.getElementById('endSessBtn').style.display='none';
-  document.getElementById('refreshLabel').style.display='none';
-  document.getElementById('sess-badge').innerHTML='<div class="session-end-badge">SESSION ENDED</div>';
-  document.getElementById('sess-summary').style.display='block';
-  document.getElementById('sess-summary').textContent=`✅ Summary: ${presentList.length} students marked present out of ${vols.length} total volunteers.`;
-  showToast('Session ended. Attendance saved.','warning');
+
+  try{
+
+    await updateDoc(
+      doc(db,"attendanceSessions",currentSessionId),
+      {
+        active:false
+      }
+    );
+
+    sessionOn = false;
+
+    document.getElementById('endSessBtn').style.display='none';
+
+    document.getElementById('sess-badge').innerHTML =
+      '<div class="session-end-badge">SESSION ENDED</div>';
+
+    document.getElementById('sess-summary').style.display='block';
+
+    document.getElementById('sess-summary').textContent =
+      `✅ ${presentList.length} students marked present`;
+
+    showToast('Session ended successfully');
+
+  }catch(err){
+
+    console.error(err);
+
+    showToast('Failed to end session','error');
+
+  }
+
 }
 
 /* ═══════════════════════════════════════════════════════════════
    VOLUNTEERS
 ═══════════════════════════════════════════════════════════════ */
-function renderVolunteers(){
+async function renderVolunteers(){
 
   document.getElementById('vol-count').textContent='('+vols.length+')';
 
@@ -385,6 +643,7 @@ function renderVolunteers(){
     <th>CLASS</th>
     <th>CONTACT</th>
     <th>EMAIL</th>
+    <th>ATTENDANCE</th>
     <th>ACTION</th>
   `;
 
@@ -406,72 +665,110 @@ function renderVolunteers(){
   }
 
   // ROWS
-  body.innerHTML=filtered.map(v=>`
+  let rows = '';
 
-    <tr>
+for(const v of filtered){
 
-      <td style="padding:12px;">
+  const attData =
+    await calculateAttendance(v.studentId);
 
-        <img 
-          src="${v.photoURL || 'https://via.placeholder.com/40'}"
-          style="
-            width:42px;
-            height:42px;
-            border-radius:50%;
-            object-fit:cover;
-            border:2px solid #e2e8f0;
-          "
-        >
+  rows += `
 
-      </td>
+  <tr>
 
-      <td style="font-weight:600;">
-        ${v.fullName || '-'}
-      </td>
+    <td style="padding:12px;">
+      <img 
+        src="${v.photoURL || 'https://via.placeholder.com/40'}"
+        style="
+          width:42px;
+          height:42px;
+          border-radius:50%;
+          object-fit:cover;
+          border:2px solid #e2e8f0;
+        "
+      >
+    </td>
 
-      <td style="color:#64748b;">
-        ${v.studentId || '-'}
-      </td>
+    <td style="font-weight:600;">
+      ${v.fullName || '-'}
+    </td>
 
-      <td style="color:#64748b;">
-        ${v.className || '-'}
-      </td>
+    <td style="color:#64748b;">
+      ${v.studentId || '-'}
+    </td>
 
-      <td style="color:#64748b;">
-        ${v.contact || '-'}
-      </td>
+    <td style="color:#64748b;">
+      ${v.className || '-'}
+    </td>
 
-      <td style="color:#64748b;">
-        ${v.email || '-'}
-      </td>
+    <td style="color:#64748b;">
+      ${v.contact || '-'}
+    </td>
 
-      <td>
+    <td style="color:#64748b;">
+      ${v.email || '-'}
+    </td>
 
-        <div style="display:flex;gap:6px;">
+    <td>
 
-          <button
-            class="btn-xs"
-            style="background:#fef3c7;color:#f59e0b;font-weight:600;"
-            onclick="showToast('Reset link sent to ${v.email}')"
-          >
-            🔑 Reset
-          </button>
+      <div style="
+        min-width:90px;
+      ">
 
-          <button
-            class="btn-xs"
-            style="background:#fee2e2;color:#ef4444;"
-            onclick="removeVol('${v.uid}')"
-          >
-            🗑️
-          </button>
-
+        <div style="
+          font-weight:700;
+          color:#2563eb;
+        ">
+          ${attData.percentage}%
         </div>
 
-      </td>
+        <div style="
+          font-size:12px;
+          color:#64748b;
+        ">
+          ${attData.attended}/${attData.totalActivities}
+        </div>
 
-    </tr>
+      </div>
 
-  `).join('');
+    </td>
+
+    <td>
+
+      <div style="display:flex;gap:6px;">
+
+        <button
+          class="btn-xs"
+          style="
+            background:#eff6ff;
+            color:#2563eb;
+            font-weight:600;
+          "
+          onclick="openVolunteerProfile('${v.studentId}')"
+        >
+          👁 View
+        </button>
+
+        <button
+          class="btn-xs"
+          style="
+            background:#fee2e2;
+            color:#ef4444;
+          "
+          onclick="removeVol('${v.uid}')"
+        >
+          🗑️
+        </button>
+
+      </div>
+
+    </td>
+
+  </tr>
+  `;
+}
+
+body.innerHTML = rows;
 
 }
 function doSort(k){
@@ -502,7 +799,7 @@ function removeVol(id){
 
   showToast('Volunteer removed.','warning');
 }
-
+// volunteer data export
 function exportCsv(){
 
   const rows = [
@@ -530,6 +827,47 @@ ${v.address || ''}
   a.click();
 
   showToast('CSV exported!');
+}
+//marks export
+function exportMarksCsv(){
+
+  if(!marks.length){
+
+    showToast('No marks data found','error');
+
+    return;
+
+  }
+
+  const rows = [
+
+    "Student Name,Student ID,Attendance Marks,Activity Marks,Total Marks",
+
+    ...marks.map(m => `
+${m.studentName || ''},
+${m.studentId || ''},
+${m.attendanceMarks || 0},
+${m.activityMarks || 0},
+${m.totalMarks || 0}
+`.replace(/\n/g,''))
+
+  ].join('\n');
+
+  const blob = new Blob(
+    [rows],
+    { type:'text/csv' }
+  );
+
+  const a = document.createElement('a');
+
+  a.href = URL.createObjectURL(blob);
+
+  a.download = 'marks-report.csv';
+
+  a.click();
+
+  showToast('Marks CSV exported!');
+
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -559,31 +897,60 @@ function updateTotal(){
   document.getElementById('totalNum').textContent=t;
   document.getElementById('totalBar').style.width=t+'%';
 }
-function saveMarks(){
-  const volId=document.getElementById('mVolSel').value;
-  const att=document.getElementById('mAtt').value;
-  const act=document.getElementById('mAct').value;
-  let ok=true;
-  document.getElementById('mVolErr').textContent='';
-  document.getElementById('mAttErr').textContent='';
-  document.getElementById('mActErr').textContent='';
-  if(!volId){document.getElementById('mVolErr').textContent='Select a volunteer';ok=false;}
-  if(!att||Number(att)<0){document.getElementById('mAttErr').textContent='Enter valid marks';ok=false;}
-  if(!act||Number(act)<0){document.getElementById('mActErr').textContent='Enter valid marks';ok=false;}
-  if(!ok) return;
-  const vol = vols.find(v => v.studentId === volId);
 
-  const entry = {
-    sid: volId,
-    name: vol?.fullName || volId,att:Number(att),act:Number(act),date:new Date().toISOString().split('T')[0]};
-  const idx=marks.findIndex(m=>m.sid===volId);
-  if(idx>=0) marks[idx]=entry; else marks.push(entry);
-  document.getElementById('mVolSel').value='';
-  document.getElementById('mAtt').value='';
-  document.getElementById('mAct').value='';
-  document.getElementById('totalPreview').style.display='none';
-  renderMarksTable(); showToast('Marks saved!');
+async function saveMarks(){
+
+  const volId = document.getElementById('mVolSel').value;
+
+  const att = Number(document.getElementById('mAtt').value);
+
+  const act = Number(document.getElementById('mAct').value);
+
+  if(!volId){
+
+    showToast('Select volunteer','error');
+
+    return;
+
+  }
+
+  const volunteer =
+    vols.find(v => v.studentId === volId);
+
+  try{
+
+    await setDoc(
+      doc(db,"marks",volId),
+      {
+        studentId: volId,
+        studentName: volunteer?.fullName || '',
+        attendanceMarks: att,
+        activityMarks: act,
+        totalMarks: att + act,
+        updatedAt: serverTimestamp()
+      }
+    );
+
+    showToast('Marks saved successfully');
+
+    document.getElementById('mVolSel').value='';
+
+    document.getElementById('mAtt').value='';
+
+    document.getElementById('mAct').value='';
+
+    document.getElementById('totalPreview').style.display='none';
+
+  }catch(err){
+
+    console.error(err);
+
+    showToast('Failed to save marks','error');
+
+  }
+
 }
+
 function renderMarksTable(){
   const w=document.getElementById('marks-body-wrap');
   if(!marks.length){w.innerHTML='<div class="empty"><div class="empty-icon">📝</div><p>No marks assigned yet.</p></div>';return;}
@@ -593,12 +960,26 @@ function renderMarksTable(){
     </tr></thead>
     <tbody>${marks.map(m=>`
       <tr>
-        <td style="padding:12px 18px;font-weight:600;">${m.name}</td>
-        <td style="padding:12px 18px;color:#334155;">${m.att}</td>
-        <td style="padding:12px 18px;color:#334155;">${m.act}</td>
-        <td style="padding:12px 18px;font-weight:800;color:#2563eb;font-size:14px;">${m.att+m.act}</td>
-        <td style="padding:12px 18px;color:#94a3b8;">${m.date}</td>
-      </tr>`).join('')}
+
+      <td style="padding:12px 18px;font-weight:600;">
+      ${m.studentName}
+      </td>
+
+      <td style="padding:12px 18px;">
+      ${m.attendanceMarks}
+      </td>
+
+      <td style="padding:12px 18px;">
+      ${m.activityMarks}
+      </td>
+
+      <td style="padding:12px 18px;font-weight:800;color:#2563eb;">
+      ${m.totalMarks}
+      </td>
+
+      </tr>
+
+      `).join('')}
     </tbody></table>`;
 }
 
@@ -627,6 +1008,223 @@ window.addEventListener('DOMContentLoaded', async ()=>{
 
   await loadVolunteers();
 
+  await loadMarks();
+
   renderDashboard();
 
 });
+
+// GLOBAL FUNCTIONS FOR HTML onclick
+
+window.openVolunteerProfile = openVolunteerProfile;
+
+window.switchTab = switchTab;
+window.toggleActForm = toggleActForm;
+window.createActivity = createActivity;
+window.deleteAct = deleteAct;
+window.goAttendance = goAttendance;
+
+window.startSession = startSession;
+window.endSession = endSession;
+
+window.openModal = openModal;
+window.closeModal = closeModal;
+
+window.exportCsv = exportCsv;
+window.exportMarksCsv = exportMarksCsv;
+
+window.saveMarks = saveMarks;
+window.updateTotal = updateTotal;
+
+window.sendReset = sendReset;
+window.clearAll = clearAll;
+
+window.onAttActChange = onAttActChange;
+
+// qr code generation
+function generateQRCode(sessionId){
+
+  const qrBox = document.getElementById('qrBox');
+
+  qrBox.innerHTML = '';
+
+  const attendanceURL =
+    `attendance.html?session=${sessionId}`;
+
+  new QRCode(qrBox, {
+    text: attendanceURL,
+    width: 220,
+    height: 220
+  });
+
+}
+
+// volunteer profile modal
+async function openVolunteerProfile(studentId){
+
+  const volunteer =
+    vols.find(v => v.studentId === studentId);
+
+  if(!volunteer){
+
+    showToast('Volunteer not found','error');
+
+    return;
+
+  }
+
+  // TOTAL ATTENDANCE
+  let totalAttendance = 0;
+
+  // TOTAL LECTURES
+  let totalLectures = 0;
+
+  // TOTAL ACTIVITIES
+  let totalActivities = 0;
+
+  // GET ATTENDANCE RECORDS
+  const attendanceSnap =
+    await getDocs(collection(db,"attendanceRecords"));
+
+  attendanceSnap.forEach(docSnap=>{
+
+    const data = docSnap.data();
+
+    if(data.studentId === studentId){
+
+      totalAttendance++;
+
+    }
+
+  });
+
+  // GET ACTIVITIES
+  const activitiesSnap =
+    await getDocs(collection(db,"activities"));
+
+  totalActivities = activitiesSnap.size;
+
+  // MOCK LECTURES
+  totalLectures = Math.floor(totalAttendance / 2);
+
+  // MARKS
+  const markData =
+    marks.find(m => m.studentId === studentId);
+
+  document.getElementById('volProfileContent').innerHTML = `
+
+    <div style="
+      display:flex;
+      gap:20px;
+      flex-wrap:wrap;
+      align-items:center;
+      margin-bottom:24px;
+    ">
+
+      <img
+        src="${volunteer.photoURL || 'https://via.placeholder.com/120'}"
+        style="
+          width:120px;
+          height:120px;
+          border-radius:24px;
+          object-fit:cover;
+          border:4px solid #e2e8f0;
+        "
+      >
+
+      <div>
+
+        <h2 style="
+          margin:0;
+          color:#0f172a;
+        ">
+          ${volunteer.fullName}
+        </h2>
+
+        <p style="color:#64748b;margin:8px 0;">
+          ${volunteer.studentId}
+        </p>
+
+        <div style="
+          display:flex;
+          gap:10px;
+          flex-wrap:wrap;
+        ">
+
+          <span class="pill pill-blue">
+            ${volunteer.className || 'N/A'}
+          </span>
+
+          <span class="pill pill-green">
+            NSS Volunteer
+          </span>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="cards">
+
+      <div class="card">
+        <div class="card-val">
+          ${totalAttendance}
+        </div>
+        <div class="card-lbl">
+          Attendance
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-val">
+          ${totalActivities}
+        </div>
+        <div class="card-lbl">
+          Activities
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-val">
+          ${totalLectures}
+        </div>
+        <div class="card-lbl">
+          Lectures
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-val">
+          ${markData?.totalMarks || 0}
+        </div>
+        <div class="card-lbl">
+          Total Marks
+        </div>
+      </div>
+
+    </div>
+
+    <div class="settings-card" style="margin-top:20px;">
+
+      <h3>Volunteer Details</h3>
+
+      <p><b>Email:</b> ${volunteer.email || '-'}</p>
+
+      <p><b>Contact:</b> ${volunteer.contact || '-'}</p>
+
+      <p><b>Blood Group:</b> ${volunteer.bloodGroup || '-'}</p>
+
+      <p><b>Address:</b> ${volunteer.address || '-'}</p>
+
+      <p><b>Date of Birth:</b> ${volunteer.dob || '-'}</p>
+
+      <p><b>Caste:</b> ${volunteer.caste || '-'}</p>
+
+    </div>
+
+  `;
+
+  openModal('volProfileModal');
+
+}

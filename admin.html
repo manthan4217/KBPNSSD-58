@@ -2,7 +2,21 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Official NSS Unit D-58 portal of Karmaveer Bhaurao Patil College, Vashi showcasing social activities, camps, leadership and community service initiatives.">
+<meta name="keywords" content="NSS, NSS D-58, Karmaveer Bhaurao Patil College, Vashi, NSS Unit, social service, NSS activities, NSS camp, Navi Mumbai">
+
+<meta name="author" content="Manthan Vitthal Rajdev">
+
+<meta property="og:title" content="NSS Unit D-58 | KBP College Vashi">
+
+<meta property="og:description" content="Official NSS portal of Karmaveer Bhaurao Patil College, Vashi showcasing activities, camps, leadership and social initiatives.">
+
+<meta property="og:image" content="images/nsslogo.png">
+
+<meta property="og:type" content="website">
+
+<link rel="icon" href="images/nsslogo.png">
 <title>NSS Admin Dashboard</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
@@ -173,7 +187,21 @@
 
     <!-- ── MARKS ── -->
     <div class="tab" id="tab-marks">
-      <div class="section-title" style="margin-bottom:22px;">Marks System</div>
+      <div class="flex-between" style="margin-bottom:22px;">
+
+        <div class="section-title">
+          Marks System
+        </div>
+
+        <button
+          class="btn btn-green"
+          style="font-size:12px;"
+          onclick="exportMarksCsv()"
+        >
+          📥 Export CSV
+        </button>
+
+      </div>
       <div class="settings-card">
         <h3>Assign / Update Marks</h3>
         <div class="field">
@@ -266,6 +294,40 @@
   </div>
 </div>
 
+<div class="modal-overlay" id="volProfileModal">
+
+  <div class="modal-box"
+       style="
+         max-width:800px;
+         width:95%;
+         max-height:90vh;
+         overflow-y:auto;
+       ">
+
+    <div style="
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:20px;
+    ">
+
+      <h3>Volunteer Profile</h3>
+
+      <button
+        class="btn btn-outline"
+        onclick="closeModal('volProfileModal')"
+      >
+        ✕
+      </button>
+
+    </div>
+
+    <div id="volProfileContent"></div>
+
+  </div>
+
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script type="module" src="admin.js"></script>
 </body>
 </html>

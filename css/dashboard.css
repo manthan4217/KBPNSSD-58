@@ -1136,3 +1136,31 @@ SMALL MOBILE
 
   margin-bottom:8px;
 }
+
+#reader{
+  width:100%;
+  max-width:420px;
+  margin-top:20px;
+  overflow:hidden;
+  border-radius:18px;
+}
+
+.scan-btn{
+  background:#2563eb;
+  color:#fff;
+  border:none;
+  padding:14px 22px;
+  border-radius:12px;
+  font-weight:700;
+  cursor:pointer;
+  margin-top:18px;
+  transition:.3s;
+}
+
+.scan-btn:hover{
+  transform:translateY(-2px);
+}
+
+#qrAttendanceBox{
+  margin-top:20px;
+}

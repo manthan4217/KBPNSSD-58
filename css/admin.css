@@ -170,3 +170,302 @@ tr:hover td{background:#f8fafc;}
 #sidebar.collapsed .sb-sub,
 #sidebar.collapsed .collapse-lbl,
 #sidebar.collapsed .logout-lbl{display:none;}
+
+/* ═══════════════════════════════════════
+   RESPONSIVE DESIGN
+═══════════════════════════════════════ */
+
+/* TABLET */
+@media (max-width: 1024px){
+
+  #sidebar{
+    width:72px;
+  }
+
+  #sidebar .nav-label,
+  #sidebar .sb-title,
+  #sidebar .sb-sub,
+  #sidebar .collapse-lbl,
+  #sidebar .logout-lbl{
+    display:none;
+  }
+
+  main{
+    padding:18px;
+  }
+
+  .cards{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .card{
+    min-width:unset;
+  }
+
+  .section-title{
+    font-size:20px;
+  }
+
+  .page-title{
+    font-size:22px;
+  }
+
+  .modal-box{
+    width:94%;
+  }
+
+}
+
+/* MOBILE */
+@media (max-width: 768px){
+
+  body{
+    overflow:auto;
+    flex-direction:column;
+  }
+
+  /* SIDEBAR */
+  #sidebar{
+    width:100%;
+    height:auto;
+    flex-direction:row;
+    align-items:center;
+    padding:10px;
+    overflow-x:auto;
+  }
+
+  .sb-logo{
+    display:none;
+  }
+
+  nav{
+    display:flex;
+    gap:8px;
+    padding:0;
+    overflow-x:auto;
+  }
+
+  .nav-btn{
+    min-width:max-content;
+    margin-bottom:0;
+    padding:10px 14px;
+    border-radius:10px;
+  }
+
+  .sb-bottom{
+    display:none;
+  }
+
+  /* MAIN */
+  #main{
+    width:100%;
+  }
+
+  header{
+    padding:14px 16px;
+    flex-direction:column;
+    align-items:flex-start;
+    gap:12px;
+  }
+
+  .hdr-right{
+    width:100%;
+    justify-content:space-between;
+  }
+
+  main{
+    padding:16px;
+  }
+
+  /* TITLES */
+  .page-title{
+    font-size:20px;
+  }
+
+  .section-title{
+    font-size:18px;
+  }
+
+  /* CARDS */
+  .cards{
+    flex-direction:column;
+  }
+
+  .card{
+    width:100%;
+  }
+
+  /* FLEX */
+  .flex-between{
+    flex-direction:column;
+    align-items:flex-start;
+    gap:12px;
+  }
+
+  .flex-row{
+    flex-direction:column;
+  }
+
+  .quick-acts{
+    flex-direction:column;
+  }
+
+  .quick-acts .btn{
+    width:100%;
+  }
+
+  /* TABLE */
+  .tbl-wrap{
+    overflow-x:auto;
+  }
+
+  table{
+    min-width:700px;
+  }
+
+  /* VOLUNTEER TABLE */
+  .vol-tbl{
+    min-width:900px;
+  }
+
+  /* ACTIVITY CARD */
+  .act-card{
+    flex-direction:column;
+  }
+
+  .act-actions{
+    width:100%;
+    justify-content:flex-end;
+  }
+
+  /* ATTENDANCE */
+  .steps{
+    overflow-x:auto;
+    padding-bottom:8px;
+  }
+
+  .step-lbl{
+    font-size:9px;
+  }
+
+  #att-step3 > div{
+    flex-direction:column;
+  }
+
+  .qr-wrap{
+    width:100%;
+  }
+
+  .qr-box{
+    margin:auto;
+  }
+
+  /* SETTINGS */
+  .settings-card,
+  .danger-card{
+    padding:18px;
+  }
+
+  /* MODAL */
+  .modal-box{
+    padding:24px 18px;
+  }
+
+  /* BUTTONS */
+  .btn{
+    width:100%;
+    justify-content:center;
+  }
+
+}
+
+/* SMALL MOBILE */
+@media (max-width: 480px){
+
+  header{
+    padding:12px;
+  }
+
+  main{
+    padding:12px;
+  }
+
+  .page-title{
+    font-size:18px;
+  }
+
+  .page-sub{
+    font-size:12px;
+  }
+
+  .card{
+    padding:16px;
+  }
+
+  .card-val{
+    font-size:24px;
+  }
+
+  .card-icon{
+    font-size:24px;
+  }
+
+  .tbl-head{
+    padding:14px 16px;
+  }
+
+  th,td{
+    padding:10px 14px;
+  }
+
+  .inp{
+    font-size:13px;
+    padding:10px 12px;
+  }
+
+  .btn{
+    padding:10px 14px;
+    font-size:12px;
+  }
+
+  .modal-box h3{
+    font-size:16px;
+  }
+
+  .modal-box p{
+    font-size:12px;
+  }
+
+  .avatar{
+    width:30px;
+    height:30px;
+    font-size:12px;
+  }
+
+}
+
+/* LARGE SCREENS */
+@media (min-width: 1400px){
+
+  .cards{
+    flex-wrap:nowrap;
+  }
+
+  main{
+    padding:32px;
+  }
+
+  .card{
+    padding:24px;
+  }
+
+  .page-title{
+    font-size:28px;
+  }
+
+}
+
+img{
+  max-width:100%;
+  display:block;
+}
