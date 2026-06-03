@@ -221,6 +221,14 @@ document.getElementById("openScannerBtn")
         const scannedSessionId =
         url.searchParams.get("session");
 
+        console.log("Active Session:", activeSessionId);
+        console.log("Scanned Session:", scannedSessionId);
+
+        alert(
+        "Active: " + activeSessionId +
+        "\nScanned: " + scannedSessionId
+        );
+
         console.log(
           "Scanned Session:",
           scannedSessionId
@@ -252,11 +260,14 @@ document.getElementById("openScannerBtn")
 
       }catch(err){
 
-        console.log(err);
+      console.error(err);
 
-        alert("QR Read Failed");
+      alert(
+        "Attendance Error:\n" +
+        err.message
+      );
 
-      }
+    }
 
     }
 
