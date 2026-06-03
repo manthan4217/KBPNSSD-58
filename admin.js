@@ -129,16 +129,10 @@ async function calculateAttendance(studentId){
       percentage
     };
 
-  }catch(err){
-
-    console.error(err);
-
-    return {
-      attended:0,
-      totalActivities:0,
-      percentage:0
-    };
-
+  }
+  catch(err){
+    console.error("Attendance Error:", err);
+    alert(err.message);
   }
 
 }
@@ -1049,7 +1043,7 @@ function generateQRCode(sessionId){
   qrBox.innerHTML = '';
 
   const attendanceURL =
-  `${window.location.origin}/attendance.html?session=${sessionId}`;
+  `${window.location.origin}/KBPNSSD-58/attendance.html?session=${sessionId}`;
 
   new QRCode(qrBox, {
     text: attendanceURL,
