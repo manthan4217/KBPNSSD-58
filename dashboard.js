@@ -208,6 +208,8 @@ document.getElementById("openScannerBtn")
 
       async(decodedText)=>{
 
+      alert("QR Detected");
+
       console.log("QR RESULT:", decodedText);
 
       try{
