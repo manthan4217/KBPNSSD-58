@@ -213,7 +213,7 @@ document.getElementById("openScannerBtn")
       );
 
       await html5QrCode.start(
-        cameras[0].id,
+        cameras[1].id,
 
       {
         fps:10,
