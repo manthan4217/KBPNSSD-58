@@ -22,14 +22,18 @@ from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 console.log("Dashboard loaded");
 
 console.log("Html5Qrcode =", window.Html5Qrcode);
-
+alert("STEP 1");
 // ======================================================
 // AUTH CHECK
 // ======================================================
 
 let currentUserData = null;
 
+alert("STEP 2");
+
 onAuthStateChanged(auth, async (user) => {
+
+  alert("STEP 3");
 
   if (!user) {
 
@@ -92,7 +96,6 @@ onAuthStateChanged(auth, async (user) => {
   }
 
 });
-
 
 // ======================================================
 // LOGOUT
