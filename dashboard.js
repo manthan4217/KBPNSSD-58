@@ -295,6 +295,11 @@ document.getElementById("openScannerBtn")
 
     }
 
+    },
+    (errorMessage)=>{
+
+      console.log("SCAN:", errorMessage);
+
     }
 
     );
