@@ -212,8 +212,20 @@ document.getElementById("openScannerBtn")
         ).join("\n\n")
       );
 
-      await html5QrCode.start(
-        cameras[1].id,
+      const cameras = await Html5Qrcode.getCameras();
+
+    alert(
+      cameras.map(c =>
+        c.label + "\nID: " + c.id
+      ).join("\n\n")
+    );
+
+    const cameras = await Html5Qrcode.getCameras();
+    alert(JSON.stringify(cameras, null, 2));
+
+    await html5QrCode.start(
+
+      cameras[1].id,
 
       {
         fps:10,
