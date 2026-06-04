@@ -1045,6 +1045,8 @@ function generateQRCode(sessionId){
   const attendanceURL =
   `${window.location.href.split("admin.html")[0]}attendance.html?session=${sessionId}`;
 
+  alert(attendanceURL);
+
   new QRCode(qrBox, {
     text: attendanceURL,
     width: 220,
