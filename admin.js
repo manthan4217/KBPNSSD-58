@@ -1043,7 +1043,7 @@ function generateQRCode(sessionId){
   qrBox.innerHTML = '';
 
   const attendanceURL =
-  `${window.location.origin}/KBPNSSD-58/attendance.html?session=${sessionId}`;
+  `${window.location.href.split("admin.html")[0]}attendance.html?session=${sessionId}`;
 
   new QRCode(qrBox, {
     text: attendanceURL,
