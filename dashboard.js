@@ -204,9 +204,16 @@ document.getElementById("openScannerBtn")
 
   try{
 
-    await html5QrCode.start(
+    const cameras = await Html5Qrcode.getCameras();
 
-      { facingMode: "environment" },
+      alert(
+        cameras.map(c =>
+          c.label + "\nID: " + c.id
+        ).join("\n\n")
+      );
+
+      await html5QrCode.start(
+        cameras[0].id,
 
       {
         fps:10,
