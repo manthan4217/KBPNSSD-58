@@ -275,12 +275,16 @@ document.getElementById("openScannerBtn")
 
   }catch(err){
 
-    console.log(err);
+    alert(
+      "Scanner Start Error:\n" +
+      err.message
+    );
+
+    console.error(err);
 
     scannerRunning = false;
 
   }
-
 });
 
 
