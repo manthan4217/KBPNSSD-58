@@ -1,4 +1,4 @@
-alert("dashboard.js loaded");
+
 import { auth, db } from "./firebase.js";
 
 import {
@@ -19,6 +19,9 @@ import {
 }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
+console.log("Dashboard loaded");
+
+console.log("Html5Qrcode =", window.Html5Qrcode);
 
 // ======================================================
 // AUTH CHECK
