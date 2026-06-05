@@ -187,145 +187,67 @@ async function loadActiveSession(){
 }
 
 
-// ======================================================
-// QR SCANNER
-// ======================================================
+try {
 
-let scannerRunning = false;
-let html5QrCode;
+  const cameras = await Html5Qrcode.getCameras();
 
-document.getElementById("openScannerBtn")
-.addEventListener("click", async ()=>{
+  alert(
+    cameras.map(c =>
+      c.label + "\nID: " + c.id
+    ).join("\n\n")
+  );
 
-  if(scannerRunning) return;
+  await html5QrCode.start(
 
-  if(!activeSessionId){
+    cameras[1].id,
 
-    alert("No active attendance session");
-    return;
+    {
+      fps: 10,
+      qrbox: 250
+    },
 
-  }
-
-  scannerRunning = true;
-
-  html5QrCode =
-  new Html5Qrcode("reader");
-
-  try{
-
-    const cameras = await Html5Qrcode.getCameras();
-
-      alert(
-        cameras.map(c =>
-          c.label + "\nID: " + c.id
-        ).join("\n\n")
-      );
-
-      const cameras = await Html5Qrcode.getCameras();
-
-    alert(
-      cameras.map(c =>
-        c.label + "\nID: " + c.id
-      ).join("\n\n")
-    );
-
-    const cameras = await Html5Qrcode.getCameras();
-    alert(JSON.stringify(cameras, null, 2));
-
-    await html5QrCode.start(
-
-      cameras[1].id,
-
-      {
-        fps:10,
-        qrbox:250
-      },
-
-      async(decodedText)=>{
+    async (decodedText) => {
 
       alert("QR Detected");
 
       console.log("QR RESULT:", decodedText);
 
-      try{
+      try {
 
-        // GET SESSION ID FROM QR
         const url =
-        new URL(decodedText, window.location.href);
+          new URL(decodedText, window.location.href);
 
         const scannedSessionId =
-        url.searchParams.get("session");
-
-        console.log("Active Session:", activeSessionId);
-        console.log("Scanned Session:", scannedSessionId);
+          url.searchParams.get("session");
 
         alert(
-        "Active: " + activeSessionId +
-        "\nScanned: " + scannedSessionId
+          "Active: " + activeSessionId +
+          "\nScanned: " + scannedSessionId
         );
 
-        console.log(
-          "Scanned Session:",
-          scannedSessionId
-        );
+      } catch(err) {
 
-        // INVALID
-        if(!scannedSessionId){
+        alert(err.message);
 
-          alert("Invalid QR");
-          return;
-
-        }
-
-        // CHECK ACTIVE SESSION
-        if(scannedSessionId !== activeSessionId){
-
-          alert("Wrong attendance session");
-          return;
-
-        }
-
-        // STOP CAMERA
-        await html5QrCode.stop();
-
-        scannerRunning = false;
-
-        // MARK ATTENDANCE
-        await markAttendance();
-
-      }catch(err){
-
-      console.error(err);
-
-      alert(
-        "Attendance Error:\n" +
-        err.message
-      );
-
-    }
+      }
 
     },
-    (errorMessage)=>{
 
-      console.log("SCAN:", errorMessage);
-
+    (errorMessage) => {
+      console.log(errorMessage);
     }
 
-    );
+  );
 
-  }catch(err){
+}
+catch(err) {
 
-    alert(
-      "Scanner Start Error:\n" +
-      err.message
-    );
+  alert(
+    "Scanner Start Error:\n" +
+    err.message
+  );
 
-    console.error(err);
-
-    scannerRunning = false;
-
-  }
-});
+}
 
 
 // ======================================================
