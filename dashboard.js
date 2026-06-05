@@ -32,6 +32,9 @@ let currentUserData = null;
 alert("STEP 2");
 
 onAuthStateChanged(auth, async (user) => {
+  alert("AUTH TRIGGERED");
+
+  console.log("User:", user);
 
   alert("STEP 3");
 
@@ -46,6 +49,12 @@ onAuthStateChanged(auth, async (user) => {
 
     const docSnap =
     await getDoc(doc(db, "volunteers", user.uid));
+
+    console.log("Doc Exists:", docSnap.exists());
+
+    if(docSnap.exists()){
+      console.log("Volunteer Data:", docSnap.data());
+    }
 
     if(docSnap.exists()){
 
