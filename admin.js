@@ -1,5 +1,5 @@
 // 🔥 FIREBASE
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 import {
   getFirestore,
@@ -15,7 +15,7 @@ import {
   getDoc,
   query,
   where
-} from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 // YOUR FIREBASE CONFIG
 const firebaseConfig = {
@@ -31,8 +31,6 @@ const firebaseConfig = {
 // INIT
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-
-
 
 
 /* ═══════════════════════════════════════════════════════════════
@@ -465,14 +463,17 @@ async function startSession(){
   try{
 
     // CREATE FIREBASE SESSION
+    const expiresAt =
+      Date.now() + (seconds * 1000);
+
     const docRef = await addDoc(
       collection(db,"attendanceSessions"),
       {
-        activityId: activity.id,
+        activityId: actId,
         activityName: activity.name,
-        expiryMinutes: mins,
         active: true,
-        createdAt: serverTimestamp()
+        createdAt: Date.now(),
+        expiresAt: expiresAt
       }
     );
 
@@ -488,17 +489,92 @@ async function startSession(){
     document.getElementById('att-step3').style.display='block';
     document.getElementById('endSessBtn').style.display='inline-block';
 
-    document.getElementById('qrExpLbl').textContent=mins;
+    document.getElementById(
+    'qrExpLbl'
+    ).textContent = seconds + " sec";
 
     document.getElementById('sess-badge').innerHTML=
       '<div class="session-badge"><span class="session-dot"></span>SESSION ACTIVE</div>';
 
     // GENERATE REAL QR
-generateQRCode(currentSessionId);
+    generateQRCode(currentSessionId);
+
+    setTimeout(async ()=>{
+
+      await updateDoc(
+        doc(db,
+        "attendanceSessions",
+        currentSessionId),
+        {
+          active:false
+        }
+      );
+
+      document.getElementById(
+        "sess-badge"
+      ).innerHTML =
+      '<div class="session-badge">QR EXPIRED</div>';
+
+      showToast(
+        "QR expired",
+        "warning"
+      );
+
+    }, seconds * 1000);
 
     setStepUI(3);
 
     listenAttendance(currentSessionId);
+
+    function listenAttendance(sessionId){
+
+      const q =
+        query(
+          collection(db,"attendanceRecords"),
+          where(
+            "sessionId",
+            "==",
+            sessionId
+          )
+        );
+
+      onSnapshot(q,(snapshot)=>{
+
+        document.getElementById(
+          "presentCount"
+        ).textContent =
+        snapshot.size;
+
+        let html = "";
+
+        snapshot.forEach(doc=>{
+
+          const data =
+            doc.data();
+
+          html += `
+            <div style="
+              padding:8px;
+              border-bottom:1px solid #eee;
+            ">
+              ${data.studentName}
+            </div>
+          `;
+
+        });
+
+        document.getElementById(
+          "presentList"
+        ).innerHTML =
+        html || `
+          <p style="color:#94a3b8">
+            Waiting for students to scan...
+          </p>
+        `;
+
+      });
+
+    }
 
     showToast('Attendance session started!');
 
@@ -583,7 +659,11 @@ async function endSession(){
   try{
 
     await updateDoc(
-      doc(db,"attendanceSessions",currentSessionId),
+      doc(
+        db,
+        "attendanceSessions",
+        activeSessionId
+      ),
       {
         active:false
       }
@@ -1035,6 +1115,16 @@ window.clearAll = clearAll;
 
 window.onAttActChange = onAttActChange;
 
+function updateQrLabel(){
+
+  const seconds =
+    document.getElementById("qrRange").value;
+
+  document.getElementById("qrVal")
+  .textContent = seconds + " sec";
+
+}
+
 // qr code generation
 function generateQRCode(sessionId){
 
@@ -1045,13 +1135,11 @@ function generateQRCode(sessionId){
   const attendanceURL =
   `${window.location.href.split("admin.html")[0]}attendance.html?session=${sessionId}`;
 
-  console.log(attendanceURL);
-  alert(attendanceURL);
-
   new QRCode(qrBox, {
     text: attendanceURL,
     width: 500,
-    height: 500
+    height: 500,
+    correctLevel: QRCode.CorrectLevel.H
   });
 
 }

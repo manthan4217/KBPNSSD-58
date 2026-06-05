@@ -19,24 +19,16 @@ import {
 }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-console.log("Dashboard loaded");
-
-console.log("Html5Qrcode =", window.Html5Qrcode);
-alert("STEP 1");
 // ======================================================
 // AUTH CHECK
 // ======================================================
 
 let currentUserData = null;
 
-alert("STEP 2");
-
 onAuthStateChanged(auth, async (user) => {
   alert("AUTH TRIGGERED");
 
   console.log("User:", user);
-
-  alert("STEP 3");
 
   if (!user) {
 
@@ -187,82 +179,6 @@ async function loadActiveSession(){
 }
 
 // ======================================================
-// QR CODE SCANNER
-// ======================================================
-
-let scannerRunning = false;
-let html5QrCode;
-
-document.getElementById("openScannerBtn")
-.addEventListener("click", async ()=>{
-
-  alert("SCAN BUTTON CLICKED");
-
-  if(scannerRunning) return;
-
-  alert("PASSED scannerRunning");
-
-  if(!activeSessionId){
-
-    alert("No active attendance session");
-    return;
-
-  }
-
-  alert("ACTIVE SESSION FOUND");
-
-  scannerRunning = true;
-
-  alert("CREATING SCANNER");
-
-  html5QrCode = new Html5Qrcode("reader");
-
-  try{
-
-    alert("GETTING CAMERAS");
-
-    const cameras =
-      await Html5Qrcode.getCameras();
-
-    alert(
-      "Found " +
-      cameras.length +
-      " cameras"
-    );
-
-    await html5QrCode.start(
-      { facingMode: "environment" },
-      {
-        fps: 30,
-        qrbox: {
-          width: 350,
-          height: 350
-        }
-      },
-      (decodedText) => {
-        console.log("DETECTED:", decodedText);
-        alert("QR DETECTED");
-      },
-      (errorMessage) => {
-        console.log(errorMessage);
-      }
-    );
-
-    }catch(err){
-
-      alert(
-        "ERROR:\n" +
-        err.message
-      );
-
-      console.error(err);
-
-    }
-
-});
-
-
-// ======================================================
 // MARK ATTENDANCE
 // ======================================================
 
@@ -270,6 +186,50 @@ async function markAttendance(){
 
   try{
 
+    // CHECK SESSION
+
+    const sessionRef =
+      doc(
+        db,
+        "attendanceSessions",
+        activeSessionId
+      );
+
+    const sessionSnap =
+      await getDoc(sessionRef);
+
+    if(!sessionSnap.exists()){
+
+      document.getElementById(
+        "qrAttendanceBox"
+      ).innerHTML = `
+        <div>
+          ❌ Invalid QR Code
+        </div>
+      `;
+
+      return;
+    }
+
+    const session =
+      sessionSnap.data();
+
+    if(Date.now() > session.expiresAt){
+
+      document.getElementById(
+        "qrAttendanceBox"
+      ).innerHTML = `
+
+        <div>
+          <h2>❌ QR Expired</h2>
+          <p>Ask NSS staff for a new QR.</p>
+        </div>
+
+      `;
+
+      return;
+    }
+    
     // DUPLICATE CHECK
     const q = query(
       collection(db,"attendanceRecords"),
@@ -319,28 +279,35 @@ async function markAttendance(){
 
     // SUCCESS UI
     document.getElementById(
-      "qrAttendanceBox"
-    ).innerHTML = `
+  "qrAttendanceBox"
+  ).innerHTML = `
 
-      <div style="
-        background:#ecfdf5;
-        color:#047857;
-        padding:20px;
-        border-radius:16px;
-        margin-top:20px;
-      ">
+  <div style="
+  background:#ecfdf5;
+  padding:25px;
+  border-radius:15px;
+  text-align:center;
+  ">
 
-        <h3 style="margin-bottom:8px;">
-          ✅ Attendance Marked
-        </h3>
+  <h2>
+  ✅ Attendance Marked
+  </h2>
 
-        <p>
-          Your attendance has been submitted successfully.
-        </p>
+  <p>
+  Your attendance has been recorded.
+  </p>
 
-      </div>
+  <p>
+  ${currentUserData.fullName}
+  </p>
 
-    `;
+  <p>
+  ${new Date().toLocaleTimeString()}
+  </p>
+
+  </div>
+
+  `;
 
   }catch(err){
 
