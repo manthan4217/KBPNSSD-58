@@ -1,5 +1,5 @@
-// 🔥 FIREBASE
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
 import {
   getFirestore,
@@ -458,7 +458,8 @@ async function startSession(){
 
   const activity = acts.find(a => a.id === actId);
 
-  const mins = Number(document.getElementById('qrRange').value);
+  const seconds =
+    Number(document.getElementById('qrRange').value);
 
   try{
 
@@ -527,16 +528,10 @@ async function startSession(){
     listenAttendance(currentSessionId);
 
     function listenAttendance(sessionId){
-
-      const q =
-        query(
-          collection(db,"attendanceRecords"),
-          where(
-            "sessionId",
-            "==",
-            sessionId
-          )
-        );
+      const q = query(
+        collection(db,"attendanceRecords"),
+        where("sessionId","==",sessionId)
+      );
 
       onSnapshot(q,(snapshot)=>{
 
@@ -588,35 +583,6 @@ async function startSession(){
 
 }
 
-//LIVE ATTENDANCE LISTENER
-function listenAttendance(sessionId){
-
-  onSnapshot(
-    collection(db,"attendanceRecords"),
-
-    (snapshot)=>{
-
-      presentList = [];
-
-      snapshot.forEach(docSnap=>{
-
-        const data = docSnap.data();
-
-        if(data.sessionId === sessionId){
-
-          presentList.push(data);
-
-        }
-
-      });
-
-      updatePresent();
-
-    }
-  );
-
-}
-
 function updatePresent(){
 
   document.getElementById('presentCount').textContent =
@@ -662,7 +628,7 @@ async function endSession(){
       doc(
         db,
         "attendanceSessions",
-        activeSessionId
+        currentSessionId
       ),
       {
         active:false
@@ -865,13 +831,17 @@ function toggleSelAll(cb){
   renderVolunteers();
 }
 
-function removeVol(id){
+async function removeVol(id){
 
-  vols = vols.filter(v => v.uid !== id);
+  const volunteer =
+  vols.find(v=>v.uid===id);
 
-  renderVolunteers();
+  if(!volunteer) return;
 
-  showToast('Volunteer removed.','warning');
+  await deleteDoc(
+    doc(db,"volunteers", volunteer.firebaseId)
+  );
+
 }
 // volunteer data export
 function exportCsv(){
