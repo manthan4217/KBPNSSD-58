@@ -233,24 +233,30 @@ document.getElementById("openScannerBtn")
     await html5QrCode.start(
       cameras[1]?.id || cameras[0].id,
       {
-        fps:10,
-        qrbox:250
+        fps: 10,
+        qrbox: 250
       },
-      (decodedText)=>{
-        alert("QR Detected");
+      (decodedText) => {
+
+        alert("QR DETECTED");
+
+        alert(decodedText);
+
+        console.log(decodedText);
+
       }
     );
 
-  }catch(err){
+    }catch(err){
 
-    alert(
-      "ERROR:\n" +
-      err.message
-    );
+      alert(
+        "ERROR:\n" +
+        err.message
+      );
 
-    console.error(err);
+      console.error(err);
 
-  }
+    }
 
 });
 
