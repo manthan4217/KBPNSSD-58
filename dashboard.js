@@ -196,6 +196,8 @@ document.getElementById("openScannerBtn")
 
   if(scannerRunning) return;
 
+  alert("PASSED scannerRunning");
+
   if(!activeSessionId){
 
     alert("No active attendance session");
@@ -203,7 +205,7 @@ document.getElementById("openScannerBtn")
 
   }
 
-  alert("SESSION FOUND");
+  alert("ACTIVE SESSION FOUND");
 
   scannerRunning = true;
 
