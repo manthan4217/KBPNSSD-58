@@ -1050,8 +1050,8 @@ function generateQRCode(sessionId){
 
   new QRCode(qrBox, {
     text: attendanceURL,
-    width: 350,
-    height: 350
+    width: 500,
+    height: 500
   });
 
 }

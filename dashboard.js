@@ -240,8 +240,11 @@ document.getElementById("openScannerBtn")
         }
       },
       (decodedText) => {
+        console.log("DETECTED:", decodedText);
         alert("QR DETECTED");
-        alert(decodedText);
+      },
+      (errorMessage) => {
+        console.log(errorMessage);
       }
     );
 
