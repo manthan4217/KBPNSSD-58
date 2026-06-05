@@ -231,19 +231,17 @@ document.getElementById("openScannerBtn")
     );
 
     await html5QrCode.start(
-      cameras[1]?.id || cameras[0].id,
+      { facingMode: "environment" },
       {
-        fps: 10,
-        qrbox: 250
+        fps: 30,
+        qrbox: {
+          width: 350,
+          height: 350
+        }
       },
       (decodedText) => {
-
         alert("QR DETECTED");
-
         alert(decodedText);
-
-        console.log(decodedText);
-
       }
     );
 
