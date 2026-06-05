@@ -23,6 +23,21 @@ if (loginBtn) {
 
       await signInWithEmailAndPassword(auth, email, password);
 
+      const pendingSession =
+      localStorage.getItem(
+        "attendanceSession"
+      );
+
+      if(pendingSession){
+
+        window.location.href =
+        `attendance.html?session=${pendingSession}`;
+
+        return;
+      }
+
+      window.location.href ="dashboard.html";
+
       // ================= STEP 3 (DEVICE ID - IMPORTANT) =================
       if (!localStorage.getItem("deviceId")) {
         localStorage.setItem("deviceId", crypto.randomUUID());

@@ -1,65 +1,151 @@
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { auth, db } from "./firebase.js";
 
 import {
-  getFirestore,
+  onAuthStateChanged
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+import {
+  doc,
+  getDoc,
   collection,
   addDoc,
   getDocs,
-  deleteDoc,
-  doc,
-  onSnapshot,
-  setDoc,
-  updateDoc,
-  serverTimestamp,
-  getDoc,
   query,
-  where
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-// YOUR FIREBASE CONFIG
-const firebaseConfig = {
-  apiKey: "AIzaSyCYJtqBXt719s28KazYEdFkhVjqm5ytHlw",
-  authDomain: "nss-d58.firebaseapp.com",
-  projectId: "nss-d58",
-  storageBucket: "nss-d58.appspot.com",
-  messagingSenderId: "851449633649",
-  appId: "1:851449633649:web:025a6a1f044fed8b6db4d0",
-  measurementId: "G-5M01SRSGZ8"
-};
-
-// INIT
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-const params =
-new URLSearchParams(
- window.location.search
-);
+  where,
+  serverTimestamp
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const sessionId =
-params.get("session");
+new URLSearchParams(
+  window.location.search
+).get("session");
 
-console.log(sessionId);
+if(!sessionId){
 
-const sessionRef =
-doc(
- db,
- "attendanceSessions",
- sessionId
+  document.getElementById("status").innerHTML =
+  "❌ Invalid Attendance Link";
+
+  throw new Error("No Session ID");
+}
+
+localStorage.setItem(
+  "attendanceSession",
+  sessionId
 );
 
-async function loadSession(){
+onAuthStateChanged(auth, async(user)=>{
 
-  const sessionSnap =
-  await getDoc(sessionRef);
+  if(!user){
 
-  if(!sessionSnap.exists()){
+    window.location.href =
+    "login.html";
 
-    alert("Invalid QR");
     return;
   }
 
-}
+  try{
 
-loadSession();
+    const volunteerSnap =
+    await getDoc(
+      doc(db,"volunteers",user.uid)
+    );
+
+    if(!volunteerSnap.exists()){
+
+      document.getElementById("status").innerHTML =
+      "❌ Volunteer data not found";
+
+      return;
+    }
+
+    const volunteer =
+    volunteerSnap.data();
+
+    const sessionSnap =
+    await getDoc(
+      doc(db,"attendanceSessions",sessionId)
+    );
+
+    if(!sessionSnap.exists()){
+
+      document.getElementById("status").innerHTML =
+      "❌ Invalid Session";
+
+      return;
+    }
+
+    const session =
+    sessionSnap.data();
+
+    if(!session.active){
+
+      document.getElementById("status").innerHTML =
+      "❌ Session Closed";
+
+      return;
+    }
+
+    if(Date.now() > session.expiresAt){
+
+      document.getElementById("status").innerHTML =
+      "❌ QR Expired";
+
+      return;
+    }
+
+    // DUPLICATE CHECK
+
+    const q = query(
+      collection(db,"attendanceRecords"),
+      where("sessionId","==",sessionId),
+      where(
+        "studentId",
+        "==",
+        volunteer.studentId
+      )
+    );
+
+    const existing =
+    await getDocs(q);
+
+    if(!existing.empty){
+
+      document.getElementById("status").innerHTML =
+      "⚠️ Attendance Already Marked";
+
+      return;
+    }
+
+    await addDoc(
+      collection(db,"attendanceRecords"),
+      {
+        sessionId,
+        studentId:
+        volunteer.studentId,
+
+        studentName:
+        volunteer.fullName,
+
+        timestamp:
+        serverTimestamp()
+      }
+    );
+
+    document.getElementById("status").innerHTML = `
+      <h2>✅ Attendance Marked</h2>
+      <p>${volunteer.fullName}</p>
+    `;
+
+  }
+  catch(err){
+
+    console.error(err);
+
+    document.getElementById("status").innerHTML =
+    "❌ Error";
+
+  }
+
+});
