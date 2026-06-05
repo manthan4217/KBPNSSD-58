@@ -229,7 +229,7 @@ async function markAttendance(){
 
       return;
     }
-    
+
     // DUPLICATE CHECK
     const q = query(
       collection(db,"attendanceRecords"),
@@ -268,14 +268,30 @@ async function markAttendance(){
 
     // SAVE ATTENDANCE
     await addDoc(
-      collection(db,"attendanceRecords"),
-      {
-        sessionId: activeSessionId,
-        studentId: currentUserData.studentId,
-        studentName: currentUserData.fullName,
-        timestamp: serverTimestamp()
-      }
-    );
+    collection(db,"attendanceRecords"),
+    {
+
+      sessionId: activeSessionId,
+
+      studentId:
+      currentUserData.studentId,
+
+      studentName:
+      currentUserData.fullName,
+
+      className:
+      currentUserData.className,
+
+      division:
+      currentUserData.division,
+
+      gender:
+      currentUserData.gender,
+
+      timestamp:
+      serverTimestamp()
+
+    });
 
     // SUCCESS UI
     document.getElementById(

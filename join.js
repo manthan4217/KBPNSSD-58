@@ -201,6 +201,12 @@ document.getElementById("nssForm")
         rollNo,
         studentId,
 
+        division:
+          document.getElementById("division").value,
+
+          gender:
+          document.getElementById("gender").value,
+
         address,
         contact,
         email: loginEmail,

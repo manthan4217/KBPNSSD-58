@@ -94,10 +94,51 @@
         <div class="field"><label class="lbl">Activity Name</label><input class="inp" id="actName" placeholder="e.g. Blood Donation Camp"/><div class="err" id="actNameErr"></div></div>
         <div class="field"><label class="lbl">Date</label><input type="date" class="inp" id="actDate"/><div class="err" id="actDateErr"></div></div>
         <div class="field"><label class="lbl">Description</label><textarea class="inp" id="actDesc" rows="3" placeholder="Briefly describe the activity..." style="resize:vertical;"></textarea><div class="err" id="actDescErr"></div></div>
+        <div class="field"><label class="lbl">Venue</label><input class="inp" id="actVenue" placeholder="Venue"/></div>
+        <div class="field"><label class="lbl">Time</label><input type="time" class="inp" id="actFrom"> 
+        <input type="time" class="inp" id="actTo"> </div>
+        <div class="field"><label class="lbl">Total Hours</label><input type="number" class="inp" id="actHours" placeholder="Total Hours"></div>
+        <div class="field"><label class="lbl">Activity Type</label><select class="inp" id="actType">
+          <option value="">
+            Select Activity Type
+          </option>
+          <option>
+            Shramdaan
+          </option>
+          <option>
+            Lecture
+          </option>
+        </select>
         <button class="btn btn-blue" onclick="createActivity()">Create Activity</button>
       </div>
       <input class="inp search-inp" id="actSearch" placeholder="🔍  Search by name or date…" oninput="renderActivities()"/>
       <div id="act-list"></div>
+    </div>
+
+    <!-- Attendance Modal -->
+
+    <div id="attendanceModal" class="modal-overlay">
+
+      <div class="modal">
+
+        <h2>
+        Activity Attendance
+        </h2>
+
+        <div id="attendanceModalContent">
+
+          Loading...
+
+        </div>
+
+        <button class="btn btn-outline" onclick="closeModal('attendanceModal')">
+          Close
+        </button>
+
+      </div>
+
+      <button class="btn btn-blue" onclick="exportAttendanceCsv()"> Export CSV </button>
+
     </div>
 
     <!-- ── ATTENDANCE ── -->

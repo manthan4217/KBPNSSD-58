@@ -53,6 +53,8 @@ function loadVolunteers(){
         fullName: data.fullName || '',
         studentId: data.studentId || '',
         className: data.className || '',
+        division: data.division || '',
+        gender: data.gender || '',
         contact: data.contact || '',
         email: data.email || '',
         bloodGroup: data.bloodGroup || '',
@@ -306,14 +308,139 @@ function renderActivities(){
         >
           🗑️
         </button>
+
+        <button
+        class="btn-xs"
+        style="
+        background:#dcfce7;
+        color:#15803d;
+        "
+        onclick="viewAttendance('${a.id}')"
+        >
+        📋 View Attendance
+        </button>
       </div>
     </div>`).join('');
 }
+/* ═══════════════════════════════════════════════════════════════
+   Attendance Modal
+═══════════════════════════════════/==================== */
+
+async function viewAttendance(activityId){
+
+  openModal('attendanceModal');
+
+  const content =
+  document.getElementById(
+    'attendanceModalContent'
+  );
+
+  content.innerHTML =
+  "Loading attendance...";
+
+  try{
+
+    // FIND SESSION
+
+    const sessionQuery =
+    query(
+      collection(db,"attendanceSessions"),
+      where(
+        "activityId",
+        "==",
+        activityId
+      )
+    );
+
+    const sessionSnap =
+    await getDocs(sessionQuery);
+
+    if(sessionSnap.empty){
+
+      content.innerHTML =
+      "No attendance found.";
+
+      return;
+    }
+
+    let html = `
+      <table style="
+      width:100%;
+      border-collapse:collapse;
+      ">
+      <tr>
+        <th>Name</th>
+        <th>Student ID</th>
+      </tr>
+    `;
+
+    for(const sessionDoc of sessionSnap.docs){
+
+      const sessionId =
+      sessionDoc.id;
+
+      const attendanceQuery =
+      query(
+        collection(db,"attendanceRecords"),
+        where(
+          "sessionId",
+          "==",
+          sessionId
+        )
+      );
+
+      const attendanceSnap =
+      await getDocs(
+        attendanceQuery
+      );
+
+      attendanceSnap.forEach(doc=>{
+
+        const data =
+        doc.data();
+
+        html += `
+        <tr>
+          <td>
+            ${data.studentName}
+          </td>
+          <td>
+            ${data.studentId}
+          </td>
+        </tr>
+        `;
+
+      });
+
+    }
+
+    html += "</table>";
+
+    content.innerHTML = html;
+
+  }
+  catch(err){
+
+    console.error(err);
+
+    content.innerHTML =
+    "Failed to load attendance";
+
+  }
+
+}
+
+
 async function createActivity(){
 
   const name=document.getElementById('actName').value.trim();
   const date=document.getElementById('actDate').value;
   const desc=document.getElementById('actDesc').value.trim();
+  const venue =document.getElementById('actVenue').value.trim();
+  const timeFrom =document.getElementById('actFrom').value;
+  const timeTo =document.getElementById('actTo').value;
+  const totalHours =document.getElementById('actHours').value;
+  const activityType =document.getElementById('actType').value;
 
   let ok=true;
 
@@ -341,10 +468,24 @@ async function createActivity(){
   try{
 
     await addDoc(collection(db,"activities"),{
+
       name,
+      activityType,
+
       date,
+
+      venue,
+
+      timeFrom,
+
+      timeTo,
+
+      totalHours,
+
       desc,
+
       status:"Upcoming"
+
     });
 
     showToast('Activity saved to Firebase!');
