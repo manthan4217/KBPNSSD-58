@@ -189,6 +189,10 @@ async function loadActiveSession(){
 // ======================================================
 // QR CODE SCANNER
 // ======================================================
+
+let scannerRunning = false;
+let html5QrCode;
+
 document.getElementById("openScannerBtn")
 .addEventListener("click", async ()=>{
 
