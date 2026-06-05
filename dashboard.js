@@ -186,68 +186,67 @@ async function loadActiveSession(){
 
 }
 
+// ======================================================
+// QR CODE SCANNER
+// ======================================================
+document.getElementById("openScannerBtn")
+.addEventListener("click", async ()=>{
 
-try {
+  alert("SCAN BUTTON CLICKED");
 
-  const cameras = await Html5Qrcode.getCameras();
+  if(scannerRunning) return;
 
-  alert(
-    cameras.map(c =>
-      c.label + "\nID: " + c.id
-    ).join("\n\n")
-  );
+  if(!activeSessionId){
 
-  await html5QrCode.start(
+    alert("No active attendance session");
+    return;
 
-    cameras[1].id,
+  }
 
-    {
-      fps: 10,
-      qrbox: 250
-    },
+  alert("SESSION FOUND");
 
-    async (decodedText) => {
+  scannerRunning = true;
 
-      alert("QR Detected");
+  alert("CREATING SCANNER");
 
-      console.log("QR RESULT:", decodedText);
+  html5QrCode = new Html5Qrcode("reader");
 
-      try {
+  try{
 
-        const url =
-          new URL(decodedText, window.location.href);
+    alert("GETTING CAMERAS");
 
-        const scannedSessionId =
-          url.searchParams.get("session");
+    const cameras =
+      await Html5Qrcode.getCameras();
 
-        alert(
-          "Active: " + activeSessionId +
-          "\nScanned: " + scannedSessionId
-        );
+    alert(
+      "Found " +
+      cameras.length +
+      " cameras"
+    );
 
-      } catch(err) {
-
-        alert(err.message);
-
+    await html5QrCode.start(
+      cameras[1]?.id || cameras[0].id,
+      {
+        fps:10,
+        qrbox:250
+      },
+      (decodedText)=>{
+        alert("QR Detected");
       }
+    );
 
-    },
+  }catch(err){
 
-    (errorMessage) => {
-      console.log(errorMessage);
-    }
+    alert(
+      "ERROR:\n" +
+      err.message
+    );
 
-  );
+    console.error(err);
 
-}
-catch(err) {
+  }
 
-  alert(
-    "Scanner Start Error:\n" +
-    err.message
-  );
-
-}
+});
 
 
 // ======================================================
