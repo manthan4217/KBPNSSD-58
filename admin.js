@@ -32,7 +32,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-
+let currentAttendanceActivityId = null;
 /* ═══════════════════════════════════════════════════════════════
    DATA
 ═══════════════════════════════════════════════════════════════ */
@@ -348,6 +348,8 @@ function renderActivities(){
 
 async function viewAttendance(activityId){
 
+  currentAttendanceActivityId = activityId;
+
   openModal('attendanceModal');
 
   const content =
@@ -360,20 +362,31 @@ async function viewAttendance(activityId){
 
   try{
 
-    // FIND SESSION
+    const activity =
+      acts.find(
+        a => a.id === activityId
+      );
+
+    if(!activity){
+
+      content.innerHTML =
+      "Activity not found";
+
+      return;
+    }
 
     const sessionQuery =
-    query(
-      collection(db,"attendanceSessions"),
-      where(
-        "activityId",
-        "==",
-        activityId
-      )
-    );
+      query(
+        collection(db,"attendanceSessions"),
+        where(
+          "activityId",
+          "==",
+          activityId
+        )
+      );
 
     const sessionSnap =
-    await getDocs(sessionQuery);
+      await getDocs(sessionQuery);
 
     if(sessionSnap.empty){
 
@@ -383,58 +396,188 @@ async function viewAttendance(activityId){
       return;
     }
 
+    let maleCount = 0;
+    let femaleCount = 0;
+    let totalCount = 0;
+    let sr = 1;
+
     let html = `
-      <table style="
-      width:100%;
-      border-collapse:collapse;
-      ">
-      <tr>
-        <th>Name</th>
-        <th>Student ID</th>
-      </tr>
+
+    <div class="attendance-preview">
+
+      <h2>
+        Karmaveer Bhaurao Patil College, Vashi
+      </h2>
+
+      <h3>
+        National Service Scheme Unit D-58
+      </h3>
+
+      <hr>
+
+      <p>
+        <b>Activity:</b>
+        ${activity.name}
+      </p>
+
+      <p>
+        <b>Date:</b>
+        ${activity.date}
+      </p>
+
+      <p>
+        <b>Venue:</b>
+        ${activity.venue || '-'}
+      </p>
+
+      <p>
+        <b>Time:</b>
+        ${activity.timeFrom || '-'}
+        to
+        ${activity.timeTo || '-'}
+      </p>
+
+      <p>
+        <b>Total Hours:</b>
+        ${activity.totalHours || '-'}
+      </p>
+
+      <table class="attendance-table">
+
+        <thead>
+
+          <tr>
+
+            <th>Sr</th>
+
+            <th>Name of Volunteer</th>
+
+            <th>Class</th>
+
+            <th>Div</th>
+
+            <th>Gender</th>
+
+          </tr>
+
+        </thead>
+
+        <tbody>
     `;
 
     for(const sessionDoc of sessionSnap.docs){
 
-      const sessionId =
-      sessionDoc.id;
-
       const attendanceQuery =
-      query(
-        collection(db,"attendanceRecords"),
-        where(
-          "sessionId",
-          "==",
-          sessionId
-        )
-      );
+        query(
+          collection(db,"attendanceRecords"),
+          where(
+            "sessionId",
+            "==",
+            sessionDoc.id
+          )
+        );
 
       const attendanceSnap =
-      await getDocs(
-        attendanceQuery
-      );
+        await getDocs(attendanceQuery);
 
-      attendanceSnap.forEach(doc=>{
+      attendanceSnap.forEach(docSnap=>{
 
         const data =
-        doc.data();
+          docSnap.data();
+
+        const volunteer =
+          vols.find(
+            v =>
+            v.studentId === data.studentId
+          );
+
+        const gender =
+          (volunteer?.gender || '').toLowerCase();
+
+        if(gender === "male")
+          maleCount++;
+
+        if(gender === "female")
+          femaleCount++;
+
+        totalCount++;
 
         html += `
+
         <tr>
+
+          <td>${sr++}</td>
+
           <td>
-            ${data.studentName}
+            ${volunteer?.fullName || data.studentName}
           </td>
+
           <td>
-            ${data.studentId}
+            ${volunteer?.className || '-'}
           </td>
+
+          <td>
+            ${volunteer?.division || '-'}
+          </td>
+
+          <td>
+            ${volunteer?.gender || '-'}
+          </td>
+
         </tr>
+
         `;
 
       });
 
     }
 
-    html += "</table>";
+    html += `
+
+        </tbody>
+
+      </table>
+
+      <div style="
+        margin-top:20px;
+        display:flex;
+        gap:20px;
+        flex-wrap:wrap;
+      ">
+
+        <span class="pill pill-blue">
+          Male: ${maleCount}
+        </span>
+
+        <span class="pill pill-green">
+          Female: ${femaleCount}
+        </span>
+
+        <span class="pill">
+          Total: ${totalCount}
+        </span>
+
+      </div>
+
+      <div class="signatures">
+
+        <div>
+          ____________________
+          <br>
+          NSS Programme Officer
+        </div>
+
+        <div>
+          ____________________
+          <br>
+          NSS Leader
+        </div>
+
+      </div>
+
+    </div>
+
+    `;
 
     content.innerHTML = html;
 
@@ -445,6 +588,231 @@ async function viewAttendance(activityId){
 
     content.innerHTML =
     "Failed to load attendance";
+
+  }
+
+}
+
+/*--attendance export modal---*/
+async function exportAttendanceSheet(){
+
+  try{
+
+    if(!currentAttendanceActivityId){
+
+      showToast(
+        "Open attendance first",
+        "error"
+      );
+
+      return;
+    }
+
+    const activity =
+      acts.find(
+        a => a.id === currentAttendanceActivityId
+      );
+
+    if(!activity){
+
+      showToast(
+        "Activity not found",
+        "error"
+      );
+
+      return;
+    }
+
+    // FIND SESSION
+
+    const sessionQuery =
+      query(
+        collection(db,"attendanceSessions"),
+        where(
+          "activityId",
+          "==",
+          currentAttendanceActivityId
+        )
+      );
+
+    const sessionSnap =
+      await getDocs(sessionQuery);
+
+    let volunteersData = [];
+
+    for(const sessionDoc of sessionSnap.docs){
+
+      const attendanceQuery =
+        query(
+          collection(db,"attendanceRecords"),
+          where(
+            "sessionId",
+            "==",
+            sessionDoc.id
+          )
+        );
+
+      const attendanceSnap =
+        await getDocs(attendanceQuery);
+
+      attendanceSnap.forEach(docSnap=>{
+
+        volunteersData.push(
+          docSnap.data()
+        );
+
+      });
+
+    }
+
+    let maleCount = 0;
+    let femaleCount = 0;
+
+    const rows = [];
+
+    let sr = 1;
+
+    for(const record of volunteersData){
+
+      const volunteer =
+        vols.find(
+          v => v.studentId === record.studentId
+        );
+
+      const gender =
+        volunteer?.gender || '';
+
+      if(gender === 'Male')
+        maleCount++;
+
+      if(gender === 'Female')
+        femaleCount++;
+
+      rows.push([
+        sr++,
+        volunteer?.fullName || record.studentName,
+        volunteer?.className || '',
+        volunteer?.division || '',
+        volunteer?.gender || ''
+      ]);
+
+    }
+
+    const totalCount =
+      volunteersData.length;
+
+    const sheetData = [
+
+      ['College File No: D-58'],
+      ['Karmaveer Bhaurao Patil College, Vashi'],
+      ['NSS Unit'],
+      ['Attendance of NSS Volunteers'],
+      [],
+
+      [
+        'Name Of the Project Activity',
+        activity.name
+      ],
+
+      [
+        'Date',
+        activity.date
+      ],
+
+      [
+        'Venue',
+        activity.venue || ''
+      ],
+
+      [
+        'Time',
+        `From ${activity.timeFrom || ''} To ${activity.timeTo || ''}`
+      ],
+
+      [
+        'Total Hours',
+        activity.totalHours || ''
+      ],
+
+      [],
+
+      [
+        'Male',
+        maleCount
+      ],
+
+      [
+        'Female',
+        femaleCount
+      ],
+
+      [
+        'Total',
+        totalCount
+      ],
+
+      [],
+
+      [
+        'Sr.No',
+        'Name of Volunteer',
+        'Class',
+        'Div',
+        'Signature'
+      ],
+
+      ...rows,
+
+      [],
+
+      [],
+
+      [
+        '',
+        '',
+        'Sign of NSS Program Officer'
+      ],
+
+      [
+        '',
+        '',
+        'Sign NSS Leader'
+      ]
+
+    ];
+
+    const ws =
+      XLSX.utils.aoa_to_sheet(
+        sheetData
+      );
+
+    const wb =
+      XLSX.utils.book_new();
+
+    XLSX.utils.book_append_sheet(
+      wb,
+      ws,
+      'Attendance'
+    );
+
+    XLSX.writeFile(
+      wb,
+      `${activity.name}-Attendance.xlsx`
+    );
+
+    showToast(
+      'Attendance Sheet Exported'
+    );
+
+  }
+  catch(err){
+
+    console.error(err);
+
+    showToast(
+      'Export failed',
+      'error'
+    );
 
   }
 
@@ -1418,6 +1786,68 @@ async function openVolunteerProfile(studentId){
 
 }
 
+/*mobile menu*/
+const mobileMenuBtn =
+document.getElementById(
+  "mobileMenuBtn"
+);
+
+const sidebar =
+document.getElementById(
+  "sidebar"
+);
+
+const overlay =
+document.getElementById(
+  "sidebarOverlay"
+);
+
+mobileMenuBtn.addEventListener(
+  "click",
+  ()=>{
+
+    sidebar.classList.remove(
+      "collapsed"
+    );
+
+    sidebar.classList.add(
+      "open"
+    );
+
+    overlay.classList.add(
+      "show"
+    );
+
+  }
+);
+
+overlay.addEventListener(
+  "click",
+  ()=>{
+
+    sidebar.classList.remove(
+      "open"
+    );
+
+    overlay.classList.remove(
+      "show"
+    );
+
+  }
+);
+
+if(window.innerWidth <= 768){
+
+  sidebar.classList.remove(
+    "open"
+  );
+
+  overlay.classList.remove(
+    "show"
+  );
+
+}
+
 // GLOBAL FUNCTIONS FOR HTML onclick
 
 
@@ -1439,3 +1869,4 @@ window.sendReset = sendReset;
 window.clearAll = clearAll;
 window.onAttActChange = onAttActChange;
 window.viewAttendance = viewAttendance;
+window.exportAttendanceSheet = exportAttendanceSheet;

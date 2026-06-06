@@ -28,7 +28,7 @@
 <!-- ══ SIDEBAR ══════════════════════════════════════════════════ -->
 <aside id="sidebar">
   <div class="sb-logo">
-    <div class="sb-icon">⚡</div>
+    <div class="sb-icon"><img src="images/nsslogo.png" alt="NSS Logo"/></a></div>
     <div>
       <div class="sb-title">NSS Admin</div>
       <div class="sb-sub">Unit D-58</div>
@@ -48,9 +48,14 @@
   </div>
 </aside>
 
+<div id="sidebarOverlay"></div>
+
 <!-- ══ MAIN ════════════════════════════════════════════════════ -->
 <div id="main">
   <header>
+    <button id="mobileMenuBtn" class="mobile-menu-btn">
+    ☰
+    </button>
     <div>
       <div class="hdr-title" id="hdrTitle">Dashboard</div>
       <div class="hdr-sub">KBP College Vashi · NSS D-58</div>
@@ -131,7 +136,7 @@
 
           </div>
 
-          <button class="btn btn-blue" onclick="exportAttendanceCsv()"> Export CSV </button>
+          <button class="btn btn-blue" onclick="exportAttendanceSheet()"> 📄 Export NSS Sheet </button>
 
           <button class="btn btn-outline" onclick="closeModal('attendanceModal')">
             Close
@@ -377,6 +382,7 @@
   </div>
 
 </div>
+<script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script type="module" src="admin.js"></script>
 </body>
