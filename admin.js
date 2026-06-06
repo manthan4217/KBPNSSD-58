@@ -189,16 +189,36 @@ let currentSessionId = null;
 ═══════════════════════════════════════════════════════════════ */
 const tabLabels={dashboard:"Dashboard",activities:"Activities",attendance:"Attendance",volunteers:"Volunteers",marks:"Marks",settings:"Settings"};
 function switchTab(t){
-  document.querySelectorAll('.tab').forEach(el=>el.classList.remove('active'));
-  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
-  document.getElementById('tab-'+t).classList.add('active');
-  document.querySelector(`[data-tab="${t}"]`).classList.add('active');
-  document.getElementById('hdrTitle').textContent=tabLabels[t];
+
+  document.querySelectorAll('.tab')
+    .forEach(el=>el.classList.remove('active'));
+
+  document.querySelectorAll('.nav-btn')
+    .forEach(el=>el.classList.remove('active'));
+
+  const tab =
+    document.getElementById('tab-' + t);
+
+  const btn =
+    document.querySelector(`[data-tab="${t}"]`);
+
+  if(tab)
+    tab.classList.add('active');
+
+  if(btn)
+    btn.classList.add('active');
+
+  document.getElementById('hdrTitle').textContent =
+    tabLabels[t] || 'Dashboard';
+
   if(t==='dashboard') renderDashboard();
   if(t==='activities') renderActivities();
   if(t==='attendance') renderAttendanceSelects();
   if(t==='volunteers') renderVolunteers();
-  if(t==='marks'){populateVolSelect();renderMarksTable();}
+  if(t==='marks'){
+    populateVolSelect();
+    renderMarksTable();
+  }
 }
 document.querySelectorAll('.nav-btn').forEach(b=>b.addEventListener('click',()=>switchTab(b.dataset.tab)));
 
@@ -1199,33 +1219,6 @@ window.addEventListener('DOMContentLoaded', async ()=>{
 
 });
 
-// GLOBAL FUNCTIONS FOR HTML onclick
-
-window.openVolunteerProfile = openVolunteerProfile;
-
-window.switchTab = switchTab;
-window.toggleActForm = toggleActForm;
-window.createActivity = createActivity;
-window.deleteAct = deleteAct;
-window.goAttendance = goAttendance;
-
-window.startSession = startSession;
-window.endSession = endSession;
-
-window.openModal = openModal;
-window.closeModal = closeModal;
-
-window.exportCsv = exportCsv;
-window.exportMarksCsv = exportMarksCsv;
-
-window.saveMarks = saveMarks;
-window.updateTotal = updateTotal;
-
-window.sendReset = sendReset;
-window.clearAll = clearAll;
-
-window.onAttActChange = onAttActChange;
-
 function updateQrLabel(){
 
   const seconds =
@@ -1424,3 +1417,25 @@ async function openVolunteerProfile(studentId){
   openModal('volProfileModal');
 
 }
+
+// GLOBAL FUNCTIONS FOR HTML onclick
+
+
+window.switchTab = switchTab;
+window.openVolunteerProfile = openVolunteerProfile;
+window.toggleActForm = toggleActForm;
+window.createActivity = createActivity;
+window.deleteAct = deleteAct;
+window.goAttendance = goAttendance;
+window.startSession = startSession;
+window.endSession = endSession;
+window.openModal = openModal;
+window.closeModal = closeModal;
+window.exportCsv = exportCsv;
+window.exportMarksCsv = exportMarksCsv;
+window.saveMarks = saveMarks;
+window.updateTotal = updateTotal;
+window.sendReset = sendReset;
+window.clearAll = clearAll;
+window.onAttActChange = onAttActChange;
+window.viewAttendance = viewAttendance;
