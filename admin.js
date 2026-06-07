@@ -25,8 +25,7 @@ import { db, auth } from "./firebase.js";
 
 // INIT
 
-const db = getFirestore(app);
-const auth = getAuth();
+
 
 onAuthStateChanged(auth, async (user) => {
 
