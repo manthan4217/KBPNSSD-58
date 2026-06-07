@@ -281,9 +281,8 @@
 
               <h4>Activities Attended</h4>
 
-              <h2>18</h2>
-
-              <p>Out of 25 Activities</p>
+              <h2 id="statActivitiesCount">—</h2>
+              <p id="statActivitiesTotal">Loading...</p>
 
             </div>
 
@@ -299,9 +298,8 @@
 
               <h4>Lectures Attended</h4>
 
-              <h2>12</h2>
-
-              <p>Out of 16 Lectures</p>
+              <h2 id="statLecturesCount">—</h2>
+              <p id="statLecturesTotal">Loading...</p>
 
             </div>
 
@@ -317,9 +315,8 @@
 
               <h4>Attendance Percentage</h4>
 
-              <h2>92%</h2>
-
-              <p>Excellent</p>
+              <h2 id="statAttendancePct">—</h2>
+              <p id="statAttendanceLabel">Loading...</p>
 
             </div>
 
@@ -335,7 +332,7 @@
 
               <h4>Volunteer Hours</h4>
 
-              <h2>64</h2>
+              <h2 id="statHours">—</h2>
 
               <p>Keep it up!</p>
 
@@ -365,6 +362,12 @@
 
           </div>
 
+          <div id="liveCount" style="font-size:32px; font-weight:700; color:#0b7a39; margin-top:10px;"></div>
+          <p style="color:#6b7280;font-size:13px;">students marked present</p>
+
+          <button id="markAttendanceBtn" class="scan-btn" disabled>
+            ✅ Mark My Attendance
+          </button>
 
           <!-- SUCCESS -->
 

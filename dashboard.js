@@ -2,6 +2,7 @@
 import { auth, db } from "./firebase.js";
 
 import {
+  getAuth,
   onAuthStateChanged,
   signOut
 }
@@ -15,9 +16,10 @@ import {
   addDoc,
   query,
   where,
+  onSnapshot,
   serverTimestamp
 }
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"; 
 
 // ======================================================
 // AUTH CHECK
@@ -26,7 +28,6 @@ from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 let currentUserData = null;
 
 onAuthStateChanged(auth, async (user) => {
-  alert("AUTH TRIGGERED");
 
   console.log("User:", user);
 
@@ -86,7 +87,7 @@ onAuthStateChanged(auth, async (user) => {
       data.email;
 
       // LOAD ACTIVE SESSION
-      loadActiveSession();
+      await Promise.all([loadActiveSession(), loadStats()]);
 
     }
 
@@ -112,6 +113,10 @@ document.getElementById("logoutBtn")
 
 });
 
+// menu toggle
+document.querySelector(".menu-toggle").addEventListener("click", () => {
+  document.querySelector(".dashboard-sidebar").classList.toggle("active");
+});
 
 // ======================================================
 // LOAD ACTIVE ATTENDANCE SESSION
@@ -141,42 +146,37 @@ async function loadActiveSession(){
 
   }
 
-  snap.forEach(docSnap=>{
+  const sessionDoc = snap.docs[0];
+  const data = sessionDoc.data();
+  activeSessionId = sessionDoc.id;
 
-    const data = docSnap.data();
+  box.innerHTML = `
+    <div style="background:#ecfdf5;border:1px solid #10b98133;padding:18px;border-radius:14px;">
+      <h3 style="color:#065f46;margin-bottom:8px;">✅ Attendance Live</h3>
+      <p style="color:#047857;font-weight:600;">${data.activityName}</p>
+    </div>`;
 
-    activeSessionId = docSnap.id;
-
-    box.innerHTML = `
-
-      <div style="
-        background:#ecfdf5;
-        border:1px solid #10b98133;
-        padding:18px;
-        border-radius:14px;
-      ">
-
-        <h3 style="
-          color:#065f46;
-          margin-bottom:8px;
-        ">
-          ✅ Attendance Live
-        </h3>
-
-        <p style="
-          color:#047857;
-          font-weight:600;
-        ">
-          ${data.activityName}
-        </p>
-
-      </div>
-
-    `;
-
-  });
+  document.getElementById("markAttendanceBtn").disabled = false;
 
 }
+
+document.getElementById("markAttendanceBtn").addEventListener("click", async () => {
+  await markAttendance();
+});
+
+// add inside loadActiveSession() after activeSessionId is set:
+onSnapshot(
+  query(
+    collection(db, "attendanceRecords"),
+    where("sessionId", "==", activeSessionId)
+  ),
+  (snap) => {
+    document.getElementById("liveCount").innerText = snap.size;
+  }
+);
+
+const btn = document.getElementById("markAttendanceBtn");
+btn.disabled = true;
 
 // ======================================================
 // MARK ATTENDANCE
@@ -327,8 +327,80 @@ async function markAttendance(){
 
   }catch(err){
 
-    console.log(err);
+    btn.disabled = false;
+    console.error("markAttendance error:", err);
 
   }
 
+}
+
+async function loadStats() {
+  try {
+    const studentId = currentUserData.studentId;
+
+    const recordsSnap = await getDocs(query(
+      collection(db, "attendanceRecords"),
+      where("studentId", "==", studentId)
+    ));
+
+    const attendedSessionIds = recordsSnap.docs.map(d => d.data().sessionId);
+
+    if (attendedSessionIds.length === 0) {
+      updateStatUI(0, 0, 0, 0, 0, currentUserData.volunteerHours ?? 0);
+      return;
+    }
+
+    let activitiesAttended = 0;
+    let lecturesAttended = 0;
+
+    // chunk into 30 for Firestore "in" limit
+    for (let i = 0; i < attendedSessionIds.length; i += 30) {
+      const chunk = attendedSessionIds.slice(i, i + 30);
+      const sessionSnap = await getDocs(query(
+        collection(db, "attendanceSessions"),
+        where("__name__", "in", chunk)
+      ));
+      sessionSnap.forEach(s => {
+        const t = s.data().type?.toLowerCase();
+        if (t === "lecture") lecturesAttended++;
+        else activitiesAttended++;
+      });
+    }
+
+    // Count total activities from Firestore
+    const allActivitiesSnap = await getDocs(collection(db, "activities"));
+
+    let totalActivities = 0;
+    let totalLectures = 0;
+
+    allActivitiesSnap.forEach(d => {
+      const type = d.data().activityType?.toLowerCase();
+      if (type === "lecture") totalLectures++;
+      else totalActivities++;
+    });
+
+    const pct = Math.round(
+      ((activitiesAttended + lecturesAttended) / (totalActivities + totalLectures)) * 100
+    );
+
+    updateStatUI(
+      activitiesAttended, totalActivities,
+      lecturesAttended, totalLectures,
+      pct, currentUserData.volunteerHours ?? 0
+    );
+
+  } catch (err) {
+    console.error("loadStats error:", err);
+  }
+}
+
+function updateStatUI(actAtt, actTotal, lecAtt, lecTotal, pct, hours) {
+  document.getElementById("statActivitiesCount").innerText = actAtt;
+  document.getElementById("statActivitiesTotal").innerText = `Out of ${actTotal} Activities`;
+  document.getElementById("statLecturesCount").innerText = lecAtt;
+  document.getElementById("statLecturesTotal").innerText = `Out of ${lecTotal} Lectures`;
+  document.getElementById("statAttendancePct").innerText = `${pct}%`;
+  document.getElementById("statAttendanceLabel").innerText =
+    pct >= 90 ? "Excellent 🌟" : pct >= 75 ? "Good" : pct >= 60 ? "Average" : "Needs Improvement";
+  document.getElementById("statHours").innerText = hours;
 }

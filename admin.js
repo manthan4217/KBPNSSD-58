@@ -14,8 +14,11 @@ import {
   serverTimestamp,
   getDoc,
   query,
-  where
+  where,
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
 
 // YOUR FIREBASE CONFIG
 const firebaseConfig = {
@@ -31,6 +34,11 @@ const firebaseConfig = {
 // INIT
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const auth = getAuth();
+
+onAuthStateChanged(auth, (user) => {
+  if (!user) window.location.href = "login.html";
+});
 
 let currentAttendanceActivityId = null;
 /* ═══════════════════════════════════════════════════════════════
@@ -183,6 +191,8 @@ function loadMarks(){
 let selVols=[], sortKey="name", sortDir="asc";
 let attStep=1, sessionOn=false, sessionDone=false, presentList=[];
 let currentSessionId = null;
+let expiryTimer = null;
+let attendanceUnsubscribe = null;
 
 /* ═══════════════════════════════════════════════════════════════
    NAVIGATION
@@ -1003,7 +1013,8 @@ async function startSession(){
         activityName: activity.name,
         active: true,
         createdAt: Date.now(),
-        expiresAt: expiresAt
+        expiresAt: expiresAt,
+        type: activity.activityType?.toLowerCase() || "activity",
       }
     );
 
@@ -1029,76 +1040,31 @@ async function startSession(){
     // GENERATE REAL QR
     generateQRCode(currentSessionId);
 
-    setTimeout(async ()=>{
-
-      await updateDoc(
-        doc(db,
-        "attendanceSessions",
-        currentSessionId),
-        {
-          active:false
-        }
-      );
-
-      document.getElementById(
-        "sess-badge"
-      ).innerHTML =
-      '<div class="session-badge">QR EXPIRED</div>';
-
-      showToast(
-        "QR expired",
-        "warning"
-      );
-
+    expiryTimer = setTimeout(async () => {
+      await updateDoc(doc(db, "attendanceSessions", currentSessionId), { active: false });
+      document.getElementById("sess-badge").innerHTML = '<div class="session-badge">QR EXPIRED</div>';
+      showToast("QR expired", "warning");
     }, seconds * 1000);
 
     setStepUI(3);
 
-    listenAttendance(currentSessionId);
-
-    function listenAttendance(sessionId){
-      const q = query(
-        collection(db,"attendanceRecords"),
-        where("sessionId","==",sessionId)
-      );
-
-      onSnapshot(q,(snapshot)=>{
-
-        document.getElementById(
-          "presentCount"
-        ).textContent =
-        snapshot.size;
-
+    if (attendanceUnsubscribe) attendanceUnsubscribe();
+    attendanceUnsubscribe = onSnapshot(
+      query(collection(db, "attendanceRecords"), where("sessionId", "==", currentSessionId)),
+      (snapshot) => {
+        document.getElementById("presentCount").textContent = snapshot.size;
         let html = "";
-
-        snapshot.forEach(doc=>{
-
-          const data =
-            doc.data();
-
-          html += `
-            <div style="
-              padding:8px;
-              border-bottom:1px solid #eee;
-            ">
-              ${data.studentName}
-            </div>
-          `;
-
+        snapshot.forEach(doc => {
+          const d = doc.data();
+          html += `<div class="live-row">
+            <span style="font-weight:600;color:#0f172a;">${d.studentName}</span>
+            <span style="color:#64748b;">${d.studentId}</span>
+          </div>`;
         });
-
-        document.getElementById(
-          "presentList"
-        ).innerHTML =
-        html || `
-          <p style="color:#94a3b8">
-            Waiting for students to scan...
-          </p>
-        `;
-
-      });
-
-    }
+        document.getElementById("presentList").innerHTML =
+          html || `<p style="color:#94a3b8;font-size:13px;font-style:italic;">Waiting for students to scan…</p>`;
+      }
+    );
 
     showToast('Attendance session started!');
 
@@ -1112,7 +1078,7 @@ async function startSession(){
 
 }
 
-function updatePresent(){
+function listenAttendance(sessionId){
 
   document.getElementById('presentCount').textContent =
     presentList.length;
@@ -1149,6 +1115,9 @@ function updatePresent(){
 }
 async function endSession(){
 
+  if (expiryTimer) { clearTimeout(expiryTimer); expiryTimer = null; }
+  if (attendanceUnsubscribe) { attendanceUnsubscribe(); attendanceUnsubscribe = null; }
+
   closeModal('endModal');
 
   try{
@@ -1173,8 +1142,8 @@ async function endSession(){
 
     document.getElementById('sess-summary').style.display='block';
 
-    document.getElementById('sess-summary').textContent =
-      `✅ ${presentList.length} students marked present`;
+    const count = document.getElementById("presentCount").textContent || "0";
+    document.getElementById("sess-summary").textContent = `✅ ${count} students marked present`;
 
     showToast('Session ended successfully');
 
@@ -1191,6 +1160,9 @@ async function endSession(){
 /* ═══════════════════════════════════════════════════════════════
    VOLUNTEERS
 ═══════════════════════════════════════════════════════════════ */
+let cachedAttendanceRecords = [];
+let cachedTotalActivities = 0;
+
 async function renderVolunteers(){
 
   document.getElementById('vol-count').textContent='('+vols.length+')';
@@ -1236,10 +1208,13 @@ async function renderVolunteers(){
   // ROWS
   let rows = '';
 
-for(const v of filtered){
+filtered.forEach(v => {
 
-  const attData =
-    await calculateAttendance(v.studentId);
+  const attData = (() => {
+    const attended = cachedAttendanceRecords.filter(r => r.studentId === v.studentId).length;
+    const pct = cachedTotalActivities > 0 ? Math.round((attended / cachedTotalActivities) * 100) : 0;
+    return { attended, totalActivities: cachedTotalActivities, percentage: pct };
+  })();
 
   rows += `
 
@@ -1335,7 +1310,7 @@ for(const v of filtered){
 
   </tr>
   `;
-}
+});
 
 body.innerHTML = rows;
 
@@ -1566,10 +1541,8 @@ function sendReset(){
   document.getElementById('rstEmail').value='';
 }
 function clearAll(){
-  vols=[];acts=[];marks=[];selVols=[];
   closeModal('clearModal');
-  renderDashboard();
-  showToast('All data cleared.','warning');
+  showToast('Use Firebase Console to clear data.', 'error');
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -1582,6 +1555,13 @@ window.addEventListener('DOMContentLoaded', async ()=>{
   await loadVolunteers();
 
   await loadMarks();
+
+  const [attCache, actCache] = await Promise.all([
+    getDocs(collection(db, "attendanceRecords")),
+    getDocs(collection(db, "activities"))
+  ]);
+  cachedAttendanceRecords = attCache.docs.map(d => d.data());
+  cachedTotalActivities = actCache.size;
 
   renderDashboard();
 
@@ -1662,7 +1642,7 @@ async function openVolunteerProfile(studentId){
   totalActivities = activitiesSnap.size;
 
   // MOCK LECTURES
-  totalLectures = Math.floor(totalAttendance / 2);
+  totalLectures = 0; // real data not yet available — remove card from modal below
 
   // MARKS
   const markData =
@@ -1847,6 +1827,18 @@ if(window.innerWidth <= 768){
   );
 
 }
+// logout
+async function handleLogout() {
+  closeModal('logoutModal');
+  try {
+    await signOut(auth);
+    window.location.href = "index.html";
+  } catch(err) {
+    console.error(err);
+    showToast('Logout failed', 'error');
+  }
+}
+window.handleLogout = handleLogout;
 
 // GLOBAL FUNCTIONS FOR HTML onclick
 
