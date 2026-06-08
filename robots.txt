@@ -1,0 +1,14 @@
+User-agent: *
+Allow: /
+
+# Block sensitive pages from Google
+Disallow: /admin.html
+Disallow: /dashboard.html
+Disallow: /attendance.html
+
+# Block raw assets
+Disallow: /images/
+Disallow: /*.pdf$
+Disallow: /*.docx$
+
+Sitemap: https://manthan4217.github.io/KBPNSSD-58/sitemap.xml
