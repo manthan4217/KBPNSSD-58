@@ -137,14 +137,74 @@ document.getElementById("nssForm")
   const photoFile =
   document.getElementById("profilePhoto").files[0];
 
-  // PASSWORD CHECK
+  // ── FULL FORM VALIDATION ─────────────────────────
 
-  if(password !== confirmPassword){
+  const errors = [];
 
-    alert("Passwords do not match");
-    return;
+  // Strip HTML tags from text fields
+  const strip = s => s.replace(/<[^>]*>/g, '').trim();
 
+  const cleanName    = strip(fullName);
+  const cleanAddress = strip(address);
+
+  // Name — letters, spaces, dots only
+  if (!/^[a-zA-Z\s.'-]{2,80}$/.test(cleanName)) {
+    errors.push("Full name must be 2–80 characters, letters only");
   }
+
+  // Phone — 10 digits starting with 6–9
+  if (!/^[6-9]\d{9}$/.test(contact)) {
+    errors.push("Enter a valid 10-digit Indian mobile number");
+  }
+
+  // Email — basic format
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    errors.push("Enter a valid email address");
+  }
+
+  // Student ID — alphanumeric, 2–20 chars
+  if (!/^[A-Z0-9]{2,20}$/i.test(studentId)) {
+    errors.push("Student ID must be 2–20 letters/numbers only");
+  }
+
+  // Password — min 8 chars
+  if (password.length < 8) {
+    errors.push("Password must be at least 8 characters");
+  }
+
+  // Password — at least one number
+  if (!/\d/.test(password)) {
+    errors.push("Password must contain at least one number");
+  }
+
+  // Confirm password
+  if (password !== confirmPassword) {
+    errors.push("Passwords do not match");
+  }
+
+  // Photo required
+  if (!photoFile) {
+    errors.push("Please upload a profile photo");
+  }
+
+  // Photo type and size check
+  if (photoFile) {
+    const allowedTypes = ['image/jpeg', 'image/png'];
+    if (!allowedTypes.includes(photoFile.type)) {
+      errors.push("Only JPG and PNG photos allowed");
+    }
+    if (photoFile.size > 2 * 1024 * 1024) {
+      errors.push("Photo must be under 2MB");
+    }
+  }
+
+  // Show all errors at once
+  if (errors.length > 0) {
+    alert(errors.join("\n"));
+    return;
+  }
+
+  // ── END VALIDATION ───────────────────────────────
 
   try{
 
@@ -194,9 +254,9 @@ document.getElementById("nssForm")
       doc(db, "volunteers", userCredential.user.uid),
       {
 
-        uid:userCredential.user.uid,
+        uid: userCredential.user.uid,
 
-        fullName,
+        fullName:  cleanName,      // sanitized
         className,
         rollNo,
         studentId,
@@ -204,10 +264,10 @@ document.getElementById("nssForm")
         division:
           document.getElementById("division").value,
 
-          gender:
+        gender:
           document.getElementById("gender").value,
 
-        address,
+        address:   cleanAddress,   // sanitized
         contact,
         email: loginEmail,
 
@@ -218,7 +278,7 @@ document.getElementById("nssForm")
 
         photoURL,
 
-        joinedAt:new Date()
+        joinedAt: new Date()
 
       }
     );
@@ -228,8 +288,6 @@ document.getElementById("nssForm")
     window.location.href = "login.html";
 
   }catch(error){
-
-    console.error(error);
 
     alert(error.message);
 

@@ -5,45 +5,56 @@ import {
 }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
+// ── RATE LIMITING ────────────────────────────────
+let loginAttempts = 0;
+const MAX_ATTEMPTS = 5;
+let lockoutUntil = 0;
+
+function isLockedOut() {
+  return Date.now() < lockoutUntil;
+}
+
+function getRemainingTime() {
+  return Math.ceil((lockoutUntil - Date.now()) / 1000);
+}
+// ────────────────────────────────────────────────
+
 const loginBtn = document.getElementById("loginBtn");
 
 if (loginBtn) {
 
   loginBtn.addEventListener("click", async () => {
 
-    const studentId = document.getElementById("studentId").value.trim();
+    // ── CHECK LOCKOUT FIRST ──────────────────────
+    if (isLockedOut()) {
+      document.getElementById("error").innerText =
+        `Too many failed attempts. Try again in ${getRemainingTime()} seconds.`;
+      return;
+    }
+    // ────────────────────────────────────────────
+
+    const email    = document.getElementById("studentId").value.trim();
     const password = document.getElementById("password").value;
 
-    const email =
-      document.getElementById("studentId")
-      .value
-      .trim();
-
     try {
-
       await signInWithEmailAndPassword(auth, email, password);
 
-      const pendingSession =
-      localStorage.getItem(
-        "attendanceSession"
-      );
+      loginAttempts = 0; // ← reset on success
 
-      if(pendingSession){
-
-        window.location.href =
-        `attendance.html?session=${pendingSession}`;
-
-        return;
-      }
-
-      window.location.href ="dashboard.html";
-
-      // ================= STEP 3 (DEVICE ID - IMPORTANT) =================
+      // Device ID
       if (!localStorage.getItem("deviceId")) {
         localStorage.setItem("deviceId", crypto.randomUUID());
       }
 
-      // ================= REDIRECT =================
+      // Pending session
+      const pendingSession = localStorage.getItem("attendanceSession");
+      if (pendingSession) {
+        localStorage.removeItem("attendanceSession");
+        window.location.href = `attendance.html?session=${pendingSession}`;
+        return;
+      }
+
+      // Redirect by role
       if (email === "admin@nssd58.com") {
         window.location.href = "admin.html";
       } else {
@@ -51,11 +62,24 @@ if (loginBtn) {
       }
 
     } catch (err) {
-      document.getElementById("error").innerText = "Invalid login";
+
+      // ── COUNT FAILED ATTEMPTS ──────────────────
+      loginAttempts++;
+
+      if (loginAttempts >= MAX_ATTEMPTS) {
+        lockoutUntil = Date.now() + (15 * 60 * 1000); // 15 min
+        loginAttempts = 0;
+        document.getElementById("error").innerText =
+          "Too many failed attempts. Locked for 15 minutes.";
+      } else {
+        document.getElementById("error").innerText =
+          `Invalid login. ${MAX_ATTEMPTS - loginAttempts} attempts remaining.`;
+      }
+      // ──────────────────────────────────────────
+
     }
 
   });
-
 }
 
 const passwordInput =

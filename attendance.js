@@ -118,6 +118,55 @@ onAuthStateChanged(auth, async(user)=>{
       return;
     }
 
+    // ── LOCATION CHECK (if session has a location) ──
+    if (session.latitude && session.longitude) {
+
+      await new Promise((resolve, reject) => {
+
+        if (!navigator.geolocation) {
+          reject("❌ Location not supported on this device");
+          return;
+        }
+
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+
+            const R = 6371000;
+            const dLat = (position.coords.latitude - session.latitude)
+                        * Math.PI / 180;
+            const dLon = (position.coords.longitude - session.longitude)
+                        * Math.PI / 180;
+
+            const a =
+              Math.sin(dLat/2) * Math.sin(dLat/2) +
+              Math.cos(session.latitude * Math.PI/180) *
+              Math.cos(position.coords.latitude * Math.PI/180) *
+              Math.sin(dLon/2) * Math.sin(dLon/2);
+
+            const distance =
+              R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+
+            const radius = session.radius || 300;
+
+            if (distance > radius) {
+              reject(
+                `❌ You are ${Math.round(distance)}m away from the activity location. ` +
+                `You must be within ${radius}m to mark attendance.`
+              );
+            } else {
+              resolve(true);
+            }
+          },
+          () => {
+            reject("❌ Location access denied. Enable GPS to mark attendance.");
+          },
+          { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+        );
+
+      });
+    }
+    // ── END LOCATION CHECK ──────────────────────────
+
     await addDoc(
       collection(db,"attendanceRecords"),
       {

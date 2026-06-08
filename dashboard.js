@@ -29,8 +29,6 @@ let currentUserData = null;
 
 onAuthStateChanged(auth, async (user) => {
 
-  console.log("User:", user);
-
   if (!user) {
 
     window.location.href = "login.html";
@@ -43,10 +41,7 @@ onAuthStateChanged(auth, async (user) => {
     const docSnap =
     await getDoc(doc(db, "volunteers", user.uid));
 
-    console.log("Doc Exists:", docSnap.exists());
-
     if(docSnap.exists()){
-      console.log("Volunteer Data:", docSnap.data());
     }
 
     if(docSnap.exists()){
@@ -92,8 +87,6 @@ onAuthStateChanged(auth, async (user) => {
     }
 
   }catch(error){
-
-    console.log(error);
 
   }
 

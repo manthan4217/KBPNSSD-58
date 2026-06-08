@@ -25,8 +25,6 @@ import { db, auth } from "./firebase.js";
 
 // INIT
 
-
-
 onAuthStateChanged(auth, async (user) => {
 
    if (!user) {
@@ -41,7 +39,19 @@ onAuthStateChanged(auth, async (user) => {
       return;
    }
 
-   loadAdminPanel();
+   // Load all admin data
+   await loadActivities();
+   await loadVolunteers();
+   await loadMarks();
+
+   const [attCache, actCache] = await Promise.all([
+      getDocs(collection(db, "attendanceRecords")),
+      getDocs(collection(db, "activities"))
+   ]);
+   cachedAttendanceRecords = attCache.docs.map(d => d.data());
+   cachedTotalActivities = actCache.size;
+
+   renderDashboard();
 });
 
 let currentAttendanceActivityId = null;
@@ -78,8 +88,6 @@ function loadVolunteers(){
       });
 
     });
-
-    console.log("Realtime volunteers:", vols);
 
     renderVolunteers();
     renderDashboard();
@@ -174,8 +182,6 @@ function loadMarks(){
 
       });
 
-      console.log("Realtime marks:", marks);
-
       renderMarksTable();
 
     },
@@ -245,6 +251,20 @@ document.getElementById('collapseBtn').addEventListener('click',()=>{
   document.getElementById('collapseArrow').textContent=sb.classList.contains('collapsed')?'▶':'◀';
 });
 
+// ═══════════════════════════════════════════════
+// SECURITY — sanitize all Firestore data before
+// injecting into innerHTML to prevent XSS attacks
+// ═══════════════════════════════════════════════
+function esc(str) {
+  if (!str) return '-';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#x27;');
+}
+
 /* ═══════════════════════════════════════════════════════════════
    TOAST
 ═══════════════════════════════════════════════════════════════ */
@@ -295,8 +315,8 @@ function renderDashboard(){
   const recent=[...acts].sort((a,b)=>b.id-a.id).slice(0,5);
   document.getElementById('dash-recent').innerHTML=recent.map(a=>`
     <tr>
-      <td style="font-weight:500;">${a.name}</td>
-      <td style="color:#64748b;">${a.date}</td>
+      <td style="font-weight:500;">${esc(a.name)}</td>
+      <td style="color:#64748b;">${esc(a.date)}</td>
       <td>${pill(a.status,a.status==='Completed'?'pill-green':'pill-amber')}</td>
     </tr>`).join('');
 }
@@ -320,11 +340,11 @@ function renderActivities(){
     <div class="act-card">
       <div class="act-card-body">
         <div class="act-pills">
-          <span class="act-name">${a.name}</span>
+          <span class="act-name">${esc(a.name)}</span>
           ${pill(a.status,a.status==='Completed'?'pill-green':'pill-amber')}
-          ${pill('📅 '+a.date,'pill-blue')}
+          ${pill('📅 '+esc(a.date),'pill-blue')}
         </div>
-        <div class="act-desc">${a.desc}</div>
+        <div class="act-desc">${esc(a.desc)}</div>
       </div>
       <div class="act-actions">
         <button
@@ -431,29 +451,29 @@ async function viewAttendance(activityId){
 
       <p>
         <b>Activity:</b>
-        ${activity.name}
+        ${esc(activity.name)}
       </p>
 
       <p>
         <b>Date:</b>
-        ${activity.date}
+        ${esc(activity.date)}
       </p>
 
       <p>
         <b>Venue:</b>
-        ${activity.venue || '-'}
+        ${esc(activity.venue) || '-'}
       </p>
 
       <p>
         <b>Time:</b>
-        ${activity.timeFrom || '-'}
+        ${esc(activity.timeFrom) || '-'}
         to
-        ${activity.timeTo || '-'}
+        ${esc(activity.timeTo) || '-'}
       </p>
 
       <p>
         <b>Total Hours:</b>
-        ${activity.totalHours || '-'}
+        ${esc(activity.totalHours) || '-'}
       </p>
 
       <table class="attendance-table">
@@ -523,19 +543,19 @@ async function viewAttendance(activityId){
           <td>${sr++}</td>
 
           <td>
-            ${volunteer?.fullName || data.studentName}
+            ${esc(volunteer?.fullName || data.studentName)}
           </td>
 
           <td>
-            ${volunteer?.className || '-'}
+            ${esc(volunteer?.className) || '-'}
           </td>
 
           <td>
-            ${volunteer?.division || '-'}
+            ${esc(volunteer?.division) || '-'}
           </td>
 
           <td>
-            ${volunteer?.gender || '-'}
+            ${esc(volunteer?.gender) || '-'}
           </td>
 
         </tr>
@@ -921,8 +941,6 @@ function loadActivities(){
 
     });
 
-    console.log("Realtime activities:", acts);
-
     renderActivities();
     renderDashboard();
     renderAttendanceSelects();
@@ -966,7 +984,7 @@ function goAttendance(id){
 ═══════════════════════════════════════════════════════════════ */
 function renderAttendanceSelects(){
   const sel=document.getElementById('attActSel');
-  sel.innerHTML='<option value="">-- Choose an activity --</option>'+acts.map(a=>`<option value="${a.id}">${a.name} · ${a.date}</option>`).join('');
+  sel.innerHTML='<option value="">-- Choose an activity --</option>'+acts.map(a=>`<option value="${a.id}">${esc(a.name)} · ${esc(a.date)}</option>`).join('');
 }
 function onAttActChange(){
   const v=document.getElementById('attActSel').value;
@@ -993,38 +1011,58 @@ function buildQR(){
 async function startSession(){
 
   const actId = document.getElementById('attActSel').value;
-
   if(!actId){
     showToast('Select an activity first.','error');
     return;
   }
 
   const activity = acts.find(a => a.id === actId);
+  const seconds = Number(document.getElementById('qrRange').value);
 
-  const seconds =
-    Number(document.getElementById('qrRange').value);
+  // ── GET ADMIN'S CURRENT LOCATION ──────────────
+  showToast('Getting your location...', 'warning');
 
-  try{
+  let latitude, longitude;
 
-    // CREATE FIREBASE SESSION
-    const expiresAt =
-      Date.now() + (seconds * 1000);
+  try {
+    const pos = await new Promise((resolve, reject) => {
+      navigator.geolocation.getCurrentPosition(
+        resolve, reject,
+        { enableHighAccuracy: true, timeout: 10000 }
+      );
+    });
+    latitude  = pos.coords.latitude;
+    longitude = pos.coords.longitude;
+    showToast(`Location captured ✅`);
+  } catch(err) {
+    showToast('Location access denied — session started without location check', 'warning');
+    latitude  = null;
+    longitude = null;
+  }
+  // ──────────────────────────────────────────────
+
+  try {
+    const expiresAt = Date.now() + (seconds * 1000);
 
     const docRef = await addDoc(
-      collection(db,"attendanceSessions"),
+      collection(db, "attendanceSessions"),
       {
-        activityId: actId,
+        activityId:   actId,
         activityName: activity.name,
-        active: true,
-        createdAt: Date.now(),
-        expiresAt: expiresAt,
-        type: activity.activityType?.toLowerCase() || "activity",
+        active:       true,
+        createdAt:    Date.now(),
+        expiresAt:    expiresAt,
+        type:         activity.activityType?.toLowerCase() || "activity",
+        // ── Store location in session ──
+        latitude:     latitude,
+        longitude:    longitude,
+        radius:       300       // metres — adjust per activity
       }
     );
 
     currentSessionId = docRef.id;
 
-    console.log("Session Created:", currentSessionId);
+    // rest of your existing startSession code continues...
 
     // UI
     sessionOn=true;
@@ -1238,23 +1276,23 @@ filtered.forEach(v => {
     </td>
 
     <td style="font-weight:600;">
-      ${v.fullName || '-'}
+      ${esc(v.fullName)}
     </td>
 
     <td style="color:#64748b;">
-      ${v.studentId || '-'}
+      ${esc(v.studentId)}
     </td>
 
     <td style="color:#64748b;">
-      ${v.className || '-'}
+      ${esc(v.className)}
     </td>
 
     <td style="color:#64748b;">
-      ${v.contact || '-'}
+      ${esc(v.contact.slice(0,4))}••••••
     </td>
 
     <td style="color:#64748b;">
-      ${v.email || '-'}
+      ${esc(v.email.split('@')[0].slice(0,3))}•••@${esc(v.email.split('@')[1])}
     </td>
 
     <td>
@@ -1434,7 +1472,7 @@ function populateVolSelect(){
 
     vols.map(v=>`
       <option value="${v.studentId}">
-        ${v.fullName} (${v.studentId})
+        ${esc(v.fullName)} (${esc(v.studentId)})
       </option>
     `).join('');
 
@@ -1514,19 +1552,19 @@ function renderMarksTable(){
       <tr>
 
       <td style="padding:12px 18px;font-weight:600;">
-      ${m.studentName}
+      ${esc(m.studentName)}
       </td>
 
       <td style="padding:12px 18px;">
-      ${m.attendanceMarks}
+      ${esc(m.attendanceMarks)}
       </td>
 
       <td style="padding:12px 18px;">
-      ${m.activityMarks}
+      ${esc(m.activityMarks)}
       </td>
 
       <td style="padding:12px 18px;font-weight:800;color:#2563eb;">
-      ${m.totalMarks}
+      ${esc(m.totalMarks)}
       </td>
 
       </tr>
@@ -1679,11 +1717,11 @@ async function openVolunteerProfile(studentId){
           margin:0;
           color:#0f172a;
         ">
-          ${volunteer.fullName}
+          ${esc(volunteer.fullName)}
         </h2>
 
         <p style="color:#64748b;margin:8px 0;">
-          ${volunteer.studentId}
+          ${esc(volunteer.studentId)}
         </p>
 
         <div style="
@@ -1693,7 +1731,7 @@ async function openVolunteerProfile(studentId){
         ">
 
           <span class="pill pill-blue">
-            ${volunteer.className || 'N/A'}
+            ${esc(volunteer.className) || 'N/A'}
           </span>
 
           <span class="pill pill-green">
@@ -1737,7 +1775,7 @@ async function openVolunteerProfile(studentId){
 
       <div class="card">
         <div class="card-val">
-          ${markData?.totalMarks || 0}
+          ${esc(markData?.totalMarks) || 0}
         </div>
         <div class="card-lbl">
           Total Marks
@@ -1750,17 +1788,17 @@ async function openVolunteerProfile(studentId){
 
       <h3>Volunteer Details</h3>
 
-      <p><b>Email:</b> ${volunteer.email || '-'}</p>
+      <p><b>Email:</b> ${esc(volunteer.email)}</p>
 
-      <p><b>Contact:</b> ${volunteer.contact || '-'}</p>
+      <p><b>Contact:</b> ${esc(volunteer.contact) || '-'}</p>
 
-      <p><b>Blood Group:</b> ${volunteer.bloodGroup || '-'}</p>
+      <p><b>Blood Group:</b> ${esc(volunteer.bloodGroup) || '-'}</p>
 
-      <p><b>Address:</b> ${volunteer.address || '-'}</p>
+      <p><b>Address:</b> ${esc(volunteer.address) || '-'}</p>
 
-      <p><b>Date of Birth:</b> ${volunteer.dob || '-'}</p>
+      <p><b>Date of Birth:</b> ${esc(volunteer.dob) || '-'}</p>
 
-      <p><b>Caste:</b> ${volunteer.caste || '-'}</p>
+      <p><b>Caste:</b> ${esc(volunteer.caste) || '-'}</p>
 
     </div>
 
