@@ -1,0 +1,7 @@
+echo "*.docx" >> .gitignore
+echo "*.xlsx" >> .gitignore
+echo "*.pdf" >> .gitignore
+echo ".DS_Store" >> .gitignore
+echo "Thumbs.db" >> .gitignore
+echo ".env" >> .gitignore
+echo "secrets.json" >> .gitignore
