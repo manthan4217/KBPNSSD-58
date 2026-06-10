@@ -14,10 +14,7 @@ import { getFirestore, collection, addDoc, serverTimestamp }
   from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 /* ── Firebase (reuse existing app if already initialized) ────────── */
-import { db } from "./firebase.js";
-
-const app = getApps().length ? getApps()[0] : initializeApp(FB_CONFIG);
-const db  = getFirestore(app);
+import { db, auth } from "./firebase.js";
 
 /* ── Categories shown in the drawer ─────────────────────────────── */
 const TYPES = [
@@ -155,6 +152,7 @@ const CSS = `
   /* Drawer header */
   .nss-fb-hdr {
     display: flex;
+    bottom: 0px;
     align-items: center;
     justify-content: space-between;
     padding: 18px 20px 14px;

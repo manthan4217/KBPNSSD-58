@@ -15,6 +15,7 @@ import {
   getDoc,
   query,
   where,
+  orderBy,   // ← add this
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
@@ -1924,7 +1925,7 @@ document.querySelector('[data-tab="feedback"]')
   ?.addEventListener("click", () => {
     if (!window._fbInit) { window._fbInit = true; initFeedbackTab(); }
   });
-  
+
 
 /*mobile menu*/
 const mobileMenuBtn =
