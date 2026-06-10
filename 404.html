@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NSS Unit D-58 · KBP College, Vashi</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --green:#145c3a;--green-2:#1e7a50;--green-3:#22c55e;
+  --green-pale:#f0fdf4;--green-faint:#f7fbf8;
+  --text:#111a14;--text-2:#5a7a66;--text-3:#a0b8a8;
+  --border:rgba(20,92,58,0.1);--white:#ffffff;
+  --shadow:0 2px 20px rgba(20,92,58,0.06),0 1px 4px rgba(0,0,0,0.03);
+  --shadow-lg:0 24px 64px rgba(20,92,58,0.08),0 8px 24px rgba(0,0,0,0.04);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  font-family:'Inter',sans-serif;
+  background:#f3f7f4;
+  color:var(--text);
+  min-height:100vh;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ── BACKGROUND ── */
+.bg{
+  position:fixed;inset:0;z-index:0;
+  background:
+    radial-gradient(ellipse 80% 60% at 10% 10%, rgba(34,197,94,0.06) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 90% 80%, rgba(20,92,58,0.05) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 40% at 50% 50%, rgba(240,253,244,0.8) 0%, transparent 100%),
+    linear-gradient(160deg, #eef6ef 0%, #f5f9f5 40%, #f9fbf9 100%);
+}
+.bg::after{
+  content:'';position:absolute;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  background-size:200px;opacity:0.5;pointer-events:none;
+}
+
+/* ── PAGE ── */
+.page{
+  position:relative;z-index:1;
+  min-height:100vh;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:48px 24px 64px;
+  gap:0;
+}
+
+/* ── TOP BADGE ── */
+.badge{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(255,255,255,0.85);
+  border:1px solid rgba(20,92,58,0.12);
+  border-radius:999px;padding:7px 16px;
+  font-size:12px;font-weight:500;color:var(--text-2);
+  letter-spacing:0.02em;
+  backdrop-filter:blur(8px);
+  box-shadow:0 1px 8px rgba(20,92,58,0.06);
+  margin-bottom:52px;
+  animation:fadeUp 0.5s ease both;
+}
+.badge-dot{
+  width:7px;height:7px;border-radius:50%;
+  background:var(--green-3);
+  box-shadow:0 0 0 3px rgba(34,197,94,0.15);
+  animation:pulse 2.5s ease-in-out infinite;
+}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 3px rgba(34,197,94,0.15)}50%{box-shadow:0 0 0 6px rgba(34,197,94,0.06)}}
+
+/* ── BOTANICAL SVG ── */
+.botanical{
+  margin-bottom:36px;
+  animation:fadeUp 0.55s ease 0.05s both;
+  opacity:0.85;
+}
+
+/* ── HEADLINE ── */
+.headline{
+  font-family:'Playfair Display',Georgia,serif;
+  font-size:clamp(32px,6vw,52px);
+  font-weight:700;
+  color:var(--text);
+  line-height:1.2;
+  letter-spacing:-0.5px;
+  text-align:center;
+  max-width:520px;
+  margin-bottom:20px;
+  animation:fadeUp 0.6s ease 0.1s both;
+}
+.headline em{
+  font-style:italic;color:var(--green);
+}
+
+/* ── SUBTEXT ── */
+.subtext{
+  font-size:16px;font-weight:400;
+  color:var(--text-2);line-height:1.75;
+  text-align:center;max-width:420px;
+  margin-bottom:52px;
+  animation:fadeUp 0.6s ease 0.15s both;
+}
+
+/* ── CARD ── */
+.card{
+  width:100%;max-width:480px;
+  background:rgba(255,255,255,0.9);
+  border:1px solid rgba(20,92,58,0.08);
+  border-radius:24px;
+  box-shadow:var(--shadow-lg);
+  overflow:hidden;
+  backdrop-filter:blur(16px);
+  margin-bottom:20px;
+  animation:fadeUp 0.65s ease 0.2s both;
+}
+
+/* COLLEGE INFO STRIP */
+.college-strip{
+  background:linear-gradient(135deg,var(--green) 0%,var(--green-2) 100%);
+  padding:20px 28px;
+  display:flex;align-items:center;gap:14px;
+}
+.college-icon{
+  width:44px;height:44px;border-radius:12px;
+  background:rgba(255,255,255,0.15);
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;flex-shrink:0;
+}
+.college-name{
+  font-size:14px;font-weight:600;color:rgba(255,255,255,0.95);
+  line-height:1.3;
+}
+.college-sub{
+  font-size:11.5px;color:rgba(255,255,255,0.65);
+  margin-top:2px;
+}
+.nss-tag{
+  margin-left:auto;
+  background:rgba(255,255,255,0.15);
+  border:1px solid rgba(255,255,255,0.2);
+  border-radius:999px;padding:4px 12px;
+  font-size:11px;font-weight:600;
+  color:rgba(255,255,255,0.9);
+  white-space:nowrap;flex-shrink:0;
+}
+
+/* PAGE STATUS */
+.status-body{padding:24px 28px;}
+.status-label{
+  font-size:11px;font-weight:600;
+  text-transform:uppercase;letter-spacing:0.08em;
+  color:var(--text-3);margin-bottom:14px;
+}
+.status-message{
+  font-size:14px;color:var(--text-2);
+  line-height:1.65;margin-bottom:20px;
+  padding:14px 16px;
+  background:var(--green-faint);
+  border-radius:12px;
+  border-left:3px solid rgba(20,92,58,0.2);
+}
+.status-message strong{color:var(--green);font-weight:600;}
+
+/* PROGRESS */
+.progress-row{display:flex;align-items:center;gap:12px;margin-bottom:6px;}
+.progress-track{flex:1;height:6px;background:rgba(20,92,58,0.08);border-radius:999px;overflow:hidden;}
+.progress-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--green),var(--green-3));border-radius:999px;transition:width 2s cubic-bezier(.25,1,.5,1);}
+.progress-pct{font-size:13px;font-weight:700;color:var(--green);font-variant-numeric:tabular-nums;white-space:nowrap;}
+.progress-sub{font-size:11.5px;color:var(--text-3);}
+
+/* DIVIDER */
+.divider{height:1px;background:rgba(20,92,58,0.07);margin:20px 0;}
+
+/* DEVELOPER */
+.dev-row{display:flex;align-items:center;gap:12px;}
+.dev-avatar{
+  width:44px;height:44px;border-radius:12px;
+  background:linear-gradient(135deg,var(--green),var(--green-2));
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;font-weight:700;color:white;flex-shrink:0;
+  box-shadow:0 4px 10px rgba(20,92,58,0.2);
+  position:relative;
+}
+.dev-avatar::after{
+  content:'';position:absolute;bottom:-2px;right:-2px;
+  width:12px;height:12px;border-radius:50%;
+  background:var(--green-3);border:2px solid white;
+}
+.dev-info{flex:1;}
+.dev-name{font-size:14px;font-weight:600;color:var(--text);}
+.dev-role{font-size:12px;color:var(--text-2);margin-top:1px;}
+.dev-actions{display:flex;gap:7px;flex-shrink:0;}
+.btn-sm{
+  padding:7px 14px;border-radius:999px;
+  font-family:'Inter',sans-serif;font-size:12px;font-weight:600;
+  cursor:pointer;transition:all 0.18s ease;
+  display:flex;align-items:center;gap:5px;text-decoration:none;
+}
+.btn-sm-primary{background:var(--green);color:white;border:none;box-shadow:0 2px 8px rgba(20,92,58,0.2);}
+.btn-sm-primary:hover{background:var(--green-2);transform:translateY(-1px);}
+.btn-sm-ghost{background:transparent;color:var(--text-2);border:1px solid var(--border);}
+.btn-sm-ghost:hover{border-color:rgba(20,92,58,0.25);color:var(--green);transform:translateY(-1px);}
+
+/* ── NAV BUTTONS ── */
+.nav{
+  display:flex;gap:10px;flex-wrap:wrap;justify-content:center;
+  animation:fadeUp 0.65s ease 0.25s both;
+}
+.btn-home{
+  padding:13px 30px;border-radius:999px;border:none;
+  background:var(--text);color:white;
+  font-family:'Inter',sans-serif;font-size:14px;font-weight:600;
+  cursor:pointer;text-decoration:none;
+  display:inline-flex;align-items:center;gap:7px;
+  box-shadow:0 4px 16px rgba(0,0,0,0.12);
+  transition:transform 0.18s,box-shadow 0.18s;
+}
+.btn-home:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.14);}
+.btn-back{
+  padding:13px 24px;border-radius:999px;
+  border:1px solid rgba(20,92,58,0.15);background:rgba(255,255,255,0.8);
+  color:var(--text-2);font-family:'Inter',sans-serif;
+  font-size:14px;font-weight:500;cursor:pointer;
+  display:inline-flex;align-items:center;gap:6px;
+  backdrop-filter:blur(8px);
+  transition:all 0.18s ease;text-decoration:none;
+}
+.btn-back:hover{border-color:rgba(20,92,58,0.25);color:var(--green);transform:translateY(-2px);}
+
+/* ── FOOTER ── */
+.footer{
+  margin-top:36px;text-align:center;
+  font-size:12px;color:var(--text-3);line-height:1.8;
+  animation:fadeUp 0.65s ease 0.3s both;
+}
+.footer strong{color:var(--text-2);font-weight:500;}
+
+/* ── TOAST ── */
+#toasts{position:fixed;bottom:24px;right:24px;display:flex;flex-direction:column;gap:8px;z-index:9999;}
+.toast{
+  display:flex;align-items:center;gap:9px;
+  background:var(--text);color:white;
+  border-radius:14px;padding:11px 16px;
+  font-size:13px;font-weight:500;max-width:280px;
+  box-shadow:0 8px 32px rgba(0,0,0,0.2);
+  animation:toastIn 0.32s cubic-bezier(.34,1.56,.64,1);
+}
+.toast.out{animation:toastOut 0.25s ease forwards;}
+@keyframes toastIn{from{transform:translateX(60px) scale(0.95);opacity:0}to{transform:none;opacity:1}}
+@keyframes toastOut{to{transform:translateX(60px) scale(0.95);opacity:0}}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp{from{transform:translateY(16px);opacity:0}to{transform:none;opacity:1}}
+
+@media(max-width:480px){
+  .page{padding:40px 18px 56px;justify-content:flex-start;padding-top:56px;}
+  .badge{margin-bottom:40px;}
+  .headline{font-size:30px;margin-bottom:16px;}
+  .subtext{font-size:14.5px;margin-bottom:40px;}
+  .college-strip{flex-wrap:wrap;}
+  .nss-tag{margin-left:0;}
+  .status-body{padding:20px;}
+  .dev-row{flex-wrap:wrap;}
+  .dev-actions{width:100%;}
+  .btn-sm{flex:1;justify-content:center;}
+}
+</style>
+</head>
+<body>
+
+<div class="bg"></div>
+<div id="toasts"></div>
+
+<div class="page">
+
+  <!-- BADGE -->
+  <div class="badge">
+    <span class="badge-dot"></span>
+    Karmaveer Bhaurao Patil College, Vashi
+  </div>
+
+  <!-- BOTANICAL ILLUSTRATION -->
+  <div class="botanical">
+    <svg width="72" height="72" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="36" cy="36" r="36" fill="#f0fdf4"/>
+      <!-- stem -->
+      <path d="M36 56 Q36 40 36 28" stroke="#145c3a" stroke-width="2.5" stroke-linecap="round"/>
+      <!-- left leaf -->
+      <path d="M36 38 Q24 32 20 20 Q30 22 36 38Z" fill="#22c55e" opacity="0.85"/>
+      <path d="M36 38 Q24 32 20 20" stroke="#16a34a" stroke-width="1" stroke-linecap="round" fill="none"/>
+      <!-- right leaf -->
+      <path d="M36 32 Q48 26 52 14 Q42 16 36 32Z" fill="#4ade80" opacity="0.85"/>
+      <path d="M36 32 Q48 26 52 14" stroke="#22c55e" stroke-width="1" stroke-linecap="round" fill="none"/>
+      <!-- small left -->
+      <path d="M36 46 Q28 42 26 34 Q33 37 36 46Z" fill="#86efac" opacity="0.7"/>
+      <!-- pot -->
+      <path d="M28 58 L30 68 L42 68 L44 58Z" fill="#c2410c" opacity="0.9"/>
+      <ellipse cx="36" cy="58" rx="9" ry="3.5" fill="#ea580c" opacity="0.9"/>
+      <!-- sparkles -->
+      <circle cx="54" cy="28" r="2" fill="#fbbf24" opacity="0.6"/>
+      <circle cx="18" cy="42" r="1.5" fill="#34d399" opacity="0.5"/>
+      <circle cx="58" cy="46" r="1" fill="#a3e635" opacity="0.5"/>
+    </svg>
+  </div>
+
+  <!-- HEADLINE -->
+  <h1 class="headline">
+    We're crafting something<br>
+    <em>meaningful</em> here
+  </h1>
+
+  <!-- SUBTEXT -->
+  <p class="subtext">
+    This page is being thoughtfully built as part of the NSS Unit D-58 digital initiative. Every section will be live soon — thank you for your patience and support.
+  </p>
+
+  <!-- CARD -->
+  <div class="card">
+
+    <!-- College strip -->
+    <div class="college-strip">
+      <div class="college-icon">🏛️</div>
+      <div>
+        <div class="college-name">Rayat Shikshan Sanstha's</div>
+        <div class="college-sub">Karmaveer Bhaurao Patil College, Vashi · Empowered Autonomous</div>
+      </div>
+      <div class="nss-tag">NSS D-58</div>
+    </div>
+
+    <div class="status-body">
+
+      <!-- Message -->
+      <div class="status-label">A note for you</div>
+      <div class="status-message">
+        This portal is an initiative by <strong>NSS Unit D-58</strong> to bring all our activities, camps, and volunteer records online. The core sections are live — a few pages are still being completed and will be published shortly.
+      </div>
+
+      <!-- Progress -->
+      <div class="progress-row">
+        <div class="progress-track">
+          <div class="progress-fill" id="pFill"></div>
+        </div>
+        <div class="progress-pct" id="pPct">0%</div>
+      </div>
+      <div class="progress-sub" id="pSub">Portal completion</div>
+
+      <div class="divider"></div>
+
+      <!-- Developer -->
+      <div class="status-label">Page coordinator</div>
+      <div class="dev-row">
+        <div class="dev-avatar">MR</div>
+        <div class="dev-info">
+          <div class="dev-name">Manthan Rajdev</div>
+          <div class="dev-role">Lead Developer · NSS Volunteer</div>
+        </div>
+        <div class="dev-actions">
+          <button class="btn-sm btn-sm-primary" onclick="pingManthan(this)">
+            <span>👋</span> Ping
+          </button>
+          <a class="btn-sm btn-sm-ghost" href="https://github.com/manthan4217" target="_blank" rel="noopener">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58v-2.03c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.21.08 1.85 1.24 1.85 1.24 1.07 1.84 2.81 1.3 3.49 1 .11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.31-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23A11.5 11.5 0 0112 5.8c1.02 0 2.04.14 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.66 1.66.24 2.87.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.49 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58A12.01 12.01 0 0024 12C24 5.37 18.63 0 12 0z"/></svg>
+            GitHub
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- NAV BUTTONS -->
+  <div class="nav">
+    <a class="btn-home" href="index.html">← Back to home</a>
+    <button class="btn-back" onclick="history.back()">Go back</button>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <strong>National Service Scheme · Unit D-58</strong><br>
+    KBP College, Vashi · "Not Me But You"
+  </div>
+
+</div>
+
+<script>
+// Progress bar
+const TARGET = 72;
+let cur = 0;
+const fill = document.getElementById('pFill');
+const pct  = document.getElementById('pPct');
+const sub  = document.getElementById('pSub');
+setTimeout(() => {
+  fill.style.width = TARGET + '%';
+  const iv = setInterval(() => {
+    cur = Math.min(cur + 1, TARGET);
+    pct.textContent = cur + '%';
+    if (cur >= TARGET) {
+      clearInterval(iv);
+      sub.textContent = '72% complete · 8 of 13 pages live';
+    }
+  }, 1800 / TARGET);
+}, 600);
+
+// Ping Manthan
+function pingManthan(btn) {
+  const orig = btn.innerHTML;
+  btn.innerHTML = '<span>📡</span> Sending...';
+  btn.disabled = true;
+  setTimeout(() => {
+    btn.innerHTML = '<span>✓</span> Sent';
+    btn.style.background = '#1a7a4e';
+    toast('Manthan will get back to you soon 👋', '📩');
+    setTimeout(() => {
+      btn.innerHTML = orig;
+      btn.style.background = '';
+      btn.disabled = false;
+    }, 3000);
+  }, 900);
+}
+
+// Toast
+function toast(msg, icon = '✅') {
+  const tc = document.getElementById('toasts');
+  const t = document.createElement('div');
+  t.className = 'toast';
+  t.innerHTML = `<span style="font-size:16px;flex-shrink:0">${icon}</span>${msg}`;
+  tc.appendChild(t);
+  setTimeout(() => {
+    t.classList.add('out');
+    setTimeout(() => t.remove(), 280);
+  }, 3500);
+}
+</script>
+</body>
+</html>

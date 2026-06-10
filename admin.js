@@ -1808,6 +1808,124 @@ async function openVolunteerProfile(studentId){
 
 }
 
+// ── FEEDBACK TAB ────────────────────────────────────────────
+
+const TYPE_META = {
+  idea:   { icon:"💡", label:"Idea",   bg:"#fef9c3", color:"#854d0e" },
+  bug:    { icon:"🐛", label:"Bug",    bg:"#fee2e2", color:"#991b1b" },
+  praise: { icon:"⭐", label:"Praise", bg:"#d1fae5", color:"#065f46" },
+  other:  { icon:"💬", label:"Other",  bg:"#f1f5f9", color:"#334155" },
+};
+
+let cachedFeedback = [];
+let activeFilter   = "all";
+
+function initFeedbackTab() {
+  const q = query(collection(db, "feedback"), orderBy("timestamp", "desc"));
+
+  onSnapshot(q, (snap) => {
+    cachedFeedback = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    renderFeedback();
+  }, (err) => {
+    console.error("[Feedback] load failed:", err);
+  });
+
+  document.querySelectorAll(".fb-filter-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".fb-filter-btn").forEach(b => b.classList.remove("active-filter"));
+      btn.classList.add("active-filter");
+      activeFilter = btn.dataset.filter;
+      renderFeedback();
+    });
+  });
+}
+
+function renderFeedback() {
+  const list  = document.getElementById("fb-list");
+  const empty = document.getElementById("fb-empty");
+  const count = document.getElementById("fb-count");
+  if (!list) return;
+
+  const filtered = activeFilter === "all"
+    ? cachedFeedback
+    : cachedFeedback.filter(f => f.type === activeFilter);
+
+  count.textContent = `(${cachedFeedback.length} total)`;
+
+  if (filtered.length === 0) {
+    list.innerHTML = "";
+    empty.style.display = "block";
+    return;
+  }
+  empty.style.display = "none";
+
+  list.innerHTML = filtered.map(fb => {
+    const meta = TYPE_META[fb.type] || TYPE_META.other;
+    const ts   = fb.timestamp?.toDate
+      ? fb.timestamp.toDate().toLocaleDateString("en-IN", { day:"2-digit", month:"short", year:"numeric", hour:"2-digit", minute:"2-digit" })
+      : "—";
+    const isNew = fb.status === "new";
+    const page  = (fb.pageTitle || fb.page || "").replace(/^https?:\/\/[^/]+/, "");
+
+    return `
+      <div class="act-card" style="border-left:3px solid ${meta.bg};" id="fbc-${fb.id}">
+        <div style="flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:6px;">
+          <div style="width:40px;height:40px;border-radius:12px;background:${meta.bg};display:flex;align-items:center;justify-content:center;font-size:20px;">
+            ${meta.icon}
+          </div>
+          ${isNew ? `<span style="width:8px;height:8px;border-radius:50%;background:#2563eb;display:block;" title="New"></span>` : ""}
+        </div>
+        <div class="act-card-body">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;flex-wrap:wrap;">
+            <span class="pill" style="background:${meta.bg};color:${meta.color};">${meta.label}</span>
+            <span style="font-size:12px;font-weight:600;color:#0f172a;">${esc(fb.name || "Anonymous")}</span>
+            ${isNew ? `<span class="pill" style="background:#dbeafe;color:#2563eb;font-size:10px;">NEW</span>` : ""}
+          </div>
+          <div style="font-size:13px;color:#334155;line-height:1.65;margin-bottom:8px;">${esc(fb.message)}</div>
+          <div style="display:flex;gap:16px;flex-wrap:wrap;">
+            <span style="font-size:11px;color:#94a3b8;">🕐 ${ts}</span>
+            <span style="font-size:11px;color:#94a3b8;" title="${esc(fb.page || "")}">📄 ${esc(page)}</span>
+          </div>
+        </div>
+        <div class="act-actions" style="flex-direction:column;gap:6px;">
+          ${isNew
+            ? `<button class="btn-xs btn-green" onclick="markFbReviewed('${fb.id}')">✓ Mark reviewed</button>`
+            : `<span style="font-size:11px;color:#94a3b8;font-weight:600;">✓ Reviewed</span>`
+          }
+          <button class="btn-xs btn-red" onclick="deleteFeedback('${fb.id}')">🗑 Delete</button>
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+async function markFbReviewed(id) {
+  try {
+    await updateDoc(doc(db, "feedback", id), { status: "reviewed" });
+  } catch (err) {
+    console.error("[Feedback] markReviewed failed:", err);
+  }
+}
+
+async function deleteFeedback(id) {
+  if (!confirm("Delete this feedback? Cannot be undone.")) return;
+  try {
+    await deleteDoc(doc(db, "feedback", id));
+  } catch (err) {
+    console.error("[Feedback] delete failed:", err);
+  }
+}
+
+window.markFbReviewed = markFbReviewed;
+window.deleteFeedback  = deleteFeedback;
+
+// Boot the tab when clicked (subscribes only once)
+document.querySelector('[data-tab="feedback"]')
+  ?.addEventListener("click", () => {
+    if (!window._fbInit) { window._fbInit = true; initFeedbackTab(); }
+  });
+  
+
 /*mobile menu*/
 const mobileMenuBtn =
 document.getElementById(
