@@ -267,8 +267,11 @@ document.getElementById("nssForm")
       joinedAt: new Date()
     });
 
-    alert("Registration Successful ✅");
-    window.location.href = "login.html";
+    document.getElementById("step2").classList.remove("active");
+    document.getElementById("step3").classList.add("active");
+
+    document.getElementById("step2-ind").classList.remove("active");
+    document.getElementById("step3-ind").classList.add("active");
 
   } catch (error) {
     // STEP 4 — registration partially failed AFTER auth account was created
@@ -283,18 +286,5 @@ document.getElementById("nssForm")
       alert("❌ Registration failed: " + error.message + "\n\nIf re-registering with this email fails, please contact NSS staff.");
     }
   }
-
-  const cloudinaryResponse = await fetch(
-  "https://api.cloudinary.com/v1_1/dstdl2ycg/image/upload",
-  { method: "POST", body: formData }
-);
-
-if (!cloudinaryResponse.ok) {
-  const errBody = await cloudinaryResponse.json().catch(() => null);
-  console.error("Cloudinary error response:", errBody);
-  throw new Error(
-    "Photo upload failed: " + (errBody?.error?.message || "Unknown error")
-  );
-}
 
 });
