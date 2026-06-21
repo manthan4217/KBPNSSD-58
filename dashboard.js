@@ -86,7 +86,7 @@ onAuthStateChanged(auth, async (user) => {
 
     }
 
-  }catch(error){
+  }catch(error){  
 
   }
 
@@ -116,6 +116,7 @@ document.querySelector(".menu-toggle").addEventListener("click", () => {
 // ======================================================
 
 let activeSessionId = null;
+let liveCountUnsub = null;
 
 async function loadActiveSession(){
 
@@ -151,25 +152,30 @@ async function loadActiveSession(){
 
   document.getElementById("markAttendanceBtn").disabled = false;
 
+  // Attach live-count listener AFTER activeSessionId is known
+  if (liveCountUnsub) liveCountUnsub();
+  liveCountUnsub = onSnapshot(
+    query(
+      collection(db, "attendanceRecords"),
+      where("sessionId", "==", activeSessionId)
+    ),
+    (snap) => {
+      document.getElementById("liveCount").innerText = snap.size;
+    }
+  );
+
 }
 
 document.getElementById("markAttendanceBtn").addEventListener("click", async () => {
   await markAttendance();
 });
 
-// add inside loadActiveSession() after activeSessionId is set:
-onSnapshot(
-  query(
-    collection(db, "attendanceRecords"),
-    where("sessionId", "==", activeSessionId)
-  ),
-  (snap) => {
-    document.getElementById("liveCount").innerText = snap.size;
-  }
-);
-
 const btn = document.getElementById("markAttendanceBtn");
 btn.disabled = true;
+
+window.addEventListener("beforeunload", () => {
+  if (liveCountUnsub) liveCountUnsub();
+});
 
 // ======================================================
 // MARK ATTENDANCE

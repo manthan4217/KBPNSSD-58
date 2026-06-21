@@ -120,7 +120,7 @@ document.getElementById("nssForm")
   document.getElementById("contact").value;
 
   const email =
-  document.getElementById("email").value;
+  document.getElementById("email").value.trim().toLowerCase();
 
   const bloodGroup =
   document.getElementById("bloodGroup").value;
@@ -206,91 +206,95 @@ document.getElementById("nssForm")
 
   // ── END VALIDATION ───────────────────────────────
 
-  try{
+  let userCredential;
 
-    // AUTH EMAIL
+  try {
+    // STEP 1 — create auth account
+    userCredential = await createUserWithEmailAndPassword(auth, email, password);
 
-    const loginEmail =
-    document.getElementById("email").value.trim();
+  } catch (error) {
+    if (error.code === "auth/email-already-in-use") {
+      alert("❌ This email is already registered!\n\nIf you forgot your password, please use the login page to reset it.");
+    } else if (error.code === "auth/weak-password") {
+      alert("❌ Password is too weak. Please use a stronger password.");
+    } else if (error.code === "auth/invalid-email") {
+      alert("❌ The email format is invalid. Please check and try again.");
+    } else {
+      alert("❌ Registration failed: " + error.message);
+    }
+    return; // stop here — nothing else to clean up
+  }
 
-    // CREATE ACCOUNT
+  try {
+    // STEP 2 — upload photo
+    const formData = new FormData();
+    formData.append("file", photoFile);
+    formData.append("upload_preset", "nss_profiles");
 
-    const userCredential =
-    await createUserWithEmailAndPassword(
-      auth,
-      loginEmail,
-      password
+    const cloudinaryResponse = await fetch(
+      "https://api.cloudinary.com/v1_1/dstdl2ycg/image/upload",
+      { method: "POST", body: formData }
     );
 
-    // ================= PHOTO UPLOAD =================
+    if (!cloudinaryResponse.ok) {
+      throw new Error("Photo upload failed. Please try again.");
+    }
 
-      const formData = new FormData();
+    const cloudinaryData = await cloudinaryResponse.json();
+    const photoURL = cloudinaryData.secure_url;
 
-      formData.append("file", photoFile);
+    if (!photoURL) {
+      throw new Error("Photo upload did not return a valid URL.");
+    }
 
-      formData.append(
-        "upload_preset",
-        "nss_profiles"
-      );
-
-      const cloudinaryResponse =
-      await fetch(
-        "https://api.cloudinary.com/v1_1/dstdl2ycg/image/upload",
-        {
-          method: "POST",
-          body: formData
-        }
-      );
-
-      const cloudinaryData =
-      await cloudinaryResponse.json();
-
-      const photoURL =
-      cloudinaryData.secure_url;
-
-    // SAVE FIRESTORE DATA
-
-    await setDoc(
-      doc(db, "volunteers", userCredential.user.uid),
-      {
-
-        uid: userCredential.user.uid,
-
-        fullName:  cleanName,      // sanitized
-        className,
-        rollNo,
-        studentId,
-
-        division:
-          document.getElementById("division").value,
-
-        gender:
-          document.getElementById("gender").value,
-
-        address:   cleanAddress,   // sanitized
-        contact,
-        email: loginEmail,
-
-        bloodGroup,
-        dob,
-        age,
-        caste,
-
-        photoURL,
-
-        joinedAt: new Date()
-
-      }
-    );
+    // STEP 3 — write Firestore doc
+    await setDoc(doc(db, "volunteers", userCredential.user.uid), {
+      uid: userCredential.user.uid,
+      fullName: cleanName,
+      className,
+      rollNo,
+      studentId,
+      division: document.getElementById("division").value,
+      gender: document.getElementById("gender").value,
+      address: cleanAddress,
+      contact,
+      email: email,
+      bloodGroup,
+      dob,
+      age,
+      caste,
+      photoURL,
+      joinedAt: new Date()
+    });
 
     alert("Registration Successful ✅");
-
     window.location.href = "login.html";
 
-  }catch(error){
+  } catch (error) {
+    // STEP 4 — registration partially failed AFTER auth account was created
+    // Clean up the orphaned auth account so the email is free to retry
+    console.error("Registration step failed:", error);
 
-    alert(error.message);
-
+    try {
+      await userCredential.user.delete();
+      alert("❌ Registration failed: " + error.message + "\n\nPlease try again — you can use the same email.");
+    } catch (cleanupErr) {
+      console.error("Failed to clean up orphaned auth account:", cleanupErr);
+      alert("❌ Registration failed: " + error.message + "\n\nIf re-registering with this email fails, please contact NSS staff.");
+    }
   }
+
+  const cloudinaryResponse = await fetch(
+  "https://api.cloudinary.com/v1_1/dstdl2ycg/image/upload",
+  { method: "POST", body: formData }
+);
+
+if (!cloudinaryResponse.ok) {
+  const errBody = await cloudinaryResponse.json().catch(() => null);
+  console.error("Cloudinary error response:", errBody);
+  throw new Error(
+    "Photo upload failed: " + (errBody?.error?.message || "Unknown error")
+  );
+}
 
 });
