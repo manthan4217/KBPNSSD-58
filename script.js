@@ -208,17 +208,83 @@ window.addEventListener('scroll',()=>{
 const form = document.getElementById("contactForm");
 const statusText = document.getElementById("form-status");
 const submitBtn = document.getElementById("submitBtn");
+const submitBtnText = document.getElementById("submitBtnText");
+const submitBtnSpinner = document.getElementById("submitBtnSpinner");
 
 if(form){
+
+  const nameInput = document.getElementById("cf-name");
+  const emailInput = document.getElementById("cf-email");
+  const messageInput = document.getElementById("cf-message");
+
+  const fields = [
+    {
+      input: nameInput,
+      errorEl: document.getElementById("cf-name-error"),
+      validate: (v) => v.trim().length >= 2,
+      message: "Please enter your name (at least 2 characters)."
+    },
+    {
+      input: emailInput,
+      errorEl: document.getElementById("cf-email-error"),
+      validate: (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()),
+      message: "Please enter a valid email address."
+    },
+    {
+      input: messageInput,
+      errorEl: document.getElementById("cf-message-error"),
+      validate: (v) => v.trim().length >= 10,
+      message: "Message must be at least 10 characters."
+    }
+  ];
+
+  function validateField(field){
+    const isValid = field.validate(field.input.value);
+
+    if(isValid){
+      field.input.classList.remove("invalid");
+      field.input.removeAttribute("aria-invalid");
+      field.errorEl.textContent = "";
+    }else{
+      field.input.classList.add("invalid");
+      field.input.setAttribute("aria-invalid", "true");
+      field.errorEl.textContent = field.message;
+    }
+
+    return isValid;
+  }
+
+  // Validate as the user types/leaves a field
+  fields.forEach(field => {
+    field.input.addEventListener("blur", () => validateField(field));
+    field.input.addEventListener("input", () => {
+      if(field.input.classList.contains("invalid")) validateField(field);
+    });
+  });
 
   form.addEventListener("submit", async function(e){
 
     e.preventDefault();
 
+    // Run all field validations and stop if anything is invalid
+    const allValid = fields.map(validateField).every(Boolean);
+
+    if(!allValid){
+      statusText.innerHTML = "⚠️ Please fix the highlighted fields above.";
+      statusText.style.color = "#b7950b";
+      const firstInvalid = fields.find(f => f.input.classList.contains("invalid"));
+      if(firstInvalid) firstInvalid.input.focus();
+      return;
+    }
+
     const formData = new FormData(form);
 
-    submitBtn.innerHTML = "Sending...";
+    // Loading state
     submitBtn.disabled = true;
+    submitBtn.classList.add("loading");
+    submitBtnText.textContent = "Sending...";
+    submitBtnSpinner.hidden = false;
+    statusText.innerHTML = "";
 
     try{
 
@@ -238,11 +304,16 @@ if(form){
         statusText.style.color = "#145c3a";
 
         form.reset();
+        fields.forEach(field => {
+          field.input.classList.remove("invalid");
+          field.input.removeAttribute("aria-invalid");
+          field.errorEl.textContent = "";
+        });
 
       }else{
 
         statusText.innerHTML =
-        "❌ Failed to send message.";
+        "❌ Failed to send message. Please try again.";
 
         statusText.style.color = "red";
       }
@@ -250,13 +321,16 @@ if(form){
     }catch(error){
 
       statusText.innerHTML =
-      "❌ Network error. Please try again.";
+      "❌ Network error. Please check your connection and try again.";
 
       statusText.style.color = "red";
     }
 
-    submitBtn.innerHTML = "Send Message";
+    // Reset loading state
     submitBtn.disabled = false;
+    submitBtn.classList.remove("loading");
+    submitBtnText.textContent = "Send Message";
+    submitBtnSpinner.hidden = true;
 
   });
 

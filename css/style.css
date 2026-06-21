@@ -118,7 +118,7 @@ font-size:13px;
 margin:0;
 }
 
-.center-text h1{
+.center-text .college-name{
 font-size:24px;
 font-weight:700;
 margin:3px 0;
@@ -130,12 +130,12 @@ margin:2px 0;
 }
 
 .center-text p,
-.center-text h1,
+.center-text .college-name,
 .center-text h3{
 margin:2px 0;
 }
 
-.center-text h1{
+.center-text .college-name{
   font-size: 20px;
   margin: 2px 0;
 }
@@ -204,7 +204,7 @@ opacity:0.9;
     min-width:0;
   }
 
-  .center-text h1{
+  .center-text .college-name{
     font-size:12px;
     line-height:1.1;
     margin:2px 0;
@@ -2456,6 +2456,49 @@ pointer-events:none;
 .contact-form-card button:disabled{
   opacity:0.7;
   cursor:not-allowed;
+}
+
+/* INLINE VALIDATION ERRORS */
+.input-group input.invalid,
+.input-group textarea.invalid{
+  border-color:#c0392b;
+  box-shadow:0 0 5px rgba(192,57,43,0.25);
+}
+
+.field-error{
+  display:block;
+  min-height:14px;
+  margin-top:4px;
+  font-size:12px;
+  color:#c0392b;
+}
+
+/* SUBMIT BUTTON LOADING STATE */
+.contact-form-card button#submitBtn{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+}
+
+.contact-form-card button#submitBtn:disabled{
+  opacity:0.85;
+  cursor:not-allowed;
+  transform:none;
+}
+
+.btn-spinner{
+  width:14px;
+  height:14px;
+  border:2px solid rgba(255,255,255,0.5);
+  border-top-color:#fff;
+  border-radius:50%;
+  display:inline-block;
+  animation:btn-spin 0.7s linear infinite;
+}
+
+@keyframes btn-spin{
+  to{ transform:rotate(360deg); }
 }
 
 
