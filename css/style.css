@@ -1309,6 +1309,27 @@ background:#ff9933;
   color:#555;
 }
 
+.contact-info-card a[data-contact]{
+  color:#555;
+  text-decoration:none;
+}
+
+.contact-info-card a[data-contact]:hover,
+.contact-info-card a[data-contact]:focus{
+  color:#145c3a;
+  text-decoration:underline;
+}
+
+.footer-section a[data-contact]{
+  color:inherit;
+  text-decoration:none;
+}
+
+.footer-section a[data-contact]:hover,
+.footer-section a[data-contact]:focus{
+  text-decoration:underline;
+}
+
 /* FORM CARD */
 .contact-form-card{
   flex:1;
