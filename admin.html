@@ -164,34 +164,108 @@
         </select>
         </div>
         <button class="btn btn-blue" onclick="createActivity()">Create Activity</button>
-        <input class="inp search-inp" id="actSearch" placeholder="🔍  Search by name or date…" oninput="renderActivities()"/>
-        <div id="act-list"></div>
       </div>
+
+      <input class="inp search-inp" id="actSearch" placeholder="🔍  Search by name or date…" oninput="renderActivities()"/>
+      <div id="act-list"></div>
 
     <!-- Attendance Modal -->
 
       <div id="attendanceModal" class="modal-overlay">
-
+ 
         <div class="modal">
-
+ 
           <h2>
           Activity Attendance
           </h2>
-
+ 
           <div id="attendanceModalContent">
-
+ 
             Loading...
-
+ 
           </div>
-
+ 
           <button class="btn btn-blue" onclick="exportAttendanceSheet()"> 📄 Export NSS Sheet </button>
-
+ 
           <button class="btn btn-outline" onclick="closeModal('attendanceModal')">
             Close
           </button>
-
+ 
         </div>
+ 
+      </div>
 
+      <div id="reportModal" class="modal-overlay">
+        <div class="modal-box report-modal-box">
+          <div class="report-modal-header">
+            <div>
+              <div class="section-title" id="reportModalTitle">Activity Report</div>
+              <div class="page-sub" id="reportModalSub">Create or update the report for this activity.</div>
+            </div>
+            <button class="btn btn-outline" onclick="closeModal('reportModal')">✕ Close</button>
+          </div>
+
+          <div class="report-meta-grid">
+            <div class="settings-card report-meta-card">
+              <div class="lbl">Activity</div>
+              <div class="report-meta-title" id="reportActivityName">—</div>
+              <div class="report-meta-detail" id="reportActivityMeta">—</div>
+            </div>
+            <div class="settings-card report-meta-card">
+              <div class="lbl">Attendance Snapshot</div>
+              <div id="reportAttendanceSummary" class="report-attendance-grid"></div>
+            </div>
+          </div>
+
+          <div class="report-status-row">
+            <span class="pill" id="reportStatusPill">Draft</span>
+            <div class="flex-row">
+              <button class="btn btn-outline" onclick="saveActivityReportDraft()">💾 Save Draft</button>
+              <button class="btn btn-green" onclick="publishActivityReport()">🚀 Publish</button>
+            </div>
+          </div>
+
+          <div class="report-editor-shell">
+            <div class="report-editor-panel">
+              <div class="report-toolbar">
+                <button class="btn-sm btn-outline" onclick="applyReportFormat('bold')">B</button>
+                <button class="btn-sm btn-outline" onclick="applyReportFormat('italic')">I</button>
+                <button class="btn-sm btn-outline" onclick="applyReportFormat('underline')">U</button>
+                <button class="btn-sm btn-outline" onclick="applyReportFormat('insertUnorderedList')">• List</button>
+                <button class="btn-sm btn-outline" onclick="applyReportFormat('insertOrderedList')">1. List</button>
+                <button class="btn-sm btn-outline" onclick="applyReportFormat('justifyLeft')">Left</button>
+                <button class="btn-sm btn-outline" onclick="applyReportFormat('justifyCenter')">Center</button>
+                <button class="btn-sm btn-outline" onclick="applyReportFormat('justifyRight')">Right</button>
+                <button class="btn-sm btn-outline" onclick="applyReportHeading('h2')">Heading</button>
+                <button class="btn-sm btn-outline" onclick="insertReportLink()">🔗 Link</button>
+              </div>
+              <div id="reportEditor" class="report-editor-content" contenteditable="true"></div>
+            </div>
+
+            <div class="report-preview-panel">
+              <div class="report-preview-header">Preview</div>
+              <div id="reportPreview" class="report-preview"></div>
+            </div>
+          </div>
+
+          <div class="report-images-box">
+            <div class="flex-between" style="margin-bottom:12px;">
+              <div class="section-title" style="font-size:18px;">Report Images</div>
+              <div class="flex-row">
+                <input id="reportImageInput" type="file" accept="image/*" multiple hidden>
+                <input id="reportReplaceInput" type="file" accept="image/*" hidden>
+                <button class="btn btn-blue" onclick="document.getElementById('reportImageInput').click()">📷 Upload Images</button>
+              </div>
+            </div>
+            <div id="reportImageList" class="report-image-list"></div>
+          </div>
+
+          <div class="modal-actions report-modal-actions">
+            <button class="btn btn-outline" onclick="closeModal('reportModal')">Cancel</button>
+            <button class="btn btn-outline" onclick="saveActivityReportDraft()">💾 Save Draft</button>
+            <button class="btn btn-green" onclick="publishActivityReport()">🚀 Publish</button>
+          </div>
+        </div>
       </div>
     </div>
 
