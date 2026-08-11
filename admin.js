@@ -163,6 +163,8 @@ let acts = [
 ];
 
 let marks = [];
+let reports = [];
+let reportFormOpen = false;
 
 function loadMarks(){
 
@@ -235,6 +237,7 @@ function switchTab(t){
   if(t==='dashboard') renderDashboard();
   if(t==='activities') renderActivities();
   if(t==='attendance') renderAttendanceSelects();
+  if(t==='reports') renderReports();
   if(t==='volunteers') renderVolunteers();
   if(t==='marks'){
     populateVolSelect();
@@ -985,7 +988,10 @@ function goAttendance(id){
 ═══════════════════════════════════════════════════════════════ */
 function renderAttendanceSelects(){
   const sel=document.getElementById('attActSel');
-  sel.innerHTML='<option value="">-- Choose an activity --</option>'+acts.map(a=>`<option value="${a.id}">${esc(a.name)} · ${esc(a.date)}</option>`).join('');
+  const reportSel=document.getElementById('reportActSel');
+  const html = '<option value="">-- Choose an activity --</option>' + acts.map(a=>`<option value="${a.id}">${esc(a.name)} · ${esc(a.date)}</option>`).join('');
+  sel.innerHTML = html;
+  if(reportSel) reportSel.innerHTML = html;
 }
 function onAttActChange(){
   const v=document.getElementById('attActSel').value;

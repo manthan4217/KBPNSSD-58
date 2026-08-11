@@ -82,6 +82,7 @@
     <button class="nav-btn active" data-tab="dashboard"><span class="nav-icon">📊</span><span class="nav-label">Dashboard</span></button>
     <button class="nav-btn" data-tab="activities"><span class="nav-icon">📅</span><span class="nav-label">Activities</span></button>
     <button class="nav-btn" data-tab="attendance"><span class="nav-icon">✅</span><span class="nav-label">Attendance</span></button>
+    <button class="nav-btn" data-tab="reports"><span class="nav-icon">📑</span><span class="nav-label">Reports</span></button>
     <button class="nav-btn" data-tab="volunteers"><span class="nav-icon">👥</span><span class="nav-label">Volunteers</span></button>
     <button class="nav-btn" data-tab="marks"><span class="nav-icon">📝</span><span class="nav-label">Marks</span></button>
     <button class="nav-btn" data-tab="settings"><span class="nav-icon">⚙️</span><span class="nav-label">Settings</span></button>
@@ -264,6 +265,25 @@
         </div>
         <div class="summary-box" id="sess-summary" style="display:none;"></div>
       </div>
+    </div>
+
+    <!-- ── REPORTS ── -->
+    <div class="tab" id="tab-reports">
+      <div class="flex-between">
+        <div class="section-title">Activity Reports</div>
+        <button class="btn btn-blue" id="newReportBtn" onclick="toggleReportForm()">+ New Report</button>
+      </div>
+      <div class="form-box" id="reportForm" style="display:none;">
+        <h3>Create New Activity Report</h3>
+        <div class="field"><label class="lbl">Activity</label><select class="inp" id="reportActSel"><option value="">-- Choose an activity --</option></select><div class="err" id="reportActErr"></div></div>
+        <div class="field"><label class="lbl">Report Title</label><input class="inp" id="reportTitle" placeholder="e.g. Environmental Cleanup Summary"/><div class="err" id="reportTitleErr"></div></div>
+        <div class="field"><label class="lbl">Summary</label><textarea class="inp" id="reportSummary" rows="3" placeholder="Brief summary of the activity report..."></textarea></div>
+        <div class="field"><label class="lbl">Details</label><textarea class="inp" id="reportDetails" rows="4" placeholder="Detailed report content..."></textarea></div>
+        <div class="field"><label class="lbl">Upload Photos</label><input type="file" class="inp" id="reportImages" accept="image/*" multiple/></div>
+        <button class="btn btn-blue" onclick="createReport()">Save Report</button>
+      </div>
+      <input class="inp search-inp" id="reportSearch" placeholder="🔍 Search reports by activity, title, or summary…" oninput="renderReports()" style="margin-bottom:18px;"/>
+      <div id="report-list"></div>
     </div>
 
     <!-- ── VOLUNTEERS ── -->
