@@ -41,9 +41,13 @@ onAuthStateChanged(auth, async (user) => {
    }
 
    // Load all admin data
+   populateAcademicYearSelect();
    await loadActivities();
    await loadVolunteers();
    await loadMarks();
+   // Load Control Center data
+   await loadControlCenter();
+   await loadControlDataIntoForm();
 
    const [attCache, actCache] = await Promise.all([
       getDocs(collection(db, "attendanceRecords")),
@@ -210,7 +214,7 @@ let attendanceUnsubscribe = null;
 /* ═══════════════════════════════════════════════════════════════
    NAVIGATION
 ═══════════════════════════════════════════════════════════════ */
-const tabLabels={dashboard:"Dashboard",activities:"Activities",attendance:"Attendance",volunteers:"Volunteers",marks:"Marks",settings:"Settings"};
+const tabLabels={dashboard:"Dashboard",activities:"Activities",attendance:"Attendance",reports:"Reports",control:"Control Center",volunteers:"Volunteers",marks:"Marks",settings:"Settings"};
 function switchTab(t){
 
   document.querySelectorAll('.tab')
@@ -325,6 +329,558 @@ function renderDashboard(){
     </tr>`).join('');
 }
 
+function formatAcademicYear(value){
+  if(!value) return getCurrentAcademicYear();
+  const match = /^\d{4}-(\d{2})$/.exec(String(value).trim());
+  if(!match) return value;
+  const startYear = Number(String(value).slice(0,4));
+  return `${startYear}–${String(startYear + 1).slice(-2)}`;
+}
+
+function getCurrentAcademicYear(){
+  const now = new Date();
+  const currentYear = now.getFullYear();
+  const startYear = now.getMonth() >= 5 ? currentYear : currentYear - 1;
+  return `${startYear}-${String(startYear + 1).slice(-2)}`;
+}
+
+function getAcademicYearForDate(dateValue){
+  if(!dateValue) return getCurrentAcademicYear();
+  const parsedDate = new Date(`${dateValue}T00:00:00`);
+  if(Number.isNaN(parsedDate.getTime())) return getCurrentAcademicYear();
+  const year = parsedDate.getFullYear();
+  const month = parsedDate.getMonth() + 1;
+  const startYear = month >= 6 ? year : year - 1;
+  return `${startYear}-${String(startYear + 1).slice(-2)}`;
+}
+
+function getAcademicYearOptions(){
+  const currentYear = new Date().getFullYear();
+  const years = [];
+  for(let i = currentYear - 2; i <= currentYear + 1; i++){
+    years.push(`${i}-${String(i + 1).slice(-2)}`);
+  }
+  return years;
+}
+
+function normalizeReportStatus(status){
+  return String(status || 'draft').toLowerCase() === 'published' ? 'published' : 'draft';
+}
+
+async function syncActivityAcademicYears(){
+  const missing = acts.filter(activity => !activity.academicYear);
+  if(!missing.length) return;
+
+  for(const activity of missing){
+    const academicYear = getAcademicYearForDate(activity.date);
+    try{
+      await updateDoc(doc(db, 'activities', activity.id), { academicYear });
+    }catch(err){
+      console.error('Failed to update academicYear for activity:', activity.id, err);
+    }
+  }
+}
+
+function openActivityForReport(activityId){
+  switchTab('activities');
+  setTimeout(() => {
+    const card = document.getElementById(`activity-card-${activityId}`);
+    if(card){
+      card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      card.style.boxShadow = '0 0 0 3px rgba(37, 99, 235, 0.18)';
+      setTimeout(() => card.style.boxShadow = '', 1600);
+    }
+  }, 140);
+}
+
+async function buildYearlySummary(selectedYearActivities){
+  const validActivities = selectedYearActivities || [];
+  const validIds = new Set(validActivities.map(activity => activity.id));
+
+  if(!validActivities.length){
+    return {
+      totalActivities: 0,
+      totalParticipants: 0,
+      totalAttendance: 0,
+      averageAttendance: 0,
+      categories: {}
+    };
+  }
+
+  const categoryMap = {};
+  validActivities.forEach(activity => {
+    const category = (activity.activityType || activity.category || 'Other').trim() || 'Other';
+    categoryMap[category] = (categoryMap[category] || 0) + 1;
+  });
+
+  const sessionsSnap = await getDocs(collection(db, 'attendanceSessions'));
+  const activityBySession = {};
+  sessionsSnap.forEach(docSnap => {
+    const session = docSnap.data();
+    if (session && session.activityId && validIds.has(session.activityId)) {
+      activityBySession[docSnap.id] = session.activityId;
+    }
+  });
+
+  const attendanceSnap = await getDocs(collection(db, 'attendanceRecords'));
+  const participantSet = new Set();
+  let totalAttendance = 0;
+  const attendanceByActivity = {};
+
+  attendanceSnap.forEach(docSnap => {
+    const record = docSnap.data();
+    const activityId = activityBySession[record.sessionId];
+    if (!activityId || !validIds.has(activityId)) return;
+
+    totalAttendance += 1;
+    if(record.studentId){ participantSet.add(String(record.studentId)); }
+    attendanceByActivity[activityId] = (attendanceByActivity[activityId] || 0) + 1;
+  });
+
+  const totalParticipants = participantSet.size;
+  const averageAttendance = Math.round(totalAttendance / validActivities.length);
+
+  return {
+    totalActivities: validActivities.length,
+    totalParticipants,
+    totalAttendance,
+    averageAttendance,
+    categories: categoryMap,
+    attendanceByActivity
+  };
+}
+
+async /* -----------------
+   Control Center helpers
+   ----------------- */
+function switchControlSection(sec){
+  document.getElementById('control-leadership').style.display = sec==='leadership' ? 'block' : 'none';
+  document.getElementById('control-stats').style.display = sec==='stats' ? 'block' : 'none';
+  document.getElementById('control-organization').style.display = sec==='organization' ? 'block' : 'none';
+  document.getElementById('control-content').style.display = sec==='content' ? 'block' : 'none';
+}
+
+async function loadControlCenter(){
+  // load leadership
+  const snaps = await getDocs(collection(db, 'leadership'));
+  const listEl = document.getElementById('leadership-list');
+  if(!listEl) return;
+  listEl.innerHTML = '';
+  snaps.forEach(docSnap => {
+    const data = docSnap.data();
+    const id = docSnap.id;
+    listEl.innerHTML += `
+      <div class="report-card-item" id="leader-${id}">
+        <div class="report-card-header">
+          <div>
+            <div class="mini-title">${esc(data.name || 'Unnamed')}</div>
+            <div class="report-meta-row">
+              <span>${esc(data.designation || '')}</span>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px;align-items:flex-end;">
+            <span class="pill ${data.isActive? 'pill-green':'pill-amber'}">${data.isActive? 'Active':'Inactive'}</span>
+            <button class="btn-xs" onclick="editLeader('${id}')">Edit</button>
+          </div>
+        </div>
+        <div class="report-card-body">
+          <div style="display:flex;gap:12px;align-items:center;">
+            <img src="${esc(data.photoUrl || 'images/profile.jpg')}" style="width:90px;height:90px;object-fit:cover;border-radius:8px;border:1px solid #e2e8f0;"/>
+            <div style="flex:1;">
+              <p>${esc(data.bio || '')}</p>
+              <div style="margin-top:8px;display:flex;gap:8px;align-items:center;">
+                <button class="btn-xs" onclick="moveLeader('${id}','up')">↑</button>
+                <button class="btn-xs" onclick="moveLeader('${id}','down')">↓</button>
+                <button class="btn-xs" onclick="deleteLeader('${id}')">Delete</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  });
+}
+
+async function addLeader(){
+  const name = document.getElementById('newLeaderName').value.trim();
+  const designation = document.getElementById('newLeaderDesignation').value.trim();
+  const file = document.getElementById('newLeaderPhoto').files[0];
+  if(!name){ showToast('Please enter a name','error'); return; }
+  try{
+    showToast('Saving leader...');
+    let photoUrl = '';
+    if(file){ photoUrl = await uploadReportImage(file); }
+    const payload = {
+      name, designation, bio:'', photoUrl, isActive:true, displayOrder:0, createdAt: Date.now(), updatedAt: Date.now()
+    };
+    const ref = await addDoc(collection(db,'leadership'), payload);
+    await updateDoc(doc(db,'leadership',ref.id), { displayOrder: Number(ref.id.slice(-6)) || Date.now() });
+    document.getElementById('newLeaderName').value='';
+    document.getElementById('newLeaderDesignation').value='';
+    document.getElementById('newLeaderPhoto').value='';
+    showToast('Leader added');
+    loadControlCenter();
+  }catch(err){ console.error(err); showToast('Failed to add leader','error'); }
+}
+
+async function editLeader(id){
+  const snap = await getDoc(doc(db,'leadership',id));
+  if(!snap.exists()) return showToast('Leader not found','error');
+  const d = snap.data();
+  // Build a small modal-like edit flow using prompts but support photo replacement via file input
+  const name = prompt('Name', d.name || '');
+  if(name === null) return;
+  const designation = prompt('Designation', d.designation || '') || '';
+  const bio = prompt('Bio', d.bio || '') || '';
+  const isActive = confirm('Should this leader be active? OK = Yes, Cancel = No');
+  try{
+    // Photo replacement
+    if(confirm('Replace photo?')){
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.accept = 'image/*';
+      input.onchange = async (e) => {
+        const file = e.target.files[0];
+        if(file){
+          try{
+            showToast('Uploading photo...');
+            const url = await uploadReportImage(file);
+            await updateDoc(doc(db,'leadership',id), { name, designation, bio, isActive, photoUrl: url, updatedAt: Date.now() });
+            showToast('Leader updated with new photo');
+            loadControlCenter();
+          }catch(err){ console.error(err); showToast('Photo upload failed','error'); }
+        }
+      };
+      input.click();
+      return;
+    }
+    await updateDoc(doc(db,'leadership',id), { name, designation, bio, isActive, updatedAt: Date.now() });
+    showToast('Leader updated');
+    loadControlCenter();
+  }catch(err){ console.error(err); showToast('Update failed','error'); }
+}
+
+
+async function deleteLeader(id){
+  if(!confirm('Delete this leader?')) return;
+  try{ await deleteDoc(doc(db,'leadership',id)); showToast('Leader deleted'); loadControlCenter(); }catch(err){ console.error(err); showToast('Delete failed','error'); }
+}
+
+async function moveLeader(id, dir){
+  const snap = await getDoc(doc(db,'leadership',id));
+  if(!snap.exists()) return;
+  const cur = snap.data();
+  const curOrder = Number(cur.displayOrder || Date.now());
+  const delta = dir==='up' ? -1 : 1;
+  await updateDoc(doc(db,'leadership',id), { displayOrder: curOrder + delta, updatedAt: Date.now() });
+  loadControlCenter();
+}
+
+async function saveStats(){
+  try{
+    const lives = document.getElementById('statLivesImpacted').value.trim();
+    const years = document.getElementById('statYears').value.trim();
+    await setDoc(doc(db,'site_config','statistics'), { livesImpacted: lives, yearsServing: years, updatedAt: Date.now() }, { merge:true });
+    showToast('Statistics saved');
+  }catch(err){ console.error(err); showToast('Save failed','error'); }
+}
+
+async function saveOrganization(){
+  try{
+    const college = document.getElementById('orgCollegeName').value.trim();
+    const unit = document.getElementById('orgUnitName').value.trim();
+    const email = document.getElementById('orgEmail').value.trim();
+    await setDoc(doc(db,'site_config','organization'), { collegeName: college, unitName: unit, contactEmail: email, updatedAt: Date.now() }, { merge:true });
+    showToast('Organization info saved');
+  }catch(err){ console.error(err); showToast('Save failed','error'); }
+}
+
+async function saveWebsiteContent(){
+  try{
+    const about = document.getElementById('contentAbout').value.trim();
+    await setDoc(doc(db,'site_config','content'), { about, updatedAt: Date.now() }, { merge:true });
+    showToast('Website content saved');
+  }catch(err){ console.error(err); showToast('Save failed','error'); }
+}
+
+async function loadControlDataIntoForm(){
+  // stats
+  const statsSnap = await getDoc(doc(db,'site_config','statistics'));
+  if(statsSnap.exists()){
+    const s = statsSnap.data();
+    document.getElementById('statLivesImpacted').value = s.livesImpacted || '';
+    document.getElementById('statYears').value = s.yearsServing || '';
+  }
+  // org
+  const orgSnap = await getDoc(doc(db,'site_config','organization'));
+  if(orgSnap.exists()){
+    const o = orgSnap.data();
+    document.getElementById('orgCollegeName').value = o.collegeName || '';
+    document.getElementById('orgUnitName').value = o.unitName || '';
+    document.getElementById('orgEmail').value = o.contactEmail || '';
+  }
+  // content
+  const contentSnap = await getDoc(doc(db,'site_config','content'));
+  if(contentSnap.exists()){
+    document.getElementById('contentAbout').value = contentSnap.data().about || '';
+  }
+}
+
+async function renderReports(){
+  const reportList = document.getElementById('report-list');
+  const yearlyReportPanel = document.getElementById('yearlyReportPanel');
+  const yearSelect = document.getElementById('yearlyReportYear');
+
+  if(!reportList || !yearlyReportPanel) return;
+
+  const selectedYear = yearSelect ? yearSelect.value : getCurrentAcademicYear();
+  const validYear = selectedYear || getCurrentAcademicYear();
+
+  if(yearSelect){
+    const options = getAcademicYearOptions();
+    if(!options.includes(validYear)){
+      options.push(validYear);
+    }
+    yearSelect.innerHTML = options.map(year => `<option value="${year}">${formatAcademicYear(year)}</option>`).join('');
+    yearSelect.value = validYear;
+    yearSelect.onchange = () => renderReports();
+  }
+
+  const selectedYearActivities = [...acts]
+    .filter(activity => (activity.academicYear || getAcademicYearForDate(activity.date)) === validYear)
+    .sort((a, b) => new Date(a.date) - new Date(b.date));
+
+  const reportsByActivity = new Map();
+  const reportSyncs = selectedYearActivities.map(async (activity) => {
+    const reportSnap = await getDoc(doc(db, 'activityReports', activity.id));
+    if(reportSnap.exists()){
+      reportsByActivity.set(activity.id, reportSnap.data());
+    }
+  });
+  await Promise.all(reportSyncs);
+
+  const publishedActivities = [];
+  const pendingActivities = [];
+  selectedYearActivities.forEach(activity => {
+    const report = reportsByActivity.get(activity.id);
+    if(report && normalizeReportStatus(report.status) === 'published'){
+      publishedActivities.push({ activity, report });
+    } else {
+      pendingActivities.push({ activity, report });
+    }
+  });
+
+  const summary = await buildYearlySummary(selectedYearActivities);
+  const categoryEntries = Object.entries(summary.categories || {}).map(([name, count]) => `
+    <div class="yearly-category-item">
+      <span>${esc(name)}</span>
+      <strong>${count}</strong>
+    </div>
+  `).join('');
+
+  const activityCards = selectedYearActivities.length ? selectedYearActivities.map(activity => {
+    const report = reportsByActivity.get(activity.id);
+    const reportLabel = report && normalizeReportStatus(report.status) === 'published' ? 'Published' : 'Draft';
+    const reportStatusClass = report && normalizeReportStatus(report.status) === 'published' ? 'pill-green' : 'pill-amber';
+    const details = report ? (report.details || report.summary || 'No detailed content recorded yet.') : 'No report yet.';
+    return `
+      <div class="report-card-item" id="report-card-${activity.id}">
+        <div class="report-card-header">
+          <div>
+            <div class="mini-title">${esc(activity.name)}</div>
+            <div class="report-meta-row">
+              <span>${esc(activity.date || 'No date')}</span>
+              <span>${esc(activity.venue || 'Venue not specified')}</span>
+            </div>
+          </div>
+          <span class="pill ${reportStatusClass}">${reportLabel}</span>
+        </div>
+        <div class="report-card-body">
+          <p><strong>Summary:</strong> ${esc(report?.summary || 'No summary available.')}</p>
+          <p><strong>Details:</strong> ${esc(details).replace(/\n/g, '<br>')}</p>
+          ${(report && Array.isArray(report.images) && report.images.length) ? `
+            <div class="report-card-images">
+              ${report.images.map(image => `<img src="${image}" alt="${esc(activity.name)}"/>`).join('')}
+            </div>
+          ` : ''}
+        </div>
+      </div>
+    `;
+  }).join('') : '<div class="empty-state">No activities found for this academic year.</div>';
+
+  const pendingMarkup = pendingActivities.length ? `
+    <div class="pending-report-box">
+      <h4>Reports Pending</h4>
+      <p>${pendingActivities.length} activities do not have published reports.</p>
+      <ul>
+        ${pendingActivities.slice(0, 10).map(({ activity }) => `
+          <li>
+            <span>${esc(activity.name)}</span>
+            <button class="btn-xs btn-blue" onclick="openActivityForReport('${activity.id}')">Open Activity</button>
+          </li>
+        `).join('')}
+      </ul>
+    </div>
+  ` : '';
+
+  const yearlyMarkup = `
+    <div class="yearly-report-panel">
+      <div class="yearly-header">
+        <div>
+          <div class="section-kicker">NSS UNIT D-58</div>
+          <h3>YEARLY ACTIVITY REPORT</h3>
+          <div class="year-tag">Academic Year: ${formatAcademicYear(validYear)}</div>
+        </div>
+        <button class="btn btn-blue" onclick="window.print()">🖨 Print / PDF</button>
+      </div>
+
+      <div class="yearly-summary-grid">
+        <div class="summary-card"><span>Total Activities</span><strong>${summary.totalActivities}</strong></div>
+        <div class="summary-card"><span>Total Participants</span><strong>${summary.totalParticipants}</strong></div>
+        <div class="summary-card"><span>Total Attendance</span><strong>${summary.totalAttendance}</strong></div>
+        <div class="summary-card"><span>Average Attendance</span><strong>${summary.averageAttendance}</strong></div>
+      </div>
+
+      <div class="yearly-category-box">
+        <h4>Activity Categories</h4>
+        <div class="yearly-category-grid">
+          ${categoryEntries || '<div class="empty-state">No category data available yet.</div>'}
+        </div>
+      </div>
+
+      <div class="yearly-activities-box">
+        <h4>${formatAcademicYear(validYear)} ACTIVITIES</h4>
+        ${publishedActivities.length ? publishedActivities.map(({ activity, report }) => `
+          <article class="yearly-activity-item">
+            <div class="yearly-activity-header">
+              <div>
+                <h5>${esc(activity.name)}</h5>
+                <div class="yearly-activity-meta">
+                  <span>Date: ${esc(activity.date || '—')}</span>
+                  <span>Venue: ${esc(activity.venue || '—')}</span>
+                  <span>Participants: ${summary.attendanceByActivity?.[activity.id] || 0}</span>
+                </div>
+              </div>
+              <span class="pill pill-blue">Report: Published</span>
+            </div>
+            <div class="yearly-activity-body">
+              <div class="yearly-report-content">${esc(report?.details || report?.summary || 'No report content available.').replace(/\n/g, '<br>')}</div>
+              ${(report && Array.isArray(report.images) && report.images.length) ? `
+                <div class="report-card-images">
+                  ${report.images.map(image => `<img src="${image}" alt="${esc(activity.name)}"/>`).join('')}
+                </div>
+              ` : ''}
+            </div>
+          </article>
+        `).join('') : '<div class="empty-state">No published reports available for this academic year.</div>'}
+      </div>
+
+      ${pendingMarkup}
+    </div>
+  `;
+
+  reportList.innerHTML = `
+    <div class="report-overview-block">
+      <div class="report-section-title">Activity Reports</div>
+      <div class="report-summary-row">
+        <div class="mini-stat"><span>Total Activities</span><strong>${selectedYearActivities.length}</strong></div>
+        <div class="mini-stat"><span>Published Reports</span><strong>${publishedActivities.length}</strong></div>
+        <div class="mini-stat"><span>Draft Reports</span><strong>${pendingActivities.length}</strong></div>
+      </div>
+      ${activityCards}
+    </div>
+  `;
+
+  yearlyReportPanel.innerHTML = yearlyMarkup;
+}
+
+async function uploadReportImage(file){
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('upload_preset', 'nss_profiles');
+
+  const response = await fetch('https://api.cloudinary.com/v1_1/dstdl2ycg/image/upload', {
+    method: 'POST',
+    body: formData
+  });
+
+  if(!response.ok){
+    throw new Error('Failed to upload image.');
+  }
+
+  const data = await response.json();
+  return data.secure_url || data.url;
+}
+
+async function createReport(){
+  const activityId = document.getElementById('reportActSel').value;
+  const title = document.getElementById('reportTitle').value.trim();
+  const summary = document.getElementById('reportSummary').value.trim();
+  const details = document.getElementById('reportDetails').value.trim();
+  const status = normalizeReportStatus(document.getElementById('reportStatus').value);
+  const files = [...document.getElementById('reportImages').files];
+
+  if(!activityId){
+    showToast('Please select an activity before saving the report.', 'error');
+    return;
+  }
+
+  if(!title && !summary && !details){
+    showToast('Add a title, summary, or detailed report content before saving.', 'error');
+    return;
+  }
+
+  const activity = acts.find(item => item.id === activityId);
+  try{
+    const imageUrls = [];
+    for(const file of files){
+      const uploadedUrl = await uploadReportImage(file);
+      imageUrls.push(uploadedUrl);
+    }
+
+    const reportPayload = {
+      activityId,
+      activityName: activity?.name || '',
+      title,
+      summary,
+      details,
+      status,
+      images: imageUrls,
+      academicYear: activity?.academicYear || getAcademicYearForDate(activity?.date),
+      updatedAt: Date.now()
+    };
+
+    await setDoc(doc(db, 'activityReports', activityId), reportPayload, { merge: true });
+
+    showToast('Activity report saved successfully.');
+    document.getElementById('reportForm').style.display = 'none';
+    document.getElementById('reportActSel').value = '';
+    document.getElementById('reportStatus').value = 'draft';
+    document.getElementById('reportTitle').value = '';
+    document.getElementById('reportSummary').value = '';
+    document.getElementById('reportDetails').value = '';
+    document.getElementById('reportImages').value = '';
+    reportFormOpen = false;
+    renderReports();
+  }catch(err){
+    console.error(err);
+    showToast('Failed to save the report. Please try again.', 'error');
+  }
+}
+
+function toggleReportForm(){
+  reportFormOpen = !reportFormOpen;
+  const form = document.getElementById('reportForm');
+  const button = document.getElementById('newReportBtn');
+  if(form){
+    form.style.display = reportFormOpen ? 'block' : 'none';
+  }
+  if(button){
+    button.textContent = reportFormOpen ? '✕ Cancel' : '+ New Report';
+    button.className = 'btn ' + (reportFormOpen ? 'btn-outline' : 'btn-blue');
+  }
+}
+
 /* ═══════════════════════════════════════════════════════════════
    ACTIVITIES
 ═══════════════════════════════════════════════════════════════ */
@@ -335,18 +891,27 @@ function toggleActForm(){
   document.getElementById('newActBtn').textContent=actFormOpen?'✕ Cancel':'+ New Activity';
   document.getElementById('newActBtn').className='btn '+(actFormOpen?'btn-outline':'btn-blue');
 }
+function populateAcademicYearSelect(){
+  const sel=document.getElementById('actAcademicYear');
+  if(!sel) return;
+  const options = getAcademicYearOptions();
+  sel.innerHTML = options.map(year => `<option value="${year}">${formatAcademicYear(year)}</option>`).join('');
+  sel.value = getCurrentAcademicYear();
+}
+
 function renderActivities(){
   const q=document.getElementById('actSearch').value.toLowerCase();
   const filtered=acts.filter(a=>a.name.toLowerCase().includes(q)||a.date.includes(q));
   const list=document.getElementById('act-list');
   if(!filtered.length){list.innerHTML='<div class="empty"><div class="empty-icon">📅</div><p>No activities match your search.</p></div>';return;}
   list.innerHTML=filtered.map(a=>`
-    <div class="act-card">
+    <div class="act-card" id="activity-card-${a.id}">
       <div class="act-card-body">
         <div class="act-pills">
           <span class="act-name">${esc(a.name)}</span>
           ${pill(a.status,a.status==='Completed'?'pill-green':'pill-amber')}
           ${pill('📅 '+esc(a.date),'pill-blue')}
+          ${(a.academicYear || getAcademicYearForDate(a.date)) ? `${pill('🎓 ' + formatAcademicYear(a.academicYear || getAcademicYearForDate(a.date)), 'pill-purple')}` : ''}
         </div>
         <div class="act-desc">${esc(a.desc)}</div>
       </div>
@@ -867,6 +1432,7 @@ async function createActivity(){
   const timeTo =document.getElementById('actTo').value;
   const totalHours =document.getElementById('actHours').value;
   const activityType =document.getElementById('actType').value;
+  const academicYear = document.getElementById('actAcademicYear') ? document.getElementById('actAcademicYear').value : getAcademicYearForDate(date);
 
   let ok=true;
 
@@ -897,6 +1463,7 @@ async function createActivity(){
 
       name,
       activityType,
+      academicYear,
 
       date,
 
@@ -930,9 +1497,11 @@ async function createActivity(){
   }
 }
 
+let academicYearSyncAttempted = false;
+
 function loadActivities(){
 
-  onSnapshot(collection(db,"activities"), (snapshot)=>{
+  onSnapshot(collection(db,"activities"), async (snapshot)=>{
 
     acts = [];
 
@@ -945,9 +1514,15 @@ function loadActivities(){
 
     });
 
+    if(!academicYearSyncAttempted){
+      academicYearSyncAttempted = true;
+      await syncActivityAcademicYears();
+    }
+
     renderActivities();
     renderDashboard();
     renderAttendanceSelects();
+    renderReports();
 
   }, (err)=>{
 

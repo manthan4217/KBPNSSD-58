@@ -6,7 +6,13 @@ import {
 
 import {
   doc,
-  setDoc
+  setDoc,
+  getDoc,
+  getDocs,
+  collection,
+  query,
+  where,
+  orderBy
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 // navbar
@@ -507,4 +513,53 @@ document.addEventListener("DOMContentLoaded", () => {
 
   }
 
+});
+
+// Load public Leadership and Site Config
+async function loadPublicLeadership(){
+  try{
+    const leadershipGrid = document.getElementById('leadershipGrid');
+    if(!leadershipGrid) return;
+    leadershipGrid.innerHTML = '';
+    const q = query(collection(db,'leadership'), where('isActive','==',true), orderBy('displayOrder','asc'));
+    const snap = await getDocs(q);
+    snap.forEach(s => {
+      const d = s.data();
+      const card = document.createElement('div');
+      card.className = 'volunteer-card reveal';
+      const photo = d.photoUrl ? `<img loading="lazy" src="${d.photoUrl}" alt="${(d.name||'Leader')}">` : '';
+      card.innerHTML = `${photo}<h4>${d.name||''}</h4><span class="badge">${d.designation||''}</span><p>${d.bio||''}</p>`;
+      leadershipGrid.appendChild(card);
+    });
+  }catch(err){ console.error('Failed to load leadership', err); }
+}
+
+async function loadPublicSiteConfig(){
+  try{
+    const statActivitiesEl = document.getElementById('statActivities');
+    const statVolsEl = document.getElementById('statVols');
+    const statYearsEl = document.getElementById('statYears');
+    const statLivesEl = document.getElementById('statLives');
+    if(statActivitiesEl){
+      const actsSnap = await getDocs(collection(db,'activities'));
+      statActivitiesEl.textContent = actsSnap.size + '+';
+    }
+    if(statVolsEl){
+      const volsSnap = await getDocs(collection(db,'volunteers'));
+      statVolsEl.textContent = volsSnap.size + '+';
+    }
+    // Load optionally stored statistics (years established, lives reached)
+    const statsDoc = await getDoc(doc(db,'site_config','statistics'));
+    if(statsDoc.exists()){
+      const s = statsDoc.data();
+      if(s.years && statYearsEl) statYearsEl.textContent = s.years;
+      if(s.lives && statLivesEl) statLivesEl.textContent = s.lives;
+    }
+  }catch(err){ console.error('Failed to load site config', err); }
+}
+
+// Run public loaders
+window.addEventListener('DOMContentLoaded', ()=>{
+  loadPublicLeadership();
+  loadPublicSiteConfig();
 });

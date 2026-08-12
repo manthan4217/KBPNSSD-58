@@ -83,6 +83,7 @@
     <button class="nav-btn" data-tab="activities"><span class="nav-icon">📅</span><span class="nav-label">Activities</span></button>
     <button class="nav-btn" data-tab="attendance"><span class="nav-icon">✅</span><span class="nav-label">Attendance</span></button>
     <button class="nav-btn" data-tab="reports"><span class="nav-icon">📑</span><span class="nav-label">Reports</span></button>
+    <button class="nav-btn" data-tab="control"><span class="nav-icon">🧭</span><span class="nav-label">Control Center</span></button>
     <button class="nav-btn" data-tab="volunteers"><span class="nav-icon">👥</span><span class="nav-label">Volunteers</span></button>
     <button class="nav-btn" data-tab="marks"><span class="nav-icon">📝</span><span class="nav-label">Marks</span></button>
     <button class="nav-btn" data-tab="settings"><span class="nav-icon">⚙️</span><span class="nav-label">Settings</span></button>
@@ -157,13 +158,26 @@
             Select Activity Type
           </option>
           <option>
-            Shramdaan
+            Environmental
           </option>
           <option>
-            Lecture
+            Education
+          </option>
+          <option>
+            Health
+          </option>
+          <option>
+            Social Service
+          </option>
+          <option>
+            Awareness
+          </option>
+          <option>
+            Other
           </option>
         </select>
         </div>
+        <div class="field"><label class="lbl">Academic Year</label><select class="inp" id="actAcademicYear"></select></div>
         <button class="btn btn-blue" onclick="createActivity()">Create Activity</button>
         <input class="inp search-inp" id="actSearch" placeholder="🔍  Search by name or date…" oninput="renderActivities()"/>
         <div id="act-list"></div>
@@ -270,20 +284,95 @@
     <!-- ── REPORTS ── -->
     <div class="tab" id="tab-reports">
       <div class="flex-between">
-        <div class="section-title">Activity Reports</div>
+        <div class="section-title">Reports</div>
         <button class="btn btn-blue" id="newReportBtn" onclick="toggleReportForm()">+ New Report</button>
       </div>
       <div class="form-box" id="reportForm" style="display:none;">
         <h3>Create New Activity Report</h3>
         <div class="field"><label class="lbl">Activity</label><select class="inp" id="reportActSel"><option value="">-- Choose an activity --</option></select><div class="err" id="reportActErr"></div></div>
+        <div class="field"><label class="lbl">Report Status</label><select class="inp" id="reportStatus"><option value="draft">Draft</option><option value="published">Published</option></select></div>
         <div class="field"><label class="lbl">Report Title</label><input class="inp" id="reportTitle" placeholder="e.g. Environmental Cleanup Summary"/><div class="err" id="reportTitleErr"></div></div>
         <div class="field"><label class="lbl">Summary</label><textarea class="inp" id="reportSummary" rows="3" placeholder="Brief summary of the activity report..."></textarea></div>
         <div class="field"><label class="lbl">Details</label><textarea class="inp" id="reportDetails" rows="4" placeholder="Detailed report content..."></textarea></div>
         <div class="field"><label class="lbl">Upload Photos</label><input type="file" class="inp" id="reportImages" accept="image/*" multiple/></div>
         <button class="btn btn-blue" onclick="createReport()">Save Report</button>
       </div>
+      <div class="report-menu-bar" style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:18px;">
+        <div class="report-menu-title">Activity Reports</div>
+        <div class="report-menu-title muted">Yearly Activity Report</div>
+      </div>
       <input class="inp search-inp" id="reportSearch" placeholder="🔍 Search reports by activity, title, or summary…" oninput="renderReports()" style="margin-bottom:18px;"/>
       <div id="report-list"></div>
+      <div class="yearly-report-wrap" style="margin-top:20px;">
+        <div class="flex-between" style="margin-bottom:16px;">
+          <div class="section-title">Yearly Activity Report</div>
+          <select class="inp" id="yearlyReportYear" style="max-width:220px;"></select>
+        </div>
+        <div id="yearlyReportPanel"></div>
+      </div>
+    </div>
+
+    <!-- ── CONTROL CENTER ── -->
+    <div class="tab" id="tab-control">
+      <div class="flex-between">
+        <div class="section-title">Control Center</div>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <button class="btn btn-blue" onclick="switchControlSection('leadership')">Leadership</button>
+          <button class="btn btn-outline" onclick="switchControlSection('stats')">NSS Statistics</button>
+          <button class="btn btn-outline" onclick="switchControlSection('organization')">Organization</button>
+          <button class="btn btn-outline" onclick="switchControlSection('content')">Website Content</button>
+        </div>
+      </div>
+
+      <div id="control-body">
+        <!-- Leadership -->
+        <div id="control-leadership" style="display:block;">
+          <div class="form-box">
+            <h3>Leadership</h3>
+            <div style="margin-bottom:12px;">Manage leadership profiles shown on the public website. Add, edit, reorder, activate or deactivate profiles.</div>
+            <div style="display:flex;gap:12px;align-items:center;margin-bottom:12px;">
+              <input class="inp" id="newLeaderName" placeholder="Name" style="max-width:220px;" />
+              <input class="inp" id="newLeaderDesignation" placeholder="Designation" style="max-width:220px;" />
+              <input type="file" id="newLeaderPhoto" accept="image/*" />
+              <button class="btn btn-green" onclick="addLeader()">+ Add Leader</button>
+            </div>
+            <div id="leadership-list"></div>
+          </div>
+        </div>
+
+        <!-- Stats -->
+        <div id="control-stats" style="display:none;">
+          <div class="form-box">
+            <h3>NSS Statistics</h3>
+            <p>Editable statistics; automatic counts are used where available.</p>
+            <div class="field"><label class="lbl">Lives Impacted (editable)</label><input class="inp" id="statLivesImpacted"/></div>
+            <div class="field"><label class="lbl">Years Serving (editable)</label><input class="inp" id="statYears"/></div>
+            <div style="display:flex;gap:8px;"><button class="btn btn-blue" onclick="saveStats()">Save Statistics</button></div>
+          </div>
+        </div>
+
+        <!-- Organization -->
+        <div id="control-organization" style="display:none;">
+          <div class="form-box">
+            <h3>Organization Information</h3>
+            <div class="field"><label class="lbl">College Name</label><input class="inp" id="orgCollegeName"/></div>
+            <div class="field"><label class="lbl">Unit Name</label><input class="inp" id="orgUnitName"/></div>
+            <div class="field"><label class="lbl">Contact Email</label><input class="inp" id="orgEmail"/></div>
+            <div style="display:flex;gap:8px;"><button class="btn btn-blue" onclick="saveOrganization()">Save Organization Info</button></div>
+          </div>
+        </div>
+
+        <!-- Website Content -->
+        <div id="control-content" style="display:none;">
+          <div class="form-box">
+            <h3>Website Content</h3>
+            <div class="field"><label class="lbl">About NSS (editable)</label><textarea class="inp" id="contentAbout" rows="4"></textarea></div>
+            <div style="display:flex;gap:8px;"><button class="btn btn-blue" onclick="saveWebsiteContent()">Save Content</button></div>
+          </div>
+        </div>
+
+      </div>
+
     </div>
 
     <!-- ── VOLUNTEERS ── -->
