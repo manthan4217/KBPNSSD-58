@@ -5,8 +5,8 @@
 // ================================================================
 
 export const SITE_CONFIG = {
-  phone: "+91 79727 59261",
-  phoneHref: "+917972759261",   // digits-only, used for tel: links
+  phone: "+91 97023 29597",
+  phoneHref: "+919702329597",   // digits-only, used for tel: links
   email: "kbp.nssunit@gmail.com"
 };
 
